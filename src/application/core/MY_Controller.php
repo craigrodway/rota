@@ -35,17 +35,21 @@ class MY_Controller extends CI_Controller
 	 */
 	function page($data)
 	{
-		// menus
+		// header with menu
 		$header['nav'] = $this->menu_model->nav_main();
-		// Load header view with menus
 		$default['header'] = $this->load->view('template/header', $header, true);
 		
-		// Default sidebar and body contents
-		$default['sidebar'] = '';
+		// sidebar
+		$sidebar['news'] = array();
+		$default['sidebar'] = $this->load->view('template/sidebar', $sidebar, true);
+		
+		// Default body contents
 		$default['body'] = '';
 		
 		// Merge supplied data array with local data
 		$data = array_merge($default, $data);
+		
+		if (array_key_exists('hide_sidebar', $data)) $data['sidebar'] = null;
 		
 		$this->load->view($this->_tpl, $data);
 	}

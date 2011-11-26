@@ -12,7 +12,7 @@ class Home extends MY_Controller {
 	public function index()
 	{
 		$data['title'] = 'Welcome to Railways on the Air';
-		$data['body'] = 'body';
+		$data['body'] = $this->load->view('home/index', null, true);
 		$this->page($data);
 	}
 	

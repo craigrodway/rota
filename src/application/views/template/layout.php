@@ -3,6 +3,17 @@
 $title_arr[] = (isset($title)) ? $title : null;
 $title_arr[] = $this->config->item('site_name');
 $title_string = implode(' - ', array_filter($title_arr));
+
+// Sidebar? Presume not.
+$left_classes = "sixteen columns";
+$right_classes = "";
+$show_sidebar = false;
+if (isset($sidebar) && !empty($sidebar))
+{
+	$left_classes = "twelve columns body";
+	$right_classes = "four columns sidebar";
+	$show_sidebar = true;
+}
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
@@ -67,15 +78,26 @@ $title_string = implode(' - ', array_filter($title_arr));
 	
 	
 	<div class="container main">
-		
-		<div class="sixteen columns">
-			
+	
+		<div class="sixteen columns title">
 			<h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1>
 			<hr>
+		</div> <!-- / .title -->
+		
+		<div class="<?php echo $left_classes ?>">
 			
 			<?php echo $body ?>
 			
-		</div>
+		</div> <!-- / .body -->
+		
+		<?php if ($show_sidebar): ?>
+		
+		<div class="<?php echo $right_classes ?>">
+			<?php echo $sidebar ?>
+		</div> <!-- / .sidebar -->
+		
+		<?php endif; ?>
+		
 		
 	</div> <!-- / .container.main -->
 	

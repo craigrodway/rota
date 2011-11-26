@@ -2,13 +2,13 @@
 		
 		<div class="container">
 			
-			<div class="twelve columns logo">
+			<div class="eight columns logo">
 				<a href="<?php echo base_url() ?>"><img src="img/global/title.png"></a>
 			</div>
 			
-			<div class="four columns account">
+			<div class="eight columns account">
 				<div style="margin-right:15px">
-					Register | Log In
+					Bishop Auckland Radio Amateur Club | Log Out
 				</div>
 			</div>
 			
