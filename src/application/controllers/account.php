@@ -35,6 +35,7 @@ class Account extends MY_Controller
 		{
 			// Get email address and create account
 			$this->form_validation->set_rules('email', 'Email address', 'required|trim|valid_email|is_unique[accounts.email]');
+			$this->form_validation->set_message('is_unique', 'There is already an account with that email address.');
 			$email = $this->input->post('email');
 			
 			if ($this->form_validation->run() == true)
@@ -60,9 +61,24 @@ class Account extends MY_Controller
 	
 	function verify($code = null)
 	{
-		$data['title'] = 'Create an account';
-		$data['body'] = $this->load->view('account/verify', null, true);
-		$this->page($data);
+		if ($code == null)
+		{
+			$data['title'] = 'Create an account';
+			$data['body'] = $this->load->view('account/verify', null, true);
+			$this->page($data);
+		}
+		else
+		{
+			$account = $this->accounts_model->find_by_verify($code);
+			if (!$account)
+			{
+				show_error('Could not find the account specified. Please check and try again. Perhaps it has already been verified?', 404);
+			}
+			else
+			{
+				$verify = $this->accounts_model->verify($code);
+			}
+		}
 	}
 	
 	

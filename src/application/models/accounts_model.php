@@ -67,9 +67,43 @@ class Accounts_model extends CI_Model
 	
 	
 	
-	function verify()
+	/**
+	 * Find and retrieve an account by the verification code
+	 */
+	function find_by_verify($code = null)
 	{
-		//$account = $this->CI->db->
+		if (!$code) return false;
+		
+		$sql = 'SELECT * FROM accounts WHERE verify = ? LIMIT 1';
+		$query = $this->db->query($sql, array($code));
+		if ($query->num_rows() == 1)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	
+	
+	function verify($code = null)
+	{
+		if (!$code) return false;
+		
+		$sql = "UPDATE accounts SET verify = NULL, enabled = 'Y'
+				WHERE verify = ?";
+		$query = $this->db->query($sql, array($code));
+		if ($this->db->affected_rows() == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 

@@ -1,12 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
- * Classroombookings. Hassle-free resource booking for schools. <http://classroombookings.com/>
- * Copyright (C) 2006-2011 Craig A Rodway <craig.rodway@gmail.com>
+/**
+ * Railways on the Air
+ * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
  *
- * This file is part of Classroombookings.
- * Classroombookings is licensed under the Affero GNU GPLv3 license.
- * Please see license-classroombookings.txt for the full license text.
+ * Licensed under the Open Software License version 3.0
+ * 
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt. It is also available 
+ * through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
  */
 
 class Auth
