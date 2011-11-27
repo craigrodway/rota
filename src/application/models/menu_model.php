@@ -38,9 +38,10 @@ class Menu_model extends CI_Model
 		$nav = array();
 		$nav[] = array('home', 'Home');
 		$nav[] = array('about', 'About');
-		$nav[] = array('stations', 'Stations');
 		$nav[] = array('news', 'News');
 		$nav[] = array('contact', 'Contact');
+		$nav[] = array('stations', 'Stations');
+		$nav[] = array('railways', 'Railways');
 		return $nav;
 	}
 	

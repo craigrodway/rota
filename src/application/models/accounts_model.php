@@ -28,23 +28,48 @@ class Accounts_model extends CI_Model
 	
 	
 	
-	function create_account($data = array(), $send_email = true)
+	function create_account($data = array(), $send_email = false)
 	{
-		if (!isset('email', $data))
+		if (!isset($data['email']))
 		{
 			return false;
 		}
 		
-		$email = $data['email'];
-		$password = (isset($data['password']) 
-			? $data['password']
-			: random_string('alnum');
+		$verify = random_string('alnum', 10);
 		
-		 $this->db->insert('accounts', array(
-		 	'email' => $email,
-			'password' => $this->auth->encrypt_password($password)
-		 ))
+		$this->db->insert('accounts', array(
+			'email' => trim($data['email']),
+			'created' => date('Y-m-d H:i:s'),
+			'enabled' => 'N',
+			'verify' => $verify
+		));
 		
+		if ($send_email == false)
+		{
+			return $verify;
+		}
+		else
+		{
+			$this->load->library('parser');
+			$this->load->library('email');
+			$parsedata['verifyurl'] = site_url('account/verify/' . $verify);
+			$mailbody = $this->parser->parse('emails/create-account', $parsedata, true);
+			
+			$this->email->from('no-reply@barac.m0php.net', 'ROTA Admin');
+			$this->email->to(trim($data['email']));
+			$this->email->subject('Railways on the Air account verification');
+			$this->email->message($mailbody);
+			$this->email->send();
+		}
+		
+	}
+	
+	
+	
+	
+	function verify()
+	{
+		//$account = $this->CI->db->
 	}
 
 

@@ -8,7 +8,12 @@
 			
 			<div class="eight columns account">
 				<div style="margin-right:15px">
-					Bishop Auckland Radio Amateur Club | Log Out
+					<?php if ($this->auth->logged_in()): ?>
+						Bishop Auckland Radio Amateur Club | Log Out
+					<?php else: ?>
+						<?php echo anchor('account/create', 'Create an account') ?> |
+						<?php echo anchor('account/login', 'Log In') ?>
+					<?php endif; ?> 
 				</div>
 			</div>
 			
@@ -27,7 +32,16 @@
 			<div class="eight columns">
 				<ul class="horizontal">
 					<?php foreach ($nav as $item): ?>
-						<li><?php echo anchor($item[0], $item[1]) ?></li>
+						<?php
+						$cls = '';
+						$uri = $this->uri->uri_string();
+						$uri = (empty($uri)) ? 'home' : $uri;
+						if (stristr($uri, $item[0]))
+						{
+							$cls = 'class="active""';
+						}
+						?>
+						<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
 					<?php endforeach; ?>
 				</ul>
 			</div>

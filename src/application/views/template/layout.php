@@ -38,10 +38,10 @@ if (isset($sidebar) && !empty($sidebar))
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css">
 
-	<!-- <link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
+	<link rel="shortcut icon" href="img/global/favicon.ico">
+	<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="img/global/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/global/apple-touch-icon-114x114.png">
 	
 	<script type="text/javascript">
 	var baseurl = "<?php echo $this->config->item('base_url') . 'assets/' ?>";
@@ -84,6 +84,14 @@ if (isset($sidebar) && !empty($sidebar))
 			<hr>
 		</div> <!-- / .title -->
 		
+		<?php
+		$flashes = array('error', 'alert', 'success', 'info', 'notice');
+		foreach ($flashes as $f)
+		{
+			echo $this->session->flashdata($f);
+		}
+		?>
+		
 		<div class="<?php echo $left_classes ?>">
 			
 			<?php echo $body ?>
@@ -102,21 +110,7 @@ if (isset($sidebar) && !empty($sidebar))
 	</div> <!-- / .container.main -->
 	
 	
-	<div class="container footer">
-		
-		<div class="sixteen columns"><hr class="remove-bottom"></div>
-		
-		<div class="eight columns left">
-			&copy; <?php echo date('Y') ?> 
-				<a href="http://barac.m0php.net/">Bishop Auckland Radio Amateur Club</a>. 
-				Location data by <a href="http://nearby.org.uk/">nearby.org.uk</a>. 
-		</div>
-		
-		<div class="eight columns right">
-			Site by <a href="http://webman.me.uk/">Craig A Rodway</a>. 
-		</div>
-		
-	</div> <!-- / .container.footer -->
+	<?php $this->load->view('template/footer') ?>
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
