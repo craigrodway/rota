@@ -60,6 +60,7 @@ div.pc100.header {
 	div.header div.account {
 		text-align: right;
 		padding-top: 1.5em;
+		font-size: 90%;
 	}
 	
 	div.header div.account a {
@@ -86,7 +87,15 @@ div.pc100.nav {
 	}
 
 
+div.pc100.nav.user-admin {
+	background: #A6260B;
+}
 
+	div.pc100.nav.user-admin ul.horizontal li a:hover,
+	div.pc100.nav.user-admin ul.horizontal li a.active {
+		color: #A6260B;
+		background: #fff;
+	}
 
 
 

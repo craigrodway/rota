@@ -21,8 +21,8 @@ $errors = validation_errors();
 	your personal details to third parties. We may send you the odd email in 
 	relation to ROTA, but we won't spam you.</p>
 
-	<p>Just enter your email address and we'll send you a message explaining what 
-	to do next.</p>
+	<p>Just enter your email address in the box below, and we'll send you a 
+	message explaining what	to do next. Don't worry, it's quite straight-forward!</p>
 
 <?php else: ?>
 

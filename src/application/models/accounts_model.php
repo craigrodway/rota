@@ -89,6 +89,10 @@ class Accounts_model extends CI_Model
 	
 	
 	
+	/**
+	 * With the supplied verification code, set the account status 
+	 * to verified and enabled.
+	 */
 	function verify($code = null)
 	{
 		if (!$code) return false;
@@ -104,6 +108,25 @@ class Accounts_model extends CI_Model
 		{
 			return false;
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * Set an account's password to a new value
+	 */
+	function set_password($account_id = null, $password = null)
+	{
+		if (!$account_id) return false;
+		if (!$password) return false;
+		
+		$hashed = $this->auth->hash_password($password);
+		
+		$sql = 'UPDATE accounts SET password = ?
+				WHERE account_id = ? LIMIT 1';
+		$query = $this->db->query($sql, array($hashed, $account_id));
+		return ($this->db->affected_rows() == 1);
 	}
 
 

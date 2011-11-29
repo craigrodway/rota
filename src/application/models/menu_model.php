@@ -51,12 +51,13 @@ class Menu_model extends CI_Model
 	/**
 	 * Logged-in user menu ('the shack')
 	 */
-	function user()
+	function nav_shack()
 	{
 		$nav = array();
 		$nav[] = array('shack/news', 'Post news update');
 		$nav[] = array('shack/upload-log', 'Upload log');
 		$nav[] = array('shack/account', 'My account');
+		return $nav;
 	} 
 	
 	
@@ -71,6 +72,8 @@ class Menu_model extends CI_Model
 		$nav[] = array('admin/accounts', 'Accounts');
 		$nav[] = array('admin/events', 'Events');
 		$nav[] = array('admin/stations', 'Stations');
+		$nav[] = array('admin/news', 'News');
+		$nav[] = array('admin/railways', 'Railways');
 		return $nav;
 	}
 	

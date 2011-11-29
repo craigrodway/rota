@@ -88,10 +88,15 @@ if (isset($sidebar) && !empty($sidebar))
 		
 		<?php
 		$flashes = array('error', 'alert', 'success', 'info', 'notice');
+		$flashmsgs = null;
 		foreach ($flashes as $f)
 		{
-			echo $this->session->flashdata($f);
+			if ($this->session->flashdata($f))
+			{
+				$flashmsgs .= '<div class="' . $f . '">' . $this->session->flashdata($f) . '</div>';
+			}
 		}
+		if ($flashmsgs) echo '<div class="grid_16">' . $flashmsgs . '</div>';
 		?>
 		
 		<div class="<?php echo $left_classes ?>">

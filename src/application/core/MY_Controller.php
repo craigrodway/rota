@@ -36,7 +36,22 @@ class MY_Controller extends CI_Controller
 	function page($data)
 	{
 		// header with menu
-		$header['nav'] = $this->menu_model->nav_main();
+		$header['type'] = 'normal';
+		$header['nav_main'] = $this->menu_model->nav_main();
+		
+		// Add shack menu if logged in
+		if ($this->auth->logged_in())
+		{
+			$header['nav_shack'] = $this->menu_model->nav_shack();
+		}
+		
+		// Admin user?
+		if ($this->auth->logged_in() && $this->session->userdata('type') == 'admin')
+		{
+			$header['nav_admin'] = $this->menu_model->admin();
+			$header['type'] = 'admin';
+		}
+		
 		$default['header'] = $this->load->view('template/header', $header, true);
 		
 		// sidebar
