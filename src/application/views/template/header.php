@@ -1,12 +1,12 @@
 	<div class="pc100 header">
 		
-		<div class="container">
+		<div class="container_16">
 			
-			<div class="eight columns logo">
+			<div class="grid_8 logo">
 				<a href="<?php echo base_url() ?>"><img src="img/global/title.png"></a>
 			</div>
 			
-			<div class="eight columns account">
+			<div class="grid_8 account">
 				<div style="margin-right:15px">
 					<?php if ($this->auth->logged_in()): ?>
 						Bishop Auckland Radio Amateur Club | Log Out
@@ -27,9 +27,9 @@
 	
 	<div class="pc100 nav add-bottom">
 		
-		<div class="container">
+		<div class="container_16">
 			
-			<div class="eight columns">
+			<div class="grid_8">
 				<ul class="horizontal">
 					<?php foreach ($nav as $item): ?>
 						<?php
@@ -46,7 +46,7 @@
 				</ul>
 			</div>
 			
-			<div class="eight columns">
+			<div class="grid_8">
 				<!-- if logged in: <ul class="horizontal" style="float:right">
 					<li><a href="#">Post news update</a></li>
 					<li><a href="#">Upload log</a></li>

@@ -4,14 +4,14 @@ $title_arr[] = (isset($title)) ? $title : null;
 $title_arr[] = $this->config->item('site_name');
 $title_string = implode(' - ', array_filter($title_arr));
 
-// Sidebar? Presume not.
-$left_classes = "sixteen columns";
+// Sidebar? Presume not!
+$left_classes = "grid_16 body";
 $right_classes = "";
 $show_sidebar = false;
 if (isset($sidebar) && !empty($sidebar))
 {
-	$left_classes = "twelve columns body";
-	$right_classes = "four columns sidebar";
+	$left_classes = "grid_12 body";
+	$right_classes = "grid_4 sidebar";
 	$show_sidebar = true;
 }
 ?>
@@ -34,9 +34,11 @@ if (isset($sidebar) && !empty($sidebar))
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
-	<link rel="stylesheet" href="css/base.css">
+	<!-- <link rel="stylesheet" href="css/base.css">
 	<link rel="stylesheet" href="css/skeleton.css">
-	<link rel="stylesheet" href="css/layout.css">
+	<link rel="stylesheet" href="css/layout.css"> -->
+	<link rel="stylesheet" href="css/960.all.css">
+	<link rel="stylesheet" href="css/rota.css">
 
 	<link rel="shortcut icon" href="img/global/favicon.ico">
 	<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
@@ -77,9 +79,9 @@ if (isset($sidebar) && !empty($sidebar))
 	<?php $this->load->view('template/header', $header) ?>
 	
 	
-	<div class="container main">
+	<div class="container_16 main">
 	
-		<div class="sixteen columns title">
+		<div class="grid_16 title">
 			<h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1>
 			<hr>
 		</div> <!-- / .title -->

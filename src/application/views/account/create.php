@@ -17,9 +17,9 @@ $errors = validation_errors();
 		</ul>
 	</p>
 
-	<p>We treat your information with greate care. We promise never to pass on your
-	personal details to third parties, and do our best to keep it secure. We may 
-	send you the odd email in relation to ROTA, but we won't spam you.</p>
+	<p>We treat your information with greate care and promise never to pass on
+	your personal details to third parties. We may send you the odd email in 
+	relation to ROTA, but we won't spam you.</p>
 
 	<p>Just enter your email address and we'll send you a message explaining what 
 	to do next.</p>
@@ -33,11 +33,11 @@ $errors = validation_errors();
 
 <?php echo form_open(current_url()) ?>
 	<div class="box">
-		<div class="three columns alpha">
+		<div class="grid_3 alpha">
 			<h5>Your email address</h5>
 		</div>
 
-		<div class="eight columns omega">
+		<div class="grid_8 omega">
 			<input type="text" name="email" size="40" value="<?php echo set_value('email') ?>">
 			<input type="submit" value="Submit" class="green button">
 		</div>
