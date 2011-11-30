@@ -42,7 +42,7 @@ class Account extends MY_Controller
 			}
 			else
 			{
-				$this->session->set_flashdata('success', 'You have now been logged in!');
+				$this->session->set_flashdata('success', 'You are now been logged in!');
 				redirect();
 			}
 		}
@@ -64,7 +64,10 @@ class Account extends MY_Controller
 	 */
 	function logout()
 	{
-		if (!$this->auth->logged_in()) redirect();
+		if ( ! $this->auth->logged_in())
+		{
+			redirect();
+		}
 		$this->auth->logout();
 		redirect();
 	}
@@ -122,7 +125,7 @@ class Account extends MY_Controller
 		{
 			// Look up the account using the code.
 			$account = $this->accounts_model->find_by_verify($code);
-			if (!$account)
+			if ( ! $account)
 			{
 				show_error('Could not find the account specified. Please check and try again. Perhaps it has already been verified?', 404);
 			}
@@ -158,12 +161,12 @@ class Account extends MY_Controller
 		else
 		{
 			$account = $this->accounts_model->find_by_verify($verify_code);
-			if (!$account) show_error('Could not find account using verification code ' . $verify_code);
+			if ( ! $account) show_error('Could not find account using verification code ' . $verify_code);
 			
 			// Attempt to set the password. Should only fail if blank!
 			$set = $this->accounts_model->set_password($account->account_id, $password1);
 			
-			if (!$set)
+			if ( ! $set)
 			{
 				show_error('An error occurred when trying to set your chosen password.');
 			}
@@ -180,7 +183,7 @@ class Account extends MY_Controller
 			// OK! Now log them in
 			$login = $this->auth->login($account->email, $password1);
 			
-			if (!$login)
+			if ( ! $login)
 			{
 				$this->session->set_flashdata('error', 'Could not log you in: ' . $this->auth->lasterr);
 			}
@@ -189,19 +192,9 @@ class Account extends MY_Controller
 				$this->session->set_flashdata('success', 'Your password has been set and you are now logged in.');
 			}
 			
-			redirect('shack/add_profile');
+			redirect('shack/profiles/add');
 			
 		}
-	}
-	
-	
-	
-	
-	function add_profile()
-	{
-		$data['title'] = 'Add an operator profile';
-		$data['body'] = '';
-		$this->page($data);
 	}
 	
 	

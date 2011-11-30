@@ -36,6 +36,51 @@ class Auth
 	
 	
 	/**
+	 * Check for authentication and level. Either redirect or return true/false.
+	 *
+	 * @param string $type User type to check for
+	 * @param bool $return Only return the result of the check
+	 * @return bool
+	 */
+	public function check($type = null, $return = false)
+	{
+		// Default value
+		$auth_ok = false;
+		
+		if ($type == null)
+		{
+			// No type to check - only make sure user is logged in
+			if ($this->logged_in())
+			{
+				$auth_ok = true;
+			}
+		}
+		else
+		{
+			$ok_types = explode(',', $type);
+			if (in_array($this->CI->session->userdata('type'), $ok_types))
+			{
+				$auth_ok = true;
+			}
+		}
+		
+		if ($return == true)
+		{
+			return $auth_ok;
+		}
+		else
+		{
+			if ($auth_ok == false)
+			{
+				show_error('You are not authorised to access that page.');
+			}
+		}
+	}
+	
+	
+	
+	
+	/**
 	 * Attempt to create a login session by authenticating email+pwd in the DB
 	 */
 	public function login($email = null, $password = null)
