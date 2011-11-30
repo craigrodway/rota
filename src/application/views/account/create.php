@@ -32,15 +32,18 @@ $errors = validation_errors();
 
 
 <?php echo form_open(current_url()) ?>
+	
 	<div class="box">
-		<div class="grid_3 alpha">
-			<h5>Your email address</h5>
+	
+		<div class="clearfix remove-bottom">
+			<label for="email">Email address</label>
+			<div class="input">
+				<input type="text" name="email" size="40" value="">
+				<br><br>
+				<input type="submit" class="btn primary" value="Submit">
+			</div>
 		</div>
 
-		<div class="grid_8 omega">
-			<input type="text" name="email" size="40" value="<?php echo set_value('email') ?>">
-			<input type="submit" value="Submit" class="green button">
-		</div>
-		<br class="clear">
 	</div>
+	
 </form>

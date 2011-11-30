@@ -7,6 +7,8 @@ a {
 	color: #1D82AB;
 }
 
+hr { border-color: #ccc; }
+
 a:hover {
 	text-decoration: underline;
 }
@@ -16,13 +18,16 @@ body {
 }
 
 .title h1 {
-	font-family: Helvetica, Arial, Sans-serif;
 	font-weight: normal;
 	font-size: 18px;
 	line-height: 18px;
 	padding: 0;
-	margin: 0 0 10px 0;
 	color: #444;
+}
+
+.title {
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 20px;
 }
 
 
@@ -112,9 +117,10 @@ div.main {
 
 
 div.footer {
-	padding-bottom: 10px;
+	padding: 20px 0;
 	font-size: 11px;
 	color: #999;
+	border-top: 1px solid #ccc;
 }
 	
 	div.footer .right {
@@ -144,11 +150,14 @@ div.box {
 	padding: 20px;
 }
 
-
+div.bg {
+	background: #f3f3f3;
+	padding: 20px 0;
+}
 
 
 /* #Buttons
-================================================== */
+================================================== 
 .button {
 	padding: 5px 10px;
 	display: inline;
@@ -182,6 +191,7 @@ div.box {
 .button.large:hover { background-position: 0 -35px; }
 .button.large:active { padding: 8px 12px 6px; background-position: 0 top; }
 
+*/
 
 
 
@@ -193,10 +203,10 @@ div.box {
 /* #Notices (from blueprint css)
 ======================================= */
 
+/*
 .error, .alert, .notice, .success, .info {
 	padding: 10px 10px 10px 40px;
 	margin-bottom: 20px;
-	/*border: 2px solid #ddd;*/
 	border: 1px solid #ccc;
 	background-position: 10px 50%;
 	background-repeat: no-repeat;
@@ -211,12 +221,12 @@ div.box {
 .notice a {color:#514721;}
 .success a {color:#264409;}
 .info a {color:#205791;}
-
+*/
 
 
 
 /* #Forms
-======================================= */
+======================================= 
 	form {
 		margin-bottom: 20px; }
 	fieldset {

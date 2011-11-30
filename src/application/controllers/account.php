@@ -20,7 +20,7 @@ class Account extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
 	}
 	
 	

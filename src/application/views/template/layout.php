@@ -5,13 +5,13 @@ $title_arr[] = $this->config->item('site_name');
 $title_string = implode(' - ', array_filter($title_arr));
 
 // Sidebar? Presume not!
-$left_classes = "grid_16 body";
+$left_classes = "span16 body";
 $right_classes = "";
 $show_sidebar = false;
 if (isset($sidebar) && !empty($sidebar))
 {
-	$left_classes = "grid_12 body";
-	$right_classes = "grid_4 sidebar";
+	$left_classes = "span12 body";
+	$right_classes = "span4 sidebar";
 	$show_sidebar = true;
 }
 ?>
@@ -37,7 +37,7 @@ if (isset($sidebar) && !empty($sidebar))
 	<!-- <link rel="stylesheet" href="css/base.css">
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css"> -->
-	<link rel="stylesheet" href="css/960.all.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/rota.css">
 
 	<link rel="shortcut icon" href="img/global/favicon.ico">
@@ -79,40 +79,42 @@ if (isset($sidebar) && !empty($sidebar))
 	<?php $this->load->view('template/header', $header) ?>
 	
 	
-	<div class="container_16 main">
+	<div class="container main">
+		
+		<div class="row">
 	
-		<div class="grid_16 title">
-			<h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1>
-			<hr>
-		</div> <!-- / .title -->
-		
-		<?php
-		$flashes = array('error', 'alert', 'success', 'info', 'notice');
-		$flashmsgs = null;
-		foreach ($flashes as $f)
-		{
-			if ($this->session->flashdata($f))
+			<div class="span16 title">
+				<h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1>
+			</div> <!-- / .title -->
+			
+			<?php
+			$flashes = array('success', 'warning', 'error', 'info');
+			$flashmsgs = null;
+			foreach ($flashes as $f)
 			{
-				$flashmsgs .= '<div class="' . $f . '">' . $this->session->flashdata($f) . '</div>';
+				if ($this->session->flashdata($f))
+				{
+					$flashmsgs .= '<div class="alert-message ' . $f . '"><p>' . $this->session->flashdata($f) . '</p></div>';
+				}
 			}
-		}
-		if ($flashmsgs) echo '<div class="grid_16">' . $flashmsgs . '</div>';
-		?>
-		
-		<div class="<?php echo $left_classes ?>">
+			if ($flashmsgs) echo '<div class="span16">' . $flashmsgs . '</div>';
+			?>
 			
-			<?php echo $body ?>
+			<div class="<?php echo $left_classes ?>">
+				
+				<?php echo $body ?>
+				
+			</div> <!-- / .body -->
 			
-		</div> <!-- / .body -->
+			<?php if ($show_sidebar): ?>
+			
+			<div class="<?php echo $right_classes ?>">
+				<?php echo $sidebar ?>
+			</div> <!-- / .sidebar -->
+			
+			<?php endif; ?>
 		
-		<?php if ($show_sidebar): ?>
-		
-		<div class="<?php echo $right_classes ?>">
-			<?php echo $sidebar ?>
-		</div> <!-- / .sidebar -->
-		
-		<?php endif; ?>
-		
+		</div> <!-- / .row -->
 		
 	</div> <!-- / .container.main -->
 	
