@@ -59,6 +59,7 @@
 	<div class="span5 bg add-bottom">
 		
 		<form class="form-stacked" method="GET" action="<?php echo site_url('admin/railways/') ?>">
+			
 			<div class="clearfix">
 				<label for="name">Name</label>
 				<div class="input">

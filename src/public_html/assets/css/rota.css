@@ -34,6 +34,12 @@ div.title {
 
 
 
+div.pagination ul li a:hover {
+	text-decoration: none;
+}
+
+
+
 
 ul.horizontal, ul.horizontal li {
 	list-style: none;
