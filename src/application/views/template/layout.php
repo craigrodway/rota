@@ -120,6 +120,7 @@ if (isset($sidebar) && !empty($sidebar))
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/bootstrap-modal.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){ jsq.run(); });
 	</script>

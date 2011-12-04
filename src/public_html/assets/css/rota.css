@@ -19,7 +19,7 @@ body {
 	background: #fff; /*#f3f3f3;*/
 }
 
-.title h1 {
+div.title h1 {
 	font-weight: normal;
 	font-size: 18px;
 	line-height: 18px;
@@ -27,7 +27,7 @@ body {
 	color: #444;
 }
 
-.title {
+div.title {
 	border-bottom: 1px solid #ccc;
 	margin-bottom: 20px;
 }
@@ -143,8 +143,23 @@ ul.ticks li {
 	margin-left: 20px;
 	margin-top: 4px;
 	margin-right: 4px;
+	color: #333;
 }
 
+
+
+
+table td.title {
+	font-weight: bold;
+}
+
+table td.ops {
+	text-align: right;
+}
+
+table td.ops a.icon-link {
+	margin-left: 15px;
+}
 
 
 div.box {
@@ -152,7 +167,7 @@ div.box {
 	padding: 20px;
 }
 
-div.bg {
+.bg {
 	background: #f3f3f3;
 	padding: 20px 0;
 }
