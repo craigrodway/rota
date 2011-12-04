@@ -20,7 +20,8 @@ class Railways extends AdminController
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
+		//$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
 	}
 	
 	
@@ -79,6 +80,71 @@ class Railways extends AdminController
 		$this->page($data);
 	}
 	
+	
+	
+	
+	function save()
+	{
+		$railway_id = $this->input->post('railway_id');
+		
+		$this->form_validation
+			->set_rules('name', 'Railway name', 'required|trim|max_length[100]')
+			->set_rules('url', 'Web address', 'prep_url')
+			->set_rules('info_src', 'trim')
+			->set_rules('photo_url', 'Photo URL')
+			->set_rules('postcode', 'Postcode', 'max_length[8]')
+			->set_rules('locator', 'Locator square')
+			->set_rules('wab', 'WAB');
+		
+		if ($this->form_validation->run() == FALSE)
+		{
+			return ($railway_id) ? $this->edit($railway_id) : $this->add();
+		}
+		else
+		{
+			// OK!
+			
+			$data['name'] = $this->input->post('name');
+			$data['url'] = $this->input->post('url');
+			$data['info_src'] = strip_tags($this->input->post('info_src'));
+			$data['info_html'] = nl2br($data['info_src']);
+			$data['postcode'] = $this->input->post('postcode');
+			$data['wab'] = $this->input->post('wab');
+			$data['locator'] = $this->input->post('locator');
+			
+			$photo_url = $this->input->post('photo_url');
+			
+			if ($photo_url)
+			{
+				$photo = $this->railways_model->get_remote_image($photo_url);
+				if ($photo == false)
+				{
+					$this->session->set_flashdata('warning', '<strong>Problem:</strong> could not retrieve photo.');
+				}
+			}
+			
+			if ($railway_id)
+			{
+				// Update
+				$op = $this->railways_model->edit($railway_id, $data);
+				$ok = "<strong>{$data['name']}</strong> has been updated successfully.";
+				$err = 'An error occurred while updating the railway.';
+			}
+			else
+			{
+				// Add
+				$op = $this->railways_model->add($data);
+				$ok = "<strong>{$data['name']}</strong> has been added successfully.";
+				$err = 'An error occurred while adding the railway';
+			}
+			
+			$msg_type = ($op) ? 'success' : 'error';
+			$msg = ($op) ? $ok : $err;
+			$this->session->set_flashdata($msg_type, $msg);
+			redirect('admin/railways');
+			
+		}
+	}
 	
 	
 	

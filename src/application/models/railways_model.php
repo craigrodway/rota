@@ -86,6 +86,77 @@ class Railways_model extends CI_Model
 	
 	
 	
+	function add($data = array())
+	{
+		if (empty($data)) return false;
+		return $this->db->insert('railways', $data);
+	}
+	
+	
+	
+	
+	function edit($railway_id = null, $data = array())
+	{
+		if ( ! $railway_id) return false;
+		if (empty($data)) return false;
+		
+		$this->db->where('railway_id', $railway_id);
+		return $this->db->update('railways', $data);
+	}
+	
+	
+	
+	
+	function get_remote_image($url = '')
+	{
+		// Path to file storage
+		$dir = '../../storage/';
+		// Configure filename
+		$orig_filename = explode(".", basename($url));
+		$new_filename = "railway-" . uniqid() . "." . $orig_filename[1];
+		$filepath = $dir . $new_filename; 
+		$lfile = fopen($filepath, "w");
+		
+		// Check if we can write
+		if ( ! is_really_writable($filepath)) return false;
+		
+		// Initialise cURL. Get remote image and save to local file
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'curl/railways-on-the-air');
+		curl_setopt($ch, CURLOPT_FILE, $lfile);
+		curl_exec($ch);
+		
+		// Validate request
+		$valid_types = array('image/jpeg', 'image/png', 'image/gif');
+		$status = false;
+		$info = curl_getinfo($ch);
+		// Not 200 OK and not an image, FAIL.
+		if ($info['http_code'] == 200 && in_array($info['content_type'], $valid_types))
+		{
+			$status = true;
+		}
+		
+		curl_close($ch);
+		fclose($lfile);
+		
+		if ($status == false)
+		{
+			@unlink($filepath);
+		}
+		
+		// TODO:
+		//  - resize/copy as appropriate 
+		
+		// Return path to file
+		return ($status == true) ? $filepath : false;
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/models/railways_model.php */

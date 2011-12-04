@@ -1,10 +1,15 @@
-<?php echo form_open('railways/save') ?>
-<?php if (isset($railway)) echo form_hidden('railway_id', $railway->railway_id) ?>
+<?php
+$errors = validation_errors();
+echo form_open('admin/railways/save');
+if (isset($railway)) echo form_hidden('railway_id', $railway->railway_id);
+
+if ( ! empty($errors)) echo '<div class="alert-message block-message error"><ul>' . $errors . '</ul></div>';
+?>
 
 <fieldset>
 	<legend>General info</legend>
 	
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('name')) echo 'error' ?>">
 		<label for="name">Name</label>
 		<div class="input"><?php
 			echo form_input(array(
@@ -16,7 +21,7 @@
 		?></div>
 	</div>
 
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('url')) echo 'error' ?>">
 		<label for="url">Web address</label>
 		<div class="input">
 			<div class="input-prepend">
@@ -33,7 +38,7 @@
 		</div>
 	</div>
 	
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('info_src')) echo 'error' ?>">
 		<label for="info_src">Information</label>
 		<div class="input"><?php
 			echo form_textarea(array(
@@ -70,7 +75,7 @@
 <fieldset>
 	<legend>Location</legend>
 	
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('postcode')) echo 'error' ?>">
 		<label for="postcode">Post code</label>
 		<div class="input"><?php
 			echo form_input(array(
@@ -82,7 +87,7 @@
 		?> <button class="small btn" id="postcode-lookup">Look up</button></div>
 	</div>
 	
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('locator')) echo 'error' ?>">
 		<label for="locator">Locator square</label>
 		<div class="input"><?php
 			echo form_input(array(
@@ -96,7 +101,7 @@
 		</div>
 	</div>
 	
-	<div class="clearfix">
+	<div class="clearfix <?php if (form_error('wab')) echo 'error' ?>">
 		<label for="wab">WAB area</label>
 		<div class="input"><?php
 			echo form_input(array(

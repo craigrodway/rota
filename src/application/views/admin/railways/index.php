@@ -4,7 +4,7 @@
 
 <div class="row">
 
-	<div class="span11">
+	<div class="span12">
 	
 	<?php if ($railways): ?>
 	
@@ -53,37 +53,37 @@
 
 	<?php endif; ?>
 	
-	</div> <!-- / .span11 -->
+	</div> <!-- / .span12 -->
 	
 	
-	<div class="span5 bg add-bottom">
+	<div class="span4 bg add-bottom">
 		
 		<form class="form-stacked" method="GET" action="<?php echo site_url('admin/railways/') ?>">
 			
 			<div class="clearfix">
 				<label for="name">Name</label>
 				<div class="input">
-					<input type="text" name="name" value="<?php echo @set_value('name', $filter_params['name']) ?>">
+					<input class="span3" type="text" name="name" value="<?php echo @set_value('name', $filter_params['name']) ?>">
 				</div>
 			</div>
 			
 			<div class="clearfix">
 				<label for="name">WAB</label>
 				<div class="input">
-					<input type="text" name="wab" value="<?php echo @set_value('wab', $filter_params['wab']) ?>">
+					<input class="span3" type="text" name="wab" value="<?php echo @set_value('wab', $filter_params['wab']) ?>">
 				</div>
 			</div>
 			
 			<div class="clearfix">
 				<label for="name">Locator</label>
 				<div class="input">
-					<input type="text" name="locator" value="<?php echo @set_value('locator', $filter_params['locator']) ?>">
+					<input class="span3" type="text" name="locator" value="<?php echo @set_value('locator', $filter_params['locator']) ?>">
 				</div>
 			</div>
 			<input type="submit" class="btn primary" value="Filter">
 		</form>
 		
-	</div> <!-- .span5 -->
+	</div> <!-- .span4 -->
 	
 
 </div>
@@ -101,7 +101,7 @@
 		<p>Are you sure you want to delete this railway?</p>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn primary">Delete</a>
+		<a href="#" class="btn danger">Delete</a>
 		<a href="#" class="btn secondary">Cancel</a>
 	</div>
 </div>
