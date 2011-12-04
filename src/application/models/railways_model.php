@@ -66,6 +66,26 @@ class Railways_model extends CI_Model
 	
 	
 	
+	function get($railway_id = null)
+	{
+		if ( ! $railway_id) return false;
+		
+		$sql = 'SELECT * FROM railways WHERE railway_id = ? LIMIT 1';
+		$query = $this->db->query($sql, array($railway_id));
+		
+		if ($query->num_rows() == 1)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/models/railways_model.php */

@@ -54,6 +54,34 @@ class Railways extends AdminController
 	
 	
 	
+	/**
+	 * Add a new railway
+	 */
+	function add()
+	{
+		$data['title'] = 'Add a railway';
+		$data['body'] = $this->load->view('admin/railways/addedit', NULL, TRUE);
+		$data['sidebar'] = null;
+		$this->page($data);
+	}
+	
+	
+	
+	
+	function edit($railway_id = null)
+	{
+		if ( ! $railway_id) redirect('admin/railways');
+		
+		$body['railway'] = $this->railways_model->get($railway_id);
+		$data['body'] = $this->load->view('admin/railways/addedit', $body, TRUE);
+		$data['title'] = 'Edit railway';
+		$data['sidebar'] = null;
+		$this->page($data);
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/controllers/admin/railways.php */
