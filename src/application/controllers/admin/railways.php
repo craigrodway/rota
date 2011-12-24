@@ -38,11 +38,11 @@ class Railways extends AdminController
 		$config['base_url'] = site_url('admin/railways/index/');
 		$config['suffix'] = '?' . @http_build_query($filter_params);
 		$config['total_rows'] = $this->railways_model->count_all($filter_params);
-		$config['per_page'] = 10; 
+		$config['per_page'] = 15; 
 		$config['uri_segment'] = 4;
 		$this->pagination->initialize($config); 
 		
-		$body['railways'] = $this->railways_model->get_all($pager, 10, $filter_params);
+		$body['railways'] = $this->railways_model->get_all($pager, $config['per_page'], $filter_params);
 		$body['filter_params'] = $filter_params;
 		
 		$data['body'] = $this->load->view('admin/railways/index', $body, TRUE);

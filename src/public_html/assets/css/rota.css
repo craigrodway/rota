@@ -65,7 +65,7 @@ div.pc100 {
 
 
 div.pc100.header {
-	padding: 10px 0;
+	padding: 20px 0;
 	background-color: #000;
 	color: #fff;
 }
@@ -176,6 +176,11 @@ div.box {
 .bg {
 	background: #f3f3f3;
 	padding: 20px 0;
+}
+
+
+.filter>div {
+	margin-bottom: 20px;
 }
 
 
