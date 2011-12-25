@@ -12,6 +12,14 @@
  * http://opensource.org/licenses/OSL-3.0
  */
 
+
+/**
+ * ROTA Nearby class
+ *
+ * Do various lookups/conversions using the Nearby.org.uk API
+ *
+ * @author		Craig A Rodway
+ */
 class Nearby
 {
 	
@@ -41,7 +49,7 @@ class Nearby
 	public function postcode($pc = '')
 	{
 		// Specify API params
-		$data['p'] = $pc;
+		$data['p'] = preg_replace('/\s|\s+/', '', trim(urldecode($pc)));
 		$data['in'] = 'postcode-uk';
 		$data['want'] = 'iaru-wgs84,ll-wgs84';
 		

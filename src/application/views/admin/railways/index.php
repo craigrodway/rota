@@ -51,6 +51,7 @@
 					<th>Name</th>
 					<th>WAB</th>
 					<th>Locator</th>
+					<th>Postcode</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -63,6 +64,7 @@
 					<td><?php echo anchor('admin/railways/edit/' . $r->railway_id, $r->name) ?></td>
 					<td><?php echo $r->wab ?></td>
 					<td><?php echo $r->locator ?></td>
+					<td><?php echo $r->postcode ?></td>
 					<td class="ops">
 						<?php
 						echo icon_link('world', $r->url, 'Visit website', 'target="_blank"');
@@ -125,7 +127,9 @@
 </div>
 
 
-<div style="border: 1px solid #ccc; padding: 20px;">MAP</div>
+<div style="border: 1px solid #ccc; padding: 0px;">
+	<?php echo $map['html']; ?>
+</div>
 
 
 <div id="dialog-delete" class="modal hide fade hidden">
@@ -138,7 +142,8 @@
 	</div>
 	<div class="modal-footer">
 		<?php echo form_open(site_url('admin/railways/delete'), '', array(
-			'railway_id' => '0'
+			'railway_id' => '0',
+			'redirect_to' => current_url(),
 		)) ?>
 		<input type="submit" class="btn danger" value="Delete">
 		<input type="reset" class="btn secondary x" value="Cancel">

@@ -36,7 +36,13 @@ class Railways_model extends CI_Model
 			$this->db->like(array_filter($filter_params, 'strlen'));
 		}
 		$this->db->order_by('name', 'asc');
-		$this->db->limit($limit, $page);
+		
+		// Only limit results if specified (explicitly supply NULL to get ALL railways)
+		if ($page !== NULL && $limit !== NULL)
+		{
+			$this->db->limit($limit, $page);
+		}
+		
 		$query = $this->db->get('railways');
 		if ($query->num_rows() > 0)
 		{
@@ -54,10 +60,7 @@ class Railways_model extends CI_Model
 	{
 		if ( ! empty($filter_params))
 		{
-			foreach ($filter_params as $n => $v)
-			{
-				if ( ! empty($v)) $this->db->like($n, "$v");
-			}
+			$this->db->like(array_filter($filter_params, 'strlen'));
 		}
 		$query = $this->db->get('railways');
 		return $query->num_rows();
@@ -107,18 +110,41 @@ class Railways_model extends CI_Model
 	
 	
 	
+	function delete($railway_id = null)
+	{
+		if ( ! $railway_id) return false;
+		
+		$sql = 'DELETE FROM railways WHERE railway_id = ? LIMIT 1';
+		$query = $this->db->query($sql, array($railway_id));
+		
+		return ($this->db->affected_rows() == 1);
+	}
+	
+	
+	
+	
+	/**
+	 * Get an image from remote server and save locally
+	 *
+	 * @param string $url		URL of picture to retrieve
+	 * @return mixed		String containing path if successful. False if error.
+	 */
 	function get_remote_image($url = '')
 	{
 		// Path to file storage
 		$dir = '../../storage/';
 		// Configure filename
 		$orig_filename = explode(".", basename($url));
-		$new_filename = "railway-" . uniqid() . "." . $orig_filename[1];
+		$new_filename = strtolower("railway-" . uniqid() . "." . end($orig_filename));
 		$filepath = $dir . $new_filename; 
 		$lfile = fopen($filepath, "w");
 		
 		// Check if we can write
-		if ( ! is_really_writable($filepath)) return false;
+		if ( ! is_really_writable($filepath))
+		{
+			$this->lasterr = "Path ($filepath) is not really writable.";
+			return false;
+		}
 		
 		// Initialise cURL. Get remote image and save to local file
 		$ch = curl_init();
@@ -133,25 +159,28 @@ class Railways_model extends CI_Model
 		$valid_types = array('image/jpeg', 'image/png', 'image/gif');
 		$status = false;
 		$info = curl_getinfo($ch);
-		// Not 200 OK and not an image, FAIL.
+		
+		curl_close($ch);
+		fclose($lfile);
+		
+		// Must be 200 OK and an image content type
 		if ($info['http_code'] == 200 && in_array($info['content_type'], $valid_types))
 		{
 			$status = true;
 		}
 		
-		curl_close($ch);
-		fclose($lfile);
-		
 		if ($status == false)
 		{
 			@unlink($filepath);
+			$this->lasterr = "Error retrieving remote image - status code was {$info['http_code']}.";
+			return false;
 		}
 		
 		// TODO:
 		//  - resize/copy as appropriate 
 		
 		// Return path to file
-		return ($status == true) ? $filepath : false;
+		return $filepath;
 	}
 	
 	

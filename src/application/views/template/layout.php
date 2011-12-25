@@ -121,9 +121,25 @@ if (isset($sidebar) && !empty($sidebar))
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
 	<script src="js/bootstrap-modal.js"></script>
+	<?php
+	if ( ! empty($js))
+	{
+		foreach ($js as $s)
+		{
+			echo '<script src="js/' . $s . '"></script>'."\n";
+		}
+	}
+	?>
 	<script type="text/javascript">
 	$(document).ready(function(){ jsq.run(); });
 	</script>
+	
+	<?php
+	if ( ! empty($map))
+	{
+		echo $map['js'];
+	}
+	?>
 
 
 </body>
