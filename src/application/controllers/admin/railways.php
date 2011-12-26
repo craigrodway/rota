@@ -22,6 +22,32 @@ class Railways extends AdminController
 		$this->load->library('form_validation');
 		//$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		
+		$config = array(
+			'field' => 'slug',
+			'title' => 'name',
+			'table' => 'railways',
+			'id' => 'railway_id',
+		);
+		$this->load->library('slug', $config);
+	}
+	
+	
+	
+	
+	function setslugs()
+	{
+		$all_railways = $this->railways_model->get_all(NULL, NULL);
+		
+		foreach ($all_railways as $r)
+		{
+			$data = array(
+				'name' => $r->name,
+			);
+			$data['slug'] = $this->slug->create_uri($data, $r->railway_id);
+			$this->db->where('railway_id', $r->railway_id);
+			$this->db->update('railways', $data);
+		}
 	}
 	
 	
@@ -87,6 +113,7 @@ class Railways extends AdminController
 	 */
 	function add()
 	{
+		$this->session->set_userdata('redirect_to', 'admin/railways');
 		$data['js'] = array('modules/ROTA.js');
 		$data['title'] = 'Add a railway';
 		$data['body'] = $this->load->view('admin/railways/addedit', NULL, TRUE);
@@ -97,6 +124,9 @@ class Railways extends AdminController
 	
 	
 	
+	/**
+	 * Page to edit a railway
+	 */
 	function edit($railway_id = null)
 	{
 		if ( ! $railway_id) redirect('admin/railways');
@@ -115,6 +145,9 @@ class Railways extends AdminController
 	
 	
 	
+	/**
+	 * Add new or update a railway
+	 */
 	function save()
 	{
 		$railway_id = $this->input->post('railway_id');
@@ -145,6 +178,9 @@ class Railways extends AdminController
 			$data['locator'] = $this->input->post('locator');
 			$data['lat'] = $this->input->post('lat');
 			$data['lng'] = $this->input->post('lng');
+			$data['slug'] = ($railway_id)
+				? $this->slug->create_uri($data, $railway_id)
+				: $this->slug->create_uri($data);
 			
 			$photo_url = $this->input->post('photo_url');
 			
@@ -177,7 +213,7 @@ class Railways extends AdminController
 			$msg = ($op) ? $ok : $err;
 			$this->session->set_flashdata($msg_type, $msg);
 			
-			$redirect_to = $this->session->userdata('redirect_to', 'admin/railways');
+			$redirect_to = $this->session->userdata('redirect_to');
 			redirect($redirect_to);
 			
 		}
@@ -186,6 +222,9 @@ class Railways extends AdminController
 	
 	
 	
+	/**
+	 * Delete a railway (only accepts POSTed data)
+	 */
 	function delete()
 	{
 		$id = $this->input->post('railway_id');

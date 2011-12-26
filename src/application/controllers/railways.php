@@ -68,7 +68,9 @@ class Railways extends MY_Controller
 			{
 				$marker = array();
 				$marker['position'] = $latlng;
-				$marker['infowindow_content'] = addslashes(anchor('railways/' . $r->railway_id, $r->name));
+				$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
+				// TODO: Use a view for the infowindow content (add desc + photo?)
+				$marker['infowindow_content'] = addslashes(anchor('railways/' . $r->slug, $r->name));
 				$this->googlemaps->add_marker($marker);
 			}
 		}
@@ -81,6 +83,45 @@ class Railways extends MY_Controller
 		$data['body'] = $this->load->view('railways/index', $body, TRUE);
 		$data['sidebar'] = NULL;
 		$this->page($data);
+	}
+	
+	
+	
+	
+	public function info($slug)
+	{
+		$this->output->enable_profiler(true);
+		$body['railway'] = $this->railways_model->get_by_slug($slug);
+		
+		if ($body['railway'])
+		{
+			$data['title'] = $body['railway']->name;
+		}
+		else
+		{
+			$data['title'] = 'Railway information';
+			$body['search'] = $this->railways_model->get_all(NULL, NULL, array('slug' => $slug));
+		}
+		
+		$data['sidebar'] = NULL;
+		$data['body'] = $this->load->view('railways/info', $body, TRUE);
+		$this->page($data);
+	}
+	
+	
+	
+	
+	public function _remap($method, $params = array())
+	{
+		// If requested method isn't in the Magic 3, look it up as a railway slug
+		if (in_array($method, array('index', 'grid', 'map')))
+		{
+			$this->$method();
+		}
+		else
+		{
+			$this->info($method);
+		}
 	}
 	
 	

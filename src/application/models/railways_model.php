@@ -71,7 +71,7 @@ class Railways_model extends CI_Model
 	
 	function get($railway_id = null)
 	{
-		if ( ! $railway_id) return false;
+		if ( ! $railway_id) return FALSE;
 		
 		$sql = 'SELECT * FROM railways WHERE railway_id = ? LIMIT 1';
 		$query = $this->db->query($sql, array($railway_id));
@@ -83,6 +83,29 @@ class Railways_model extends CI_Model
 		else
 		{
 			return false;
+		}
+	}
+	
+	
+	
+	
+	function get_by_slug($slug = '')
+	{
+		if ($slug == '')
+		{
+			return FALSE;
+		}
+		
+		$sql = 'SELECT * FROM railways WHERE slug = ? LIMIT 1';
+		$query = $this->db->query($sql, array($slug));
+		
+		if ($query->num_rows() == 1)
+		{
+			return $query->row();
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 	
