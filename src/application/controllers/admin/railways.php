@@ -132,12 +132,11 @@ class Railways extends AdminController
 		// Index page to redirect to
 		$this->session->set_userdata('redirect_to', $this->input->server('HTTP_REFERER'));
 		
-		$data['js'] = array('modules/ROTA.js');
-		$body['railway'] = $this->railways_model->get($railway_id);
-		$data['body'] = $this->load->view('admin/railways/addedit', $body, TRUE);
-		$data['title'] = 'Edit railway';
-		$data['sidebar'] = null;
-		$this->page($data);
+		$data['railway'] = $this->railways_model->get($railway_id);
+		
+		$this->layout->set_title('Edit railway');
+		$this->layout->set_view('content', 'admin/railways/addedit');
+		$this->layout->page($data);
 	}
 	
 	
