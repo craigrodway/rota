@@ -12,7 +12,7 @@
 					<div style="margin-right:15px">
 						<?php if ($this->auth->logged_in()): ?>
 							Welcome <strong><?php echo $this->session->userdata('email') ?></strong> 
-								<?php echo ($type == 'admin') ? '(admin)' : '' ?> | 
+								<?php echo ($header['type'] == 'admin') ? '(admin)' : '' ?> | 
 							<?php echo anchor('account/logout', 'Log Out') ?>
 						<?php else: ?>
 							<?php echo anchor('account/create', 'Create an account') ?> |
@@ -28,17 +28,17 @@
 	</div> <!-- / .pc100.header-->
 	
 	
-	<div class="pc100 nav add-bottom user-<?php echo $type ?>">
+	<div class="pc100 nav add-bottom user-<?php echo $header['type'] ?>">
 		
 		<div class="container">
 		
 			<div class="row">
 			
-				<?php if ($type == 'normal'): ?>
+				<?php if ($header['type'] == 'normal'): ?>
 				
 				<div class="span8">
 					<ul class="horizontal">
-						<?php foreach ($nav_main as $item): ?>
+						<?php foreach ($header['nav_main'] as $item): ?>
 							<?php
 							$cls = '';
 							$uri = $this->uri->uri_string();
@@ -56,7 +56,7 @@
 				<div class="span8">
 					<?php if ($this->auth->logged_in()): ?>
 					<ul class="horizontal" style="float:right">
-						<?php foreach ($nav_shack as $item): ?>
+						<?php foreach ($header['nav_shack'] as $item): ?>
 							<?php
 							$cls = '';
 							$uri = $this->uri->uri_string();
@@ -72,11 +72,11 @@
 					<?php endif; ?>
 				</div>
 				
-				<?php elseif ($type == 'admin'): ?>
+				<?php elseif ($header['type'] == 'admin'): ?>
 				
 				<div class="span16">
 					<ul class="horizontal">
-						<?php foreach ($nav_admin as $item): ?>
+						<?php foreach ($header['nav_admin'] as $item): ?>
 							<?php
 							$cls = '';
 							$uri = $this->uri->uri_string();

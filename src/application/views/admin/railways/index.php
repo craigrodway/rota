@@ -44,7 +44,8 @@
 	
 	<?php if ($railways): ?>
 	
-		<table class="condensed-table bordered-table zebra-striped">
+		<!-- <table class="condense-table bordered-tabl zebra-striped"> -->
+		<table class="simple">
 			
 			<thead>
 				<tr>
@@ -52,7 +53,7 @@
 					<th>WAB</th>
 					<th>Locator</th>
 					<th>Postcode</th>
-					<th></th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			
@@ -61,7 +62,7 @@
 			<?php foreach ($railways as $r): ?>
 				
 				<tr>
-					<td><?php echo anchor('admin/railways/edit/' . $r->railway_id, $r->name) ?></td>
+					<td class="title"><?php echo anchor('admin/railways/edit/' . $r->railway_id, $r->name) ?></td>
 					<td><?php echo $r->wab ?></td>
 					<td><?php echo $r->locator ?></td>
 					<td><?php echo $r->postcode ?></td>

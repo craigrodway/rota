@@ -24,18 +24,19 @@ class Home extends MY_Controller
 	
 	public function index()
 	{
-		$data['title'] = 'Welcome to Railways on the Air';
-		$data['body'] = $this->load->view('home/index', null, true);
-		$this->page($data);
+		$this->layout->set_title('Welcome to Railways on the Air');
+		$this->layout->set_view('content', 'home/index');
+		$this->layout->set_content('sidebar', 'Sidebar');
+		$this->layout->page();
 	}
 	
 	
 	
 	public function about()
 	{
-		$data['title'] = 'About the event';
-		$data['body'] = '';	//$this->load->view('home/about');
-		$this->page($data);
+		$this->layout->set_title('About the event');
+		$this->layout->set_content('content', 'About the event');
+		$this->layout->page();
 	}
 	
 	
@@ -43,9 +44,9 @@ class Home extends MY_Controller
 	
 	public function contact()
 	{
-		$data['title'] = 'Contact us';
-		$data['body'] = '';
-		$this->page($data);
+		$this->layout->set_title('Contact us');
+		$this->layout->set_content('content', 'Contact us about the event');
+		$this->layout->page();
 	}
 	
 	

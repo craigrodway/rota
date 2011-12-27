@@ -30,11 +30,14 @@ class Railways extends AdminController
 			'id' => 'railway_id',
 		);
 		$this->load->library('slug', $config);
+		
+		$this->layout->add_js('modules/ROTA.js');
 	}
 	
 	
 	
 	
+	/*
 	function setslugs()
 	{
 		$all_railways = $this->railways_model->get_all(NULL, NULL);
@@ -49,7 +52,7 @@ class Railways extends AdminController
 			$this->db->update('railways', $data);
 		}
 	}
-	
+	*/
 	
 	
 	
@@ -69,8 +72,8 @@ class Railways extends AdminController
 		$config['uri_segment'] = 4;
 		$this->pagination->initialize($config); 
 		
-		$body['railways'] = $this->railways_model->get_all($pager, $config['per_page'], $filter_params);
-		$body['filter_params'] = $filter_params;
+		$data['railways'] = $this->railways_model->get_all($pager, $config['per_page'], $filter_params);
+		$data['filter_params'] = $filter_params;
 		
 		// Get all railways to show on map
 		$all_railways = $this->railways_model->get_all(NULL, NULL);
@@ -96,13 +99,10 @@ class Railways extends AdminController
 		
 		$data['map'] = $this->googlemaps->create_map();
 		
-		$body['map'] = $data['map'];		
+		$this->layout->set_title('Railways');
+		$this->layout->set_view('content', 'admin/railways/index');
+		$this->layout->page($data);
 		
-		$data['body'] = $this->load->view('admin/railways/index', $body, TRUE);
-		$data['title'] = 'Railways';
-		$data['sidebar'] = null;
-		
-		$this->page($data);
 	}
 	
 	
@@ -114,11 +114,9 @@ class Railways extends AdminController
 	function add()
 	{
 		$this->session->set_userdata('redirect_to', 'admin/railways');
-		$data['js'] = array('modules/ROTA.js');
-		$data['title'] = 'Add a railway';
-		$data['body'] = $this->load->view('admin/railways/addedit', NULL, TRUE);
-		$data['sidebar'] = null;
-		$this->page($data);
+		$this->layout->set_title('Add a railway');
+		$this->layout->set_view('content', 'admin/railways/addedit');
+		$this->layout->page();
 	}
 	
 	

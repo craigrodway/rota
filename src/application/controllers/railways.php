@@ -38,12 +38,12 @@ class Railways extends MY_Controller
 	
 	function grid()
 	{
-		$body['tab'] = 'grid';
-		$body['railways'] = $this->railways_model->get_all(NULL, NULL);
-		$data['title'] = 'Railways';
-		$data['body'] = $this->load->view('railways/index', $body, TRUE);
-		$data['sidebar'] = NULL;
-		$this->page($data);
+		
+		$data['tab'] = 'grid';
+		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
+		$this->layout->set_title('Railways');
+		$this->layout->set_view('content', 'railways/index');
+		$this->layout->page($data);
 	}
 	
 	
@@ -51,8 +51,8 @@ class Railways extends MY_Controller
 	
 	function map()
 	{
-		$body['tab'] = 'map';
-		$body['railways'] = $this->railways_model->get_all(NULL, NULL);
+		$data['tab'] = 'map';
+		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
 		
 		// Do map
 		$this->load->library('googlemaps');
@@ -60,8 +60,9 @@ class Railways extends MY_Controller
 		$mapconfig['cluster'] = TRUE;
 		$mapconfig['center'] = 'United Kingdom';
 		$this->googlemaps->initialize($mapconfig);
+		
 		// Place all stations on the map
-		foreach ($body['railways'] as $r)
+		foreach ($data['railways'] as $r)
 		{
 			$latlng = "{$r->lat},{$r->lng}";
 			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
@@ -77,12 +78,9 @@ class Railways extends MY_Controller
 		
 		$data['map'] = $this->googlemaps->create_map();
 		
-		$body['map'] = $data['map'];
-		
-		$data['title'] = 'Railways map';
-		$data['body'] = $this->load->view('railways/index', $body, TRUE);
-		$data['sidebar'] = NULL;
-		$this->page($data);
+		$this->layout->set_title('Railways map');
+		$this->layout->set_view('content', 'railways/index');
+		$this->layout->page($data);
 	}
 	
 	
@@ -90,22 +88,20 @@ class Railways extends MY_Controller
 	
 	public function info($slug)
 	{
-		$this->output->enable_profiler(true);
-		$body['railway'] = $this->railways_model->get_by_slug($slug);
+		$data['railway'] = $this->railways_model->get_by_slug($slug);
 		
-		if ($body['railway'])
+		if ($data['railway'])
 		{
-			$data['title'] = $body['railway']->name;
+			$this->layout->set_title($data['railway']->name);
 		}
 		else
 		{
-			$data['title'] = 'Railway information';
-			$body['search'] = $this->railways_model->get_all(NULL, NULL, array('slug' => $slug));
+			$this->layout->set_title('Railway information');
+			$data['search'] = $this->railways_model->get_all(NULL, NULL, array('slug' => $slug));
 		}
 		
-		$data['sidebar'] = NULL;
-		$data['body'] = $this->load->view('railways/info', $body, TRUE);
-		$this->page($data);
+		$this->layout->set_view('content', 'railways/info');
+		$this->layout->page($data);
 	}
 	
 	
