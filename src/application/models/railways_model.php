@@ -73,7 +73,7 @@ class Railways_model extends CI_Model
 	{
 		if ( ! $railway_id) return FALSE;
 		
-		$sql = 'SELECT * FROM railways WHERE railway_id = ? LIMIT 1';
+		$sql = 'SELECT FROM railways WHERE railway_id = ? LIMIT 1';
 		$query = $this->db->query($sql, array($railway_id));
 		
 		if ($query->num_rows() == 1)
@@ -96,7 +96,12 @@ class Railways_model extends CI_Model
 			return FALSE;
 		}
 		
-		$sql = 'SELECT * FROM railways WHERE slug = ? LIMIT 1';
+		$sql = "SELECT
+					railways.*,
+					CONCAT_WS(',',lat,lng) AS latlng
+				FROM railways
+				WHERE slug = ?
+				LIMIT 1";
 		$query = $this->db->query($sql, array($slug));
 		
 		if ($query->num_rows() == 1)

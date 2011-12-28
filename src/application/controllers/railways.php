@@ -68,6 +68,7 @@ class Railways extends MY_Controller
 			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
 			{
 				$marker = array();
+				$marker['title'] = $r->name;
 				$marker['position'] = $latlng;
 				$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
 				// TODO: Use a view for the infowindow content (add desc + photo?)
@@ -93,6 +94,18 @@ class Railways extends MY_Controller
 		if ($data['railway'])
 		{
 			$this->layout->set_title($data['railway']->name);
+			
+			$mapconfig['center'] = $data['railway']->latlng;
+			$mapconfig['zoom'] = '9';
+			$this->googlemaps->initialize($mapconfig);
+			
+			$marker = array();
+			$marker['title'] = $data['railway']->name;
+			$marker['position'] = $data['railway']->latlng;
+			$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
+			$this->googlemaps->add_marker($marker);
+			
+			$data['map'] = $this->googlemaps->create_map();
 		}
 		else
 		{
@@ -109,8 +122,8 @@ class Railways extends MY_Controller
 	
 	public function _remap($method, $params = array())
 	{
-		// If requested method isn't in the Magic 3, look it up as a railway slug
-		if (in_array($method, array('index', 'grid', 'map')))
+		// If requested method isn't any of these, look it up as a railway slug
+		if (in_array($method, array('index', 'edit', 'grid', 'map')))
 		{
 			$this->$method();
 		}

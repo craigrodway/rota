@@ -113,6 +113,7 @@ if ($this->layout->has('sidebar'))
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
 	<script src="js/bootstrap-modal.js"></script>
+	<script src="js/bootstrap-tabs.js"></script>
 	<?php
 	foreach ($this->layout->get_js() as $s)
 	{
