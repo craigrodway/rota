@@ -127,12 +127,15 @@ class Railways extends AdminController
 	 */
 	function edit($railway_id = null)
 	{
-		if ( ! $railway_id) redirect('admin/railways');
+		$data['railway'] = $this->railways_model->get($railway_id);
+		
+		if ( ! $data['railway'])
+		{
+			show_error('Could not find requested railway.', 404);
+		}
 		
 		// Index page to redirect to
 		$this->session->set_userdata('redirect_to', $this->input->server('HTTP_REFERER'));
-		
-		$data['railway'] = $this->railways_model->get($railway_id);
 		
 		$this->layout->set_title('Edit railway');
 		$this->layout->set_view('content', 'admin/railways/addedit');

@@ -1,5 +1,5 @@
 <p class="add-bottom">
-	<a href="<?php echo site_url('admin/railways/add') ?>" class="btn">Add new railway</a>
+	<a href="<?php echo site_url('admin/railways/add') ?>" class="success btn">Add new railway</a>
 </p>
 
 

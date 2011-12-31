@@ -29,10 +29,6 @@ class Railways_model extends CI_Model
 	{
 		if ( ! empty($filter_params))
 		{
-			/*foreach ($filter_params as $n => $v)
-			{
-				if ( ! empty($v)) $this->db->like($n, "$v");
-			}*/
 			$this->db->like(array_filter($filter_params, 'strlen'));
 		}
 		$this->db->order_by('name', 'asc');
@@ -73,7 +69,12 @@ class Railways_model extends CI_Model
 	{
 		if ( ! $railway_id) return FALSE;
 		
-		$sql = 'SELECT FROM railways WHERE railway_id = ? LIMIT 1';
+		$sql = "SELECT
+					railways.*,
+					CONCAT_WS(',',lat,lng)
+				FROM railways
+				WHERE railway_id = ?
+				LIMIT 1";
 		$query = $this->db->query($sql, array($railway_id));
 		
 		if ($query->num_rows() == 1)
