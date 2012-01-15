@@ -49,10 +49,9 @@ class Account extends MY_Controller
 		else
 		{
 			// show form
-			$data['title'] = 'Log in with your ROTA account';
-			$data['body'] = $this->load->view('account/login', null, true);
-			$data['sidebar'] = null;
-			$this->page($data);
+			$this->layout->set_title('Log in with your ROTA account');
+			$this->layout->set_view('content', 'account/login');
+			$this->layout->page();
 		}
 	}
 	
@@ -100,9 +99,9 @@ class Account extends MY_Controller
 			}
 		}
 		
-		$data['title'] = 'Create an account';
-		$data['body'] = $this->load->view('account/create', null, true);
-		$this->page($data);
+		$this->layout->set_title('Create an account');
+		$this->layout->set_view('content', 'account/create');
+		$this->layout->page();
 		
 	}
 	
@@ -117,9 +116,9 @@ class Account extends MY_Controller
 		if ($code == null)
 		{
 			// Show simple page if no code supplied
-			$data['title'] = 'Create an account';
-			$data['body'] = $this->load->view('account/verify1', null, true);
-			$this->page($data);
+			$this->layout->set_title('Create an account');
+			$this->layout->set_view('content', 'account/verify1');
+			$this->layout->page();
 		}
 		else
 		{
@@ -131,10 +130,10 @@ class Account extends MY_Controller
 			}
 			else
 			{
-				$body['account'] = $account;
-				$data['title'] = 'Verify your account';
-				$data['body'] = $this->load->view('account/verify2', $body, true);
-				$this->page($data);
+				$data['account'] = $account;
+				$this->layout->set_title('Verify your account');
+				$this->layout->set_view('content', 'account/verify2');
+				$this->layout->page();
 			}
 		}
 	}

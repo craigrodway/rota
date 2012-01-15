@@ -1,18 +1,11 @@
 <?php
-// Decide on page title
-$title_arr[] = (isset($title)) ? $title : null;
-$title_arr[] = $this->config->item('site_name');
-$title_string = implode(' - ', array_filter($title_arr));
-
 // Sidebar? Presume not!
 $left_classes = "span16 body";
 $right_classes = "";
-$show_sidebar = false;
-if (isset($sidebar) && !empty($sidebar))
+if ($this->layout->has('sidebar'))
 {
 	$left_classes = "span12 body";
 	$right_classes = "span4 sidebar";
-	$show_sidebar = true;
 }
 ?>
 <!DOCTYPE html>
@@ -24,7 +17,7 @@ if (isset($sidebar) && !empty($sidebar))
 	
 	<meta charset="utf-8">
 	<base href="<?php echo $this->config->item('base_url') . 'assets/' ?>">
-	<title><?php echo $title_string ?></title>
+	<title><?php echo $this->layout->get_title('full') ?></title>
 	<meta name="description" content="Railways on the Air - amateur radio special event">
 	<meta name="author" content="Craig A Rodway. Bishop Auckland Radio Amateur Club">
 	
@@ -53,7 +46,8 @@ if (isset($sidebar) && !empty($sidebar))
 		
 		// Add a function to the queue
 		fs.add = function(f){
-			q.push(f);
+			console.log(typeof(f));
+			//if (f != "undefined" OR typeof(f) != "undefined") q.push(f);
 		};
 		
 		// Run the queued functions
@@ -71,17 +65,16 @@ if (isset($sidebar) && !empty($sidebar))
 
 </head>
 <body>
-
-
-	<?php $this->load->view('template/header', $header) ?>
 	
+	<?php $this->load->view('template/header') ?>
 	
 	<div class="container main">
 		
 		<div class="row">
 	
 			<div class="span16 title">
-				<h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1>
+				<!-- <h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1> -->
+				<h1><?php echo $this->layout->get_title() ?></h1>
 			</div> <!-- / .title -->
 			
 			<?php
@@ -99,14 +92,14 @@ if (isset($sidebar) && !empty($sidebar))
 			
 			<div class="<?php echo $left_classes ?>">
 				
-				<?php echo $body ?>
+				<?php echo $this->layout->get('content') ?>
 				
 			</div> <!-- / .body -->
 			
-			<?php if ($show_sidebar): ?>
+			<?php if ($this->layout->has('sidebar')): ?>
 			
 			<div class="<?php echo $right_classes ?>">
-				<?php echo $sidebar ?>
+				<?php echo $this->layout->get('sidebar') ?>
 			</div> <!-- / .sidebar -->
 			
 			<?php endif; ?>
@@ -120,10 +113,25 @@ if (isset($sidebar) && !empty($sidebar))
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/amplify.min.js"></script>
 	<script src="js/bootstrap-modal.js"></script>
+	<script src="js/bootstrap-tabs.js"></script>
+	<?php
+	foreach ($this->layout->get_js() as $s)
+	{
+		echo '<script src="js/' . $s . '"></script>'."\n";
+	}
+	?>
 	<script type="text/javascript">
 	$(document).ready(function(){ jsq.run(); });
 	</script>
+	
+	<?php
+	if ( ! empty($map))
+	{
+		echo $map['js'];
+	}
+	?>
 
 
 </body>

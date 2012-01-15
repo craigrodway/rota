@@ -20,9 +20,40 @@ class Railways extends AdminController
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
+		//$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
+		$this->form_validation->set_error_delimiters('<li>', '</li>');
+		
+		$config = array(
+			'field' => 'slug',
+			'title' => 'name',
+			'table' => 'railways',
+			'id' => 'railway_id',
+		);
+		$this->load->library('slug', $config);
+		
+		//$this->layout->add_js('modules/ROTA.js');
+		$this->layout->add_js('modules/admin_railways_addedit.js');
 	}
 	
+	
+	
+	
+	/*
+	function setslugs()
+	{
+		$all_railways = $this->railways_model->get_all(NULL, NULL);
+		
+		foreach ($all_railways as $r)
+		{
+			$data = array(
+				'name' => $r->name,
+			);
+			$data['slug'] = $this->slug->create_uri($data, $r->railway_id);
+			$this->db->where('railway_id', $r->railway_id);
+			$this->db->update('railways', $data);
+		}
+	}
+	*/
 	
 	
 	
@@ -33,24 +64,194 @@ class Railways extends AdminController
 	{
 		$filter_params = $this->input->get(NULL, TRUE);
 		
-		$this->load->library('pagination');
+		$this->load->library('pagination', 'google_maps');
+		
 		$config['base_url'] = site_url('admin/railways/index/');
 		$config['suffix'] = '?' . @http_build_query($filter_params);
 		$config['total_rows'] = $this->railways_model->count_all($filter_params);
-		$config['per_page'] = 10; 
+		$config['per_page'] = 15; 
 		$config['uri_segment'] = 4;
 		$this->pagination->initialize($config); 
 		
-		$body['railways'] = $this->railways_model->get_all($pager, 10, $filter_params);
-		$body['filter_params'] = $filter_params;
+		$data['railways'] = $this->railways_model->get_all($pager, $config['per_page'], $filter_params);
+		$data['filter_params'] = $filter_params;
 		
-		$data['body'] = $this->load->view('admin/railways/index', $body, TRUE);
-		$data['title'] = 'Railways';
-		$data['sidebar'] = null;
+		// Get all railways to show on map
+		$all_railways = $this->railways_model->get_all(NULL, NULL);
 		
-		$this->page($data);
+		// Do map
+		$this->load->library('googlemaps');
+		$mapconfig['zoom'] = 'auto';
+		$mapconfig['cluster'] = TRUE;
+		$mapconfig['center'] = 'United Kingdom';
+		$this->googlemaps->initialize($mapconfig);
+		// Place all stations on the map
+		foreach ($all_railways as $r)
+		{
+			$latlng = "{$r->lat},{$r->lng}";
+			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
+			{
+				$marker = array();
+				$marker['position'] = $latlng;
+				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->railway_id, $r->name));
+				$this->googlemaps->add_marker($marker);
+			}
+		}
+		
+		$data['map'] = $this->googlemaps->create_map();
+		
+		$this->layout->set_title('Railways');
+		$this->layout->set_view('content', 'admin/railways/index');
+		$this->layout->page($data);
+		
 	}
 	
+	
+	
+	
+	/**
+	 * Add a new railway
+	 */
+	function add()
+	{
+		$this->session->set_userdata('redirect_to', 'admin/railways');
+		$this->layout->set_title('Add a railway');
+		$this->layout->set_view('content', 'admin/railways/addedit');
+		$this->layout->page();
+	}
+	
+	
+	
+	
+	/**
+	 * Page to edit a railway
+	 */
+	function edit($railway_id = null)
+	{
+		$data['railway'] = $this->railways_model->get($railway_id);
+		
+		if ( ! $data['railway'])
+		{
+			show_error('Could not find requested railway.', 404);
+		}
+		
+		// Index page to redirect to
+		$this->session->set_userdata('redirect_to', $this->input->server('HTTP_REFERER'));
+		
+		$this->layout->set_title('Edit railway');
+		$this->layout->set_view('content', 'admin/railways/addedit');
+		$this->layout->page($data);
+	}
+	
+	
+	
+	
+	/**
+	 * Add new or update a railway
+	 */
+	function save()
+	{
+		$railway_id = $this->input->post('railway_id');
+		
+		$this->form_validation
+			->set_rules('name', 'Railway name', 'required|trim|max_length[100]')
+			->set_rules('url', 'Web address', 'trim|prep_url')
+			->set_rules('info_src', 'trim')
+			->set_rules('photo_url', 'Photo URL')
+			->set_rules('postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
+			->set_rules('locator', 'Locator square', 'strtoupper|trim|max_length[8]')
+			->set_rules('wab', 'WAB', 'strtoupper|trim');
+		
+		if ($this->form_validation->run() == FALSE)
+		{
+			return ($railway_id) ? $this->edit($railway_id) : $this->add();
+		}
+		else
+		{
+			// OK!
+			
+			$data['name'] = $this->input->post('name');
+			$data['url'] = $this->input->post('url');
+			$data['info_src'] = strip_tags($this->input->post('info_src'));
+			$data['info_html'] = nl2br($data['info_src']);
+			$data['postcode'] = $this->input->post('postcode');
+			$data['wab'] = $this->input->post('wab');
+			$data['locator'] = $this->input->post('locator');
+			$data['lat'] = $this->input->post('lat');
+			$data['lng'] = $this->input->post('lng');
+			$data['slug'] = ($railway_id)
+				? $this->slug->create_uri($data, $railway_id)
+				: $this->slug->create_uri($data);
+			
+			$photo_url = $this->input->post('photo_url');
+			
+			if ($photo_url)
+			{
+				$photo = $this->railways_model->get_remote_image($photo_url);
+				if ($photo == false)
+				{
+					$this->session->set_flashdata('warning', 
+						'<strong>Problem:</strong> ' . $this->railways_model->lasterr);
+				}
+			}
+			
+			if ($railway_id)
+			{
+				// Update
+				$op = $this->railways_model->edit($railway_id, $data);
+				$ok = "<strong>{$data['name']}</strong> has been updated successfully.";
+				$err = 'An error occurred while updating the railway.';
+			}
+			else
+			{
+				// Add
+				$op = $this->railways_model->add($data);
+				$ok = "<strong>{$data['name']}</strong> has been added successfully.";
+				$err = 'An error occurred while adding the railway';
+			}
+			
+			$msg_type = ($op) ? 'success' : 'error';
+			$msg = ($op) ? $ok : $err;
+			$this->session->set_flashdata($msg_type, $msg);
+			
+			$redirect_to = $this->session->userdata('redirect_to');
+			redirect($redirect_to);
+			
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * Delete a railway (only accepts POSTed data)
+	 */
+	function delete()
+	{
+		$id = $this->input->post('railway_id');
+		if ( ! $id)
+		{
+			redirect('admin/railways');
+		}
+		
+		$delete = $this->railways_model->delete($id);
+		
+		if ($delete == true)
+		{
+			$msg_type = 'success';
+			$msg = 'The railway has been deleted successfully.';
+		}
+		else
+		{
+			$msg_type = 'error';
+			$msg = 'Problem removing railway - ' . $this->railways_model->lasterr;
+		}
+		$this->session->set_flashdata($msg_type, $msg);
+		
+		$redirect_to = $this->input->post('redirect_to');
+		$redirect_to = ($redirect_to) ? $redirect_to : 'admin/railways'; 
+		redirect($redirect_to);
+	}
 	
 	
 	
