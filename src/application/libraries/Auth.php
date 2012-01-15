@@ -96,11 +96,11 @@ class Auth
 		
 		$email = trim($email);
 		
-		$sql = "SELECT password 
+		$sql = "SELECT a_password 
 				FROM accounts
-				WHERE email = ?
-				AND enabled = 'Y'
-				AND verify IS NULL
+				WHERE a_email = ?
+				AND a_enabled = 'Y'
+				AND a_verify IS NULL
 				LIMIT 1";
 				
 		$query = $this->CI->db->query($sql, array($email));
@@ -108,7 +108,7 @@ class Auth
 		if ($query->num_rows() == 1)
 		{
 			$account = $query->row();
-			$match = $this->check_password($password, $account->password);
+			$match = $this->check_password($password, $account->a_password);
 			if ($match == true)
 			{
 				// If passwords match, create session
@@ -174,9 +174,9 @@ class Auth
 		$email = trim($email);
 		
 		$sql = "SELECT * FROM accounts
-				WHERE email = ? 
-				AND enabled = 'Y'
-				AND verify IS NULL
+				WHERE a_email = ? 
+				AND a_enabled = 'Y'
+				AND a_verify IS NULL
 				LIMIT 1";
 		
 		$query = $this->CI->db->query($sql, array($email));
@@ -188,14 +188,14 @@ class Auth
 			
 			// Update last login timestamp
 			$timestamp = mdate('%Y-%m-%d %H:%i:%s');
-			$sql = 'UPDATE accounts SET lastlogin = ?
-					WHERE account_id = ? LIMIT 1';
-			$this->CI->db->query($sql, array($timestamp, $account->account_id));
+			$sql = 'UPDATE accounts SET a_lastlogin = ?
+					WHERE a_id = ? LIMIT 1';
+			$this->CI->db->query($sql, array($timestamp, $account->a_id));
 			
 			// Gather info for session
-			$sessdata['account_id'] = $account->account_id;
-			$sessdata['email'] = $account->email;
-			$sessdata['type'] = $account->type;
+			$sessdata['account_id'] = $account->a_id;
+			$sessdata['email'] = $account->a_email;
+			$sessdata['type'] = $account->a_type;
 			
 			// Set session data
 			$this->CI->session->set_userdata($sessdata);

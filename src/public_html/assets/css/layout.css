@@ -1,0 +1,210 @@
+/*
+* Skeleton V1.1
+* Copyright 2011, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 8/17/2011
+*/
+
+/* Table of Content
+==================================================
+	#Site Styles
+	#Page Styles
+	#Media Queries
+	#Font-Face */
+
+/* #Site Styles
+================================================== */
+
+body {
+	background: #e0e0e0;
+	padding: 0 0 20px 0;
+}
+
+
+div#body {
+	background: #fff;
+	border: 5px solid #cfcfcf;
+	border-top-width: 0px;
+	padding: 20px 15px 15px 15px;
+}
+
+a {
+	color: #1D82AB;
+}
+
+
+p.big { font-size: 135%; line-height: 165%; color: #666; }
+
+
+.left { text-align: left; }
+.right { text-align: right; }
+
+
+
+.header { margin-bottom: 15px; }
+.header .right ul.horizontal { margin-bottom: 15px; float: right; text-align: right; }
+.header .right ul.horizontal li { margin-left: 24px; }
+.header .right .status { float: right; text-align: right; }
+.header .right ul.horizontal li a { color: #295474; text-decoration: none; font-weight: bold; }
+.header .right ul.horizontal li a:hover { color: #1D82AB; }
+
+
+
+div.nav, div.footer {
+	background: #405E52 ;
+	border-radius:3px;
+}
+div.nav.admin { background: #BF4D28; }
+div.nav.admin ul li a:hover { background: #602714; }
+div.nav ul { margin-left: 3px; }
+div.nav ul li a {
+	display: block;
+	padding: 5px;
+	font-weight: bold;
+	font-size: 95%;
+}
+div.nav ul li a {
+	display: block;
+	padding: 10px 15px;
+	text-decoration: none;
+	color: #fff;
+}
+div.nav ul li a:hover {
+	background: #202F29;
+}
+
+
+
+
+div.footer {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+	div.footer p {
+		margin: 10px;
+		color: #fff;
+		font-size: 85%;
+	}
+	
+	div.footer a {
+		color: #F6F7BD;
+		text-decoration: none;
+	}
+
+
+
+
+div.title {
+	border-bottom: 1px solid #cfcfcf;
+	margin-bottom: 20px;
+	padding: 0;
+}
+	div.title h4 {
+		line-height: inherit;
+		margin: 15px 0;
+		padding: 0;
+	}
+
+
+a.i {
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.i.login { background-image: url(../img/global/icons/login.png); }
+.i.account { background-image: url(../img/global/icons/account.png); }
+.i.news { background-image: url(../img/global/icons/news.png); }
+.i.log { background-image: url(../img/global/icons/log.png); }
+.i.register { background-image: url(../img/global/icons/tick.png); }
+
+
+
+
+/* #Page Styles
+================================================== */
+
+
+
+
+/* Railways page
+==================== */
+
+ul.railways {
+	display: block;
+	margin-left: -20px;
+}
+
+	ul.railways li {
+		position: relative;
+		display: block;
+		width: 220px;
+		float: left;
+		margin-left: 20px;
+		margin-bottom: 20px;
+	}
+
+	ul.railways li a {
+		text-decoration: none;
+		outline: 0;
+		line-height: inherit;
+		margin-bottom: 20px;
+	}
+
+	ul.railways li a img {
+		display: block;
+		width: 100%;
+	}
+
+	ul.railways li h4 {
+		background: #80BCA3;
+		color: #fff;
+		padding: 10px 10px 5px 10px;
+		height: 64px;
+		line-height: 125%;
+	}
+
+	ul.railways li a:hover h4 {
+		background: #655643;
+	}
+
+
+/* #Media Queries
+================================================== */
+
+	/* Smaller than standard 960 (devices and browsers) */
+	@media only screen and (max-width: 959px) {}
+
+	/* Tablet Portrait size to standard 960 (devices and browsers) */
+	@media only screen and (min-width: 768px) and (max-width: 959px) {}
+
+	/* All Mobile Sizes (devices and browser) */
+	@media only screen and (max-width: 767px) {}
+
+	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+	@media only screen and (max-width: 479px) {}
+
+
+/* #Font-Face
+================================================== */
+/* 	This is the proper syntax for an @font-face file
+		Just create a "fonts" folder at the root,
+		copy your FontName into code below and remove
+		comment brackets */
+
+/*	@font-face {
+	    font-family: 'FontName';
+	    src: url('../fonts/FontName.eot');
+	    src: url('../fonts/FontName.eot?iefix') format('eot'),
+	         url('../fonts/FontName.woff') format('woff'),
+	         url('../fonts/FontName.ttf') format('truetype'),
+	         url('../fonts/FontName.svg#webfontZam02nTh') format('svg');
+	    font-weight: normal;
+	    font-style: normal; }
+*/

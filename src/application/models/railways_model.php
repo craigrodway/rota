@@ -31,7 +31,7 @@ class Railways_model extends CI_Model
 		{
 			$this->db->like(array_filter($filter_params, 'strlen'));
 		}
-		$this->db->order_by('name', 'asc');
+		$this->db->order_by('r_name', 'asc');
 		
 		// Only limit results if specified (explicitly supply NULL to get ALL railways)
 		if ($page !== NULL && $limit !== NULL)
