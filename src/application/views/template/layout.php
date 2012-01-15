@@ -1,11 +1,10 @@
 <?php
-// Sidebar? Presume not!
-$left_classes = "span16 body";
-$right_classes = "";
+$left_classes = 'sixteen columns content';
+$right_classes = '';
 if ($this->layout->has('sidebar'))
 {
-	$left_classes = "span12 body";
-	$right_classes = "span4 sidebar";
+	$left_classes = 'twelve columns content';
+	$right_classes = 'four columns sidebar';
 }
 ?>
 <!DOCTYPE html>
@@ -21,19 +20,16 @@ if ($this->layout->has('sidebar'))
 	<meta name="description" content="Railways on the Air - amateur radio special event">
 	<meta name="author" content="Craig A Rodway. Bishop Auckland Radio Amateur Club">
 	
-	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/rota.css">
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/skeleton.css">
+	<link rel="stylesheet" href="css/layout.css">
 	
 	<link rel="shortcut icon" href="img/global/favicon.ico">
-	<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
+	<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="img/global/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="img/global/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/global/apple-touch-icon-114x114.png"> -->
 	
 	<script type="text/javascript">
 	var baseurl = "<?php echo $this->config->item('base_url') . 'assets/' ?>";
@@ -62,11 +58,128 @@ if ($this->layout->has('sidebar'))
 		return fs;
 	})();
 	</script>
+	
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
 </head>
 <body>
 	
-	<?php $this->load->view('template/header') ?>
+	<div class="container" id="body">
+		
+		<!-- header area -->
+		<div class="header">
+			
+			<div class="six columns left">
+				<a href="<?php echo site_url() ?>"><img src="img/global/title.png" title="Railways on the Air"></a>
+			</div>
+			
+			<div class="ten columns right">
+				
+				<ul class="horizontal">
+					<?php
+					foreach ($nav['top'] as $item){
+						$cls = array('i', $item[2]);
+						$uri = $this->uri->uri_string();
+						$uri = (empty($uri)) ? 'home' : $uri;
+						if (stristr($uri, $item[0]))
+						{
+							$cls[] = 'active';
+						}
+						$cls = 'class="' . implode(' ', $cls) . '"';
+						echo '<li>' . anchor($item[0], $item[1], $cls) . '</li>';
+					}
+					?>
+				</ul>
+				
+				<div class="clear"></div>
+				
+				<div class="status">
+					<?php if ($this->auth->logged_in()): ?>
+						<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
+					<?php endif; ?>
+				</div> <!-- / .status -->
+				
+			</div> <!-- / .right -->
+			
+			<div class="clear"></div>
+			
+		</div> <!-- / .header -->
+		
+		<?php
+		$nav_class = '';
+		if ($this->session->userdata('type') == 'admin')
+		{
+			$nav_class = 'admin';
+		}
+		?>
+		
+		<div class="sixteen columns nav <?php echo $nav_class ?>">
+			<ul class="horizontal">
+				<?php foreach ($nav['primary'] as $item): ?>
+				<?php
+				$cls = '';
+				$uri = $this->uri->uri_string();
+				$uri = (empty($uri)) ? 'home' : $uri;
+				if (stristr($uri, $item[0]))
+				{
+					$cls = 'class="active""';
+				}
+				?>
+				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		
+		
+		<div class="sixteen columns title">
+			<h4><?php echo $this->layout->get_title() ?></h4>
+		</div>
+		
+		
+		<?php
+		$flashes = array('success', 'warning', 'error');
+		$flashmsgs = null;
+		foreach ($flashes as $f)
+		{
+			if ($this->session->flashdata($f))
+			{
+				$flashmsgs .= '<div class="alert-box ' . $f . '">' . $this->session->flashdata($f) . '</div>';
+			}
+		}
+		if ($flashmsgs) echo '<div class="sixteen columns">' . $flashmsgs . '</div>';
+		?>
+		
+		
+		<div class="<?php echo $left_classes ?>">
+			<?php echo $this->layout->get('content') ?>
+		</div> <!-- / .content -->
+		
+		
+		<?php if ($this->layout->has('sidebar')): ?>
+		<div class="<?php echo $right_classes ?>">
+			<?php echo $this->layout->get('sidebar'); ?>
+		</div> <!-- / .sidebar -->
+		<?php endif; ?>
+		
+		
+		<div class="clear"></div>
+		
+		<br>
+		
+		<div class="sixteen columns footer">
+			<div class="eight columns alpha left">
+				<p>&copy; Bishop Auckland Radio Amateur Club. Location data by <a href="http://nearby.org.uk/">Nearby.org.uk</a>.</p>
+			</div>
+			<div class="eight columns omega right"><p>Site by <a href="http://webman.me.uk/">Craig A Rodway</a>.</p></div>
+			<div class="clear"></div>
+		</div>
+	
+	</div> <!-- / #body -->
+	
+<?php
+/*
 	
 	<div class="container main">
 		
@@ -110,6 +223,8 @@ if ($this->layout->has('sidebar'))
 	
 	
 	<?php $this->load->view('template/footer') ?>
+	*/
+	?>
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>

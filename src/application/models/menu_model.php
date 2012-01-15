@@ -33,7 +33,7 @@ class Menu_model extends CI_Model
 	/**
 	 * Main navigation for guests
 	 */
-	function nav_main()
+	function primary()
 	{
 		$nav = array();
 		$nav[] = array('home', 'Home');
@@ -51,14 +51,29 @@ class Menu_model extends CI_Model
 	/**
 	 * Logged-in user menu ('the shack')
 	 */
-	function nav_shack()
+	function loggedin()
 	{
 		$nav = array();
-		$nav[] = array('shack/news', 'Post news update');
-		$nav[] = array('shack/upload-log', 'Upload log');
-		$nav[] = array('shack/account', 'My account');
+		$nav[] = array('shack/news', 'Post news update', 'news');
+		$nav[] = array('shack/upload-log', 'Upload log', 'log');
+		$nav[] = array('shack/account', 'My account', 'account');
+		$nav[] = array('account/logout', 'Log out', 'login');
 		return $nav;
-	} 
+	}
+	
+	
+	
+	
+	/**
+	 * Anonymous - register/login
+	 */
+	function guest()
+	{
+		$nav = array();
+		$nav[] = array('account/create', 'Create an account', 'register');
+		$nav[] = array('account/login', 'Log In', 'login');
+		return $nav;
+	}
 	
 	
 	

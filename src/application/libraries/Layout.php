@@ -151,25 +151,25 @@ class Layout
 	 */
 	public function page($data = array())
 	{
-		// Configure page header
-		$header['type'] = 'normal';
-		$header['nav_main'] = $this->CI->menu_model->nav_main();
-		
 		// Add shack menu if logged in
 		if ($this->CI->auth->logged_in())
 		{
-			$header['nav_shack'] = $this->CI->menu_model->nav_shack();
+			$data['nav']['top'] = $this->CI->menu_model->loggedin();
 		}
-		
-		// Admin user?
-		if ($this->CI->auth->logged_in() && $this->CI->session->userdata('type') == 'admin')
+		else
 		{
-			$header['nav_admin'] = $this->CI->menu_model->admin();
-			$header['type'] = 'admin';
+			$data['nav']['top'] = $this->CI->menu_model->guest();
 		}
 		
-		// Add header data to main data array
-		$data['header'] = $header;
+		// Admin user? 
+		if ($this->CI->session->userdata('type') == 'admin')
+		{
+			$data['nav']['primary'] = $this->CI->menu_model->admin();
+		}
+		else
+		{
+			$data['nav']['primary'] = $this->CI->menu_model->primary();
+		}
 		
 		// Load variables if set
 		if ( ! empty($data))

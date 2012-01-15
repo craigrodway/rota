@@ -1,38 +1,34 @@
 <br><br>
 
 <div class="row">
-
-	<div class="span8 bg offset4">
-
-		<?php echo form_open(current_url()) ?>
-			
-			<div class="clearfix">
-				<label for="email">Email address</label>
-				<div class="input">
-					<input type="text" name="email" size="40" value="">
-				</div>
-			</div>
-			
-			<div class="clearfix">
-				<label for="password">Password</label>
-				<div class="input">
-					<input type="password" name="password" size="40" value="">
-				</div>
-			</div>
-			
-			<div class="clearfix">
-				<label></label>
-				<div class="input">
-					<input type="submit" class="btn primary" value="Log In">
-					&nbsp; &nbsp; 
-					<?php echo anchor('account/elephant', 'Forgot your password?') ?>
-				</div>
-			</div>
-		
-		</form>
 	
-	</div>
+	<div class="five columns alpha">&nbsp;</div>
+	
+	<div class="six columns">
+	
+		<div class="panel">
 
+			<?php echo form_open(current_url()) ?>
+			
+				<label for="email">Email address</label>
+				<input type="text" name="email" size="40" value="">
+				
+				<label for="password">Password</label>
+				<input type="password" name="password" size="40" value="">
+			
+				<input type="submit" class="green button" value="Log In">
+				&nbsp; &nbsp; 
+				<?php echo anchor('account/elephant', 'Forgot your password?') ?>
+				
+			</form>
+	
+		</div> <!-- / .panel -->
+	
+	</div> <!-- / .eight columns -->
+	
+	
+	<div class="five columns omega">&nbsp;</div>
+	
 </div> <!-- / .row -->
 
 <br><br>

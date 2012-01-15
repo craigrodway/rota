@@ -64,15 +64,15 @@ class Railways extends MY_Controller
 		// Place all stations on the map
 		foreach ($data['railways'] as $r)
 		{
-			$latlng = "{$r->lat},{$r->lng}";
+			$latlng = "{$r->r_lat},{$r->r_lng}";
 			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
 			{
 				$marker = array();
-				$marker['title'] = $r->name;
+				$marker['title'] = $r->r_name;
 				$marker['position'] = $latlng;
 				$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
 				// TODO: Use a view for the infowindow content (add desc + photo?)
-				$marker['infowindow_content'] = addslashes(anchor('railways/' . $r->slug, $r->name));
+				$marker['infowindow_content'] = addslashes(anchor('railways/' . $r->r_slug, $r->r_name));
 				$this->googlemaps->add_marker($marker);
 			}
 		}
