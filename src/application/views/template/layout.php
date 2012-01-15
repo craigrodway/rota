@@ -46,7 +46,8 @@ if ($this->layout->has('sidebar'))
 		
 		// Add a function to the queue
 		fs.add = function(f){
-			q.push(f);
+			console.log(typeof(f));
+			//if (f != "undefined" OR typeof(f) != "undefined") q.push(f);
 		};
 		
 		// Run the queued functions
@@ -112,6 +113,7 @@ if ($this->layout->has('sidebar'))
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/amplify.min.js"></script>
 	<script src="js/bootstrap-modal.js"></script>
 	<script src="js/bootstrap-tabs.js"></script>
 	<?php

@@ -31,7 +31,8 @@ class Railways extends AdminController
 		);
 		$this->load->library('slug', $config);
 		
-		$this->layout->add_js('modules/ROTA.js');
+		//$this->layout->add_js('modules/ROTA.js');
+		$this->layout->add_js('modules/admin_railways_addedit.js');
 	}
 	
 	

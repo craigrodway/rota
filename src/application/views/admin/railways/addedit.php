@@ -102,7 +102,7 @@ if ( ! empty($errors)) echo '<div class="alert-message block-message error"><ul>
 						'class' => 'span2',
 						'value' => @set_value('locator', $railway->locator)
 					))
-				?>
+				?> <button class="small btn" id="lookup_locator">Look up</button>
 				<span class="help-block">Essential for placing it on the map.</span>
 				</div>
 			</div>
@@ -126,13 +126,13 @@ if ( ! empty($errors)) echo '<div class="alert-message block-message error"><ul>
 					echo form_input(array(
 						'name' => 'lat',
 						'id' => 'lat',
-						'class' => 'span2',
+						'class' => 'span2 latlng',
 						'value' => @set_value('lat', $railway->lat)
 					));
 					echo form_input(array(
 						'name' => 'lng',
 						'id' => 'lng',
-						'class' => 'span2',
+						'class' => 'span2 latlng',
 						'value' => @set_value('lng', $railway->lng)
 					));
 				?></div>
@@ -175,8 +175,9 @@ if ( ! empty($errors)) echo '<div class="alert-message block-message error"><ul>
 
 
 <script>
-jsq.add(function(){
-	$("#lookup_postcode").click(function(event){
+/*jsq.add(function(){
+	//railways.init();
+	/*$("#lookup_postcode").click(function(event){
 		event.preventDefault();
 		$("div#map").html("");
 		ROTA.lookup_postcode($("input#postcode").val(), function(data){
@@ -196,5 +197,5 @@ jsq.add(function(){
 			}
 		});
 	})
-});
+});*/
 </script>
