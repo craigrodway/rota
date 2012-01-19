@@ -88,12 +88,12 @@ class Railways extends AdminController
 		// Place all stations on the map
 		foreach ($all_railways as $r)
 		{
-			$latlng = "{$r->lat},{$r->lng}";
+			$latlng = "{$r->r_lat},{$r->r_lng}";
 			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
 			{
 				$marker = array();
 				$marker['position'] = $latlng;
-				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->railway_id, $r->name));
+				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->r_id, $r->r_name));
 				$this->googlemaps->add_marker($marker);
 			}
 		}
@@ -126,9 +126,9 @@ class Railways extends AdminController
 	/**
 	 * Page to edit a railway
 	 */
-	function edit($railway_id = null)
+	function edit($r_id = null)
 	{
-		$data['railway'] = $this->railways_model->get($railway_id);
+		$data['railway'] = $this->railways_model->get($r_id);
 		
 		if ( ! $data['railway'])
 		{
@@ -151,39 +151,39 @@ class Railways extends AdminController
 	 */
 	function save()
 	{
-		$railway_id = $this->input->post('railway_id');
+		$r_id = $this->input->post('r_id');
 		
 		$this->form_validation
-			->set_rules('name', 'Railway name', 'required|trim|max_length[100]')
-			->set_rules('url', 'Web address', 'trim|prep_url')
-			->set_rules('info_src', 'trim')
-			->set_rules('photo_url', 'Photo URL')
-			->set_rules('postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
-			->set_rules('locator', 'Locator square', 'strtoupper|trim|max_length[8]')
-			->set_rules('wab', 'WAB', 'strtoupper|trim');
+			->set_rules('r_name', 'Railway name', 'required|trim|max_length[100]')
+			->set_rules('r_url', 'Web address', 'trim|prep_url')
+			->set_rules('r_info_src', 'trim')
+			->set_rules('r_photo_url', 'Photo URL')
+			->set_rules('r_postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
+			->set_rules('r_locator', 'Locator square', 'strtoupper|trim|max_length[8]')
+			->set_rules('r_wab', 'WAB', 'strtoupper|trim');
 		
 		if ($this->form_validation->run() == FALSE)
 		{
-			return ($railway_id) ? $this->edit($railway_id) : $this->add();
+			return ($r_id) ? $this->edit($r_id) : $this->add();
 		}
 		else
 		{
 			// OK!
 			
-			$data['name'] = $this->input->post('name');
-			$data['url'] = $this->input->post('url');
-			$data['info_src'] = strip_tags($this->input->post('info_src'));
-			$data['info_html'] = nl2br($data['info_src']);
-			$data['postcode'] = $this->input->post('postcode');
-			$data['wab'] = $this->input->post('wab');
-			$data['locator'] = $this->input->post('locator');
-			$data['lat'] = $this->input->post('lat');
-			$data['lng'] = $this->input->post('lng');
-			$data['slug'] = ($railway_id)
-				? $this->slug->create_uri($data, $railway_id)
+			$data['r_name'] = $this->input->post('r_name');
+			$data['r_url'] = $this->input->post('r_url');
+			$data['r_info_src'] = strip_tags($this->input->post('r_info_src'));
+			$data['r_info_html'] = nl2br($data['r_info_src']);
+			$data['r_postcode'] = $this->input->post('r_postcode');
+			$data['r_wab'] = $this->input->post('r_wab');
+			$data['r_locator'] = $this->input->post('r_locator');
+			$data['r_lat'] = $this->input->post('r_lat');
+			$data['r_lng'] = $this->input->post('r_lng');
+			$data['r_slug'] = ($r_id)
+				? $this->slug->create_uri($data, $r_id)
 				: $this->slug->create_uri($data);
 			
-			$photo_url = $this->input->post('photo_url');
+			$photo_url = $this->input->post('r_photo_url');
 			
 			if ($photo_url)
 			{
@@ -195,18 +195,18 @@ class Railways extends AdminController
 				}
 			}
 			
-			if ($railway_id)
+			if ($r_id)
 			{
 				// Update
-				$op = $this->railways_model->edit($railway_id, $data);
-				$ok = "<strong>{$data['name']}</strong> has been updated successfully.";
+				$op = $this->railways_model->edit($r_id, $data);
+				$ok = "<strong>{$data['r_name']}</strong> has been updated successfully.";
 				$err = 'An error occurred while updating the railway.';
 			}
 			else
 			{
 				// Add
 				$op = $this->railways_model->add($data);
-				$ok = "<strong>{$data['name']}</strong> has been added successfully.";
+				$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
 				$err = 'An error occurred while adding the railway';
 			}
 			

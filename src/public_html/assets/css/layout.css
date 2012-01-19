@@ -17,6 +17,10 @@
 /* #Site Styles
 ================================================== */
 
+html {
+	overflow-y: scroll;
+}
+
 body {
 	background: #e0e0e0;
 	padding: 0 0 20px 0;
@@ -30,7 +34,12 @@ div#body {
 	padding: 20px 15px 15px 15px;
 }
 
+
 a {
+	color: #295474;
+	text-decoration: none;
+}
+a:hover {
 	color: #1D82AB;
 }
 
@@ -120,6 +129,16 @@ a.i {
 .i.news { background-image: url(../img/global/icons/news.png); }
 .i.log { background-image: url(../img/global/icons/log.png); }
 .i.register { background-image: url(../img/global/icons/tick.png); }
+
+
+
+
+/**
+ * Admin tables
+ */
+td.title, td.title a { font-weight: bold; }
+table tbody tr td.ops { text-align: right; }
+table tbody tr td.ops a.icon-link { margin-left: 15px; }
 
 
 

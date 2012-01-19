@@ -25,6 +25,7 @@ if ($this->layout->has('sidebar'))
 	<link rel="stylesheet" href="css/base.css">
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css">
+	<link rel="stylesheet" href="vendor/reveal/reveal.css">
 	
 	<link rel="shortcut icon" href="img/global/favicon.ico">
 	<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
@@ -42,8 +43,9 @@ if ($this->layout->has('sidebar'))
 		
 		// Add a function to the queue
 		fs.add = function(f){
-			console.log(typeof(f));
+			//console.log(typeof(f));
 			//if (f != "undefined" OR typeof(f) != "undefined") q.push(f);
+			if (typeof(f) == "function") q.push(f);
 		};
 		
 		// Run the queued functions
@@ -229,8 +231,9 @@ if ($this->layout->has('sidebar'))
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
 	<script src="js/amplify.min.js"></script>
-	<script src="js/bootstrap-modal.js"></script>
-	<script src="js/bootstrap-tabs.js"></script>
+	<script src="js/tabs.js"></script>
+	<script src="vendor/reveal/jquery.reveal.js"></script>
+	
 	<?php
 	foreach ($this->layout->get_js() as $s)
 	{

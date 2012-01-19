@@ -1,177 +1,174 @@
 <?php
 $errors = validation_errors();
 echo form_open('admin/railways/save');
-if (isset($railway)) echo form_hidden('railway_id', $railway->railway_id);
-
-if ( ! empty($errors)) echo '<div class="alert-message block-message error"><ul>' . $errors . '</ul></div>';
+if (isset($railway)) echo form_hidden('r_id', $railway->r_id);
+if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</ul></div>';
 ?>
 
-<fieldset>
-	<legend>General info</legend>
-	
-	<div class="clearfix <?php if (form_error('name')) echo 'error' ?>">
-		<label for="name">Name</label>
-		<div class="input"><?php
-			echo form_input(array(
-				'name' => 'name',
-				'id' => 'name',
-				'class' => 'xlarge',
-				'value' => @set_value('name', $railway->name)
-			))
-		?></div>
-	</div>
 
-	<div class="clearfix <?php if (form_error('url')) echo 'error' ?>">
-		<label for="url">Web address</label>
-		<div class="input">
-			<div class="input-prepend">
-				<span class="add-on">http://</span>
-				<?php
-				echo form_input(array(
-					'name' => 'url',
-					'id' => 'url',
-					'class' => 'xlarge',
-					'value' => @set_value('url', $railway->url)
-				))
-				?>
-			</div>
+<dl class="tabs contained">
+	<dd><a href="#general" class="active">General info</a></dd>
+	<dd><a href="#photo">Photo</a></dd>
+	<dd><a href="#location">Location</a></dd>
+</dl>
+
+
+<ul class="tabs-content contained">
+	
+	
+	<li class="active" id="generalTab">
+		
+		<div class="inline">
+			<label for="r_name">Name</label>
+			<?php echo form_input(array(
+				'name' => 'r_name',
+				'id' => 'r_name',
+				'size' => '40',
+				'value' => @set_value('r_name', $railway->r_name)
+			)); ?>
 		</div>
-	</div>
+		
+		<div class="inline">
+			<label for="r_url" <?php if (form_error('r_url')) echo 'class="error"' ?>>Web address</label>
+			<?php echo form_input(array(
+				'name' => 'r_url',
+				'id' => 'r_url',
+				'size' => '50',
+				'value' => @set_value('r_url', $railway->r_url)
+			)); ?>
+		</div>
+		
+		<div class="inline">
+			<label for="r_info_src" <?php if (form_error('r_info_src')) echo 'class="error"' ?>>Information</label>
+			<?php echo form_textarea(array(
+				'name' => 'r_info_src',
+				'id' => 'r_info_src',
+				'cols' => '50',
+				'rows' => '10',
+				'value' => @set_value('r_info_src', $railway->r_info_src)
+			)); ?>
+		</div>
+		
+	</li>
 	
-	<div class="clearfix <?php if (form_error('info_src')) echo 'error' ?>">
-		<label for="info_src">Information</label>
-		<div class="input"><?php
-			echo form_textarea(array(
-				'name' => 'info_src',
-				'id' => 'info_src',
-				'class' => 'span6',
-				'rows' => '6',
-				'value' => @set_value('info_src', $railway->info_src)
-			))
-		?></div>
-	</div>
 	
-	<div class="clearfix">
-		<label for="photo">Photo</label>
-		<div class="input">
-			<div class="input-prepend">
-				<span class="add-on">http://</span>
-				<?php
-				echo form_input(array(
-					'name' => 'photo_url',
-					'id' => 'photo_url',
-					'class' => 'xlarge'
-				))
-				?>
-				<p><strong><br> - OR - <br></strong></p>
+	<li id="photoTab">
+		
+		<div class="inline">
+			
+			<label for="r_photo">Photo</label>
+			<?php echo form_input(array(
+				'name' => 'r_photo_url',
+				'id' => 'r_photo_url',
+				'class' => 'xlarge'
+			)); ?>
+			
+			<div class="more">
+				<br><br>
+				<strong>- OR - </strong>
+				<br><br>
 				<input type="file" class="input-file" name="userfile" id="userfile">
 			</div>
+			
 		</div>
-	</div>
+		
+	</li>
 	
-</fieldset>
-
-
-
-
-<fieldset>
-	<legend>Location</legend>
-
-	<div class="row">
+	
+	<li id="locationTab">
+	
+		<div class="seven columns alpha">
 		
-		<div class="span8">
-		
-			<div class="clearfix <?php if (form_error('postcode')) echo 'error' ?>">
-				<label for="postcode">Post code</label>
-				<div class="input"><?php
-					echo form_input(array(
-						'name' => 'postcode',
-						'id' => 'postcode',
-						'class' => 'span2',
-						'value' => @set_value('postcode', $railway->postcode)
-					))
-				?> <button class="small btn" id="lookup_postcode">Look up</button></div>
-			</div>
-			
-			<div class="clearfix <?php if (form_error('locator')) echo 'error' ?>">
-				<label for="locator">Locator square</label>
-				<div class="input"><?php
-					echo form_input(array(
-						'name' => 'locator',
-						'id' => 'locator',
-						'class' => 'span2',
-						'value' => @set_value('locator', $railway->locator)
-					))
-				?> <button class="small btn" id="lookup_locator">Look up</button>
-				<span class="help-block">Essential for placing it on the map.</span>
-				</div>
-			</div>
-			
-			<div class="clearfix <?php if (form_error('wab')) echo 'error' ?>">
-				<label for="wab">WAB area</label>
-				<div class="input"><?php
-					echo form_input(array(
-						'name' => 'wab',
-						'id' => 'wab',
-						'class' => 'span2',
-						'value' => @set_value('wab', $railway->wab)
-					))
-				?></div>
-			</div>
-			
-			
-			<div class="clearfix">
-				<label>Lat/Long</label>
-				<div class="input"><?php
-					echo form_input(array(
-						'name' => 'lat',
-						'id' => 'lat',
-						'class' => 'span2 latlng',
-						'value' => @set_value('lat', $railway->lat)
-					));
-					echo form_input(array(
-						'name' => 'lng',
-						'id' => 'lng',
-						'class' => 'span2 latlng',
-						'value' => @set_value('lng', $railway->lng)
-					));
-				?></div>
-			</div>
-			
-			<?php
-			/* echo form_hidden('lat', @set_value('lat', $railway->lat));
-			echo form_hidden('lng', @set_value('lng', $railway->lng)); */
-			@$railway_coords = "{$railway->lat},{$railway->lng}";
-			?>
-		
-		</div> <!-- / .span8 -->
-		
-		<div class="span8">
-			<div style="width: 100%; height: 200px; overflow: hidden; display: block;" id="map">
-				<?php
-				if (strlen($railway_coords > 1))
-				{
-					$data['urlonly'] = false;
-					$data['coords'] = $railway_coords;
-					$data['size'] = '460x200';
-					echo $this->maps->staticmap($data);
-				}
-				?>
-			</div>
+		<div class="inline">
+			<label for="r_postcode" <?php if (form_error('r_postcode')) echo 'class="error"' ?>>Post code</label>
+			<?php echo form_input(array(
+				'name' => 'postcode',
+				'id' => 'postcode',
+				'size' => '10',
+				'value' => @set_value('postcode', $railway->postcode)
+			)); ?>
+			<button class="small black button" id="lookup_postcode">Look up</button>
 		</div>
 		
-	</div>
+		<div class="inline">
+			<label for="r_locator" <?php if (form_error('r_locator')) echo 'class="error"' ?>>Locator square</label>
+			<?php echo form_input(array(
+				'name' => 'r_locator',
+				'id' => 'r_locator',
+				'size' => '10',
+				'value' => @set_value('r_locator', $railway->r_locator)
+			)); ?>
+			<button class="small black button" id="lookup_locator">Look up</button>
+		</div>
+		
+		<div class="inline">
+			<label for="r_wab" <?php if (form_error('r_wab')) echo 'class="error"' ?>>WAB area</label>
+			<?php echo form_input(array(
+				'name' => 'r_wab',
+				'id' => 'r_wab',
+				'size' => '10',
+				'value' => @set_value('r_wab', $railway->r_wab)
+			)); ?>
+		</div>
+		
+		<div class="inline">
+			<label>Lat/Long</label>
+			<?php echo form_input(array(
+				'name' => 'r_lat',
+				'id' => 'r_lat',
+				'class' => 'latlng',
+				'size' => '10',
+				'value' => @set_value('r_lat', $railway->r_lat)
+			));
+			echo form_input(array(
+				'name' => 'r_lng',
+				'id' => 'r_lng',
+				'class' => 'latlng',
+				'size' => '10',
+				'value' => @set_value('r_lng', $railway->r_lng)
+			)); ?>
+		</div>
+		
+		</div>
+			
+		<?php
+		/* echo form_hidden('lat', @set_value('lat', $railway->lat));
+		echo form_hidden('lng', @set_value('lng', $railway->lng)); */
+		@$railway_coords = "{$railway->r_lat},{$railway->r_lng}";
+		?>
+		
+		<div class="seven columns omega">
+		
+		<div style="width: 100%; height: 200px; overflow: hidden; display: block;" id="map">
+			<?php
+			if (strlen($railway_coords > 1))
+			{
+				$data['urlonly'] = false;
+				$data['coords'] = $railway_coords;
+				$data['size'] = '460x200';
+				echo $this->maps->staticmap($data);
+			}
+			?>
+		</div>
+		
+		</div>
+		
+		<div class="clear"></div>
+	
+	</li>
+	
+</ul>
 
-</fieldset>
+
+<br>
 
 
-<div class="actions">
+<div class="actions" style="margin-left: 160px">
 	<?php
 	$text = (isset($railway)) ? 'Save' : 'Add';
 	?>
-	<input class="btn primary" type="submit" name="submit" value="<?php echo $text ?>">
+	<input class="large blue button" type="submit" name="submit" value="<?php echo $text ?>">
 </div>
-
 
 
 <script>

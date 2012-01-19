@@ -101,7 +101,7 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 	p.lead { font-size: 21px; line-height: 27px; color: #777;  }
 
 	em { font-style: italic; }
-	strong { font-weight: bold; color: #333; }
+	strong { font-weight: bold; color: inherit; }
 	small { font-size: 80%; }
 
 /*	Blockquotes  */
@@ -118,9 +118,9 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 
 /* #Links
 ================================================== */
-	a, a:visited { color: #333; text-decoration: underline; outline: 0; }
+	/* a, a:visited { color: #333; text-decoration: underline; outline: 0; }
 	a:hover, a:focus { color: #000; }
-	p a, p a:visited { line-height: inherit; }
+	p a, p a:visited { line-height: inherit; } */
 
 
 
@@ -189,11 +189,12 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 .button.black { background-color: #333; }
 .button.white { background-color: #fff; color: #000; text-shadow: 1px 1px #fff; }
 
-.button.small { font-size: 11px; padding: 3px 7px; }
-.button.large { font-size: 14px; padding: 11px 13px; }
+.button.small { font-size: 11px; padding: 4px 5px; }
+.button.large { font-size: 14px; padding: 10px 15px; }
 
 .button.right:after { content: "  \2192"; font-size: 150%; }
 .button.left:before { content: "\2190  "; font-size: 150%; }
+.button.add:before { content: "+  "; font-weight: bold; }
 
 
 
@@ -201,23 +202,26 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 /* #Tables (ZURB)
 ==================== */
 
-table { background: #fff; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin: 0 0 18px; border: 1px solid #ddd;  }
+table.simple { background: #fff; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; margin: 0 0 18px; border: 1px solid #ddd;  }
 
-table thead, table tfoot { background: #f5f5f5; }
-table thead tr th,
-table tfoot tr th,
-table tbody tr td,
-table tr td,
-table tfoot tr td { font-size: 12px; line-height: 18px; text-align: left; }
-table thead tr th,
-table tfoot tr td { padding: 8px 10px 9px; font-size: 14px; font-weight: bold; color: #222; }
-table thead tr th:first-child, table tfoot tr td:first-child { border-left: none; }
-table thead tr th:last-child, table tfoot tr td:last-child { border-right: none; }
+table.simple thead, table.simple tfoot { background: #f5f5f5; }
+table.simple thead tr th,
+table.simple tfoot tr th,
+table.simple tbody tr td,
+table.simple tr td,
+table.simple tfoot tr td { font-size: 12px; line-height: 18px; text-align: left; }
+table.simple thead tr th,
+table.simple tfoot tr td { padding: 8px 10px 9px; font-size: 14px; font-weight: bold; color: #222; }
+table.simple thead tr th:first-child, table.simple tfoot tr td:first-child { border-left: none; }
+table.simple thead tr th:last-child, table.simple tfoot tr td:last-child { border-right: none; }
 
-table tbody tr.even,
-table tbody tr.alt { background: #f9f9f9; }
-table tbody tr:nth-child(even) { background: #f9f9f9; }
-table tbody tr td { color: #333; padding: 9px 10px; vertical-align: top; border: none; }
+table.simple tbody tr:hover, 
+table.simple tbody tr:hover td { background: #ddd; cursor: pointer; }
+
+table.simple tbody tr.even,
+table.simple tbody tr.alt { background: #f9f9f9; }
+table.simple tbody tr:nth-child(even) { background: #f9f9f9; }
+table.simple tbody tr td { color: #333; padding: 6px 8px; vertical-align: top; border: none; }
 
 
 
@@ -232,6 +236,51 @@ div.alert-box { display: block; padding: 6px 7px; font-weight: bold; font-size: 
 
 .alert-box a.close { color: #000; position: absolute; right: 4px; top: 0; font-size: 18px; opacity: 0.2; padding: 4px; }
 .alert-box a.close:hover,.alert-box a.close:focus { opacity: 0.4; }
+
+.alert-box ul, .alert-box ul li { margin: 0; }
+
+
+
+
+/* #Labels
+==================== */
+
+.label {
+		padding: 1px 6px 2px;
+		font-size: 11px;
+		font-weight: bold;
+		text-align: center;
+		text-decoration: none;
+		line-height: 1;
+		font-family: "Helvetica Neue", "Helvetica", Arial, Verdana, sans-serif;
+		white-space: nowrap;
+		display: inline;
+		position: relative;
+		bottom: 1px;
+		margin-right: 4px;
+		color: #fff;
+		background: #00a6fc;
+	}
+	
+	.label.radius {
+		-moz-border-radius: 2px;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+	}
+	
+	.label.round {
+		padding: 1px 8px 2px;
+		-moz-border-radius: 1000px;
+		-webkit-border-radius: 1000px;
+		border-radius: 1000px;
+	}
+	
+	/* Colors ---------- */
+	.blue.label				{ background-color: #00a6fc; }
+	.red.label				{ background-color: #e91c21; }
+	.green.label			{ background-color: #7fae00; }
+	.white.label			{ background-color: #e9e9e9; color: #333; }
+	.black.label			{ background-color: #141414; }
 
 
 
@@ -293,14 +342,19 @@ ul.pagination li.unavailable:hover a, ul.pagination li.unavailable a:focus { bor
 
 div.panel {
 	padding: 20px 20px 2px 20px;
+	border: 1px solid #ddd;
+	background: #f5f5f5;
+	background: -moz-linear-gradient(top, #fff 0%, #efefef 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(100%,#efefef));
+	/*padding: 20px 20px 2px 20px;
 	background: #efefef;
-	background: -moz-linear-gradient(top, #FFFFFF 0%, #F4F4F4 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#F4F4F4));
+	background: -moz-linear-gradient(top, #FAFAFA 0%, #F4F4F4 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FAFAFA), color-stop(100%,#F4F4F4));
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#F4F4F4',GradientType=0 );
 	box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 	-webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 	-moz-box-shadow: 0 2px 5px rgba(0,0,0,0.25);
-	margin: 0 0 20px 0;
+	margin: 0 0 20px 0;*/
 }
 
 div.box {
@@ -320,6 +374,7 @@ div.box {
 		margin-bottom: 20px; }
 	fieldset {
 		margin-bottom: 20px; }
+	
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
@@ -332,10 +387,11 @@ div.box {
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
 		font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		color: #777;
+		color: #333;
 		margin: 0;
-		width: 210px;
-		max-width: 100%;
+		/* width: 100%;
+		margin-right: 20px;
+		max-width: 210px; */
 		display: block;
 		margin-bottom: 20px;
 		background: #fff; }
@@ -366,8 +422,33 @@ div.box {
 		font-weight: normal;
 		font-size: 13px;
 		color: #444; }
-
-
+	
+	
+	/* Inline form elements. Just wrap in <div class="inline"> */
+	form div.inline {
+		margin-bottom: 20px;
+		display: block;
+	}
+	
+	form div.inline label {
+		width: 120px;
+		display: block;
+		float: left;
+		text-align: right;
+		margin-right: 20px;
+		padding-top: 5px;
+	}
+	
+	form div.inline input,
+	form div.inline select,
+	form div.inline textarea {
+		display: inline-block;
+		margin: 0;
+	}
+	
+	form div.inline div.more {
+		margin-left: 140px;
+	}
 
 
 /* #Misc

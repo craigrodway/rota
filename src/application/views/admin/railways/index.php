@@ -1,131 +1,95 @@
 <p class="add-bottom">
-	<a href="<?php echo site_url('admin/railways/add') ?>" class="success btn">Add new railway</a>
+	<a href="<?php echo site_url('admin/railways/add') ?>" class="green button add">Add new railway</a>
 </p>
 
 
-<form class="form-stacked" method="GET" action="<?php echo site_url('admin/railways/') ?>">
+<form method="GET" action="<?php echo site_url('admin/railways/') ?>">
 
-	<div class="row bg filter">
+	<div class="row panel">
 			
-		<div class="span3">
+		<div class="three columns alpha">
 			<label for="name">Name</label>
-			<input class="span3" type="text" name="name" value="<?php echo @set_value('name', $filter_params['name']) ?>">
+			<input type="text" name="r_name" value="<?php echo @set_value('r_name', $filter_params['r_name']) ?>">
 		</div>
 
-		<div class="span3">
+		<div class="three columns">
 			<label for="name">WAB</label>
-			<input class="span3" type="text" name="wab" value="<?php echo @set_value('wab', $filter_params['wab']) ?>">
+			<input type="text" name="r_wab" value="<?php echo @set_value('r_wab', $filter_params['r_wab']) ?>">
 		</div>
 
-		<div class="span3">
+		<div class="three columns">
 			<label for="name">Locator</label>
-			<input class="span3" type="text" name="locator" value="<?php echo @set_value('locator', $filter_params['locator']) ?>">
+			<input type="text" name="r_locator" value="<?php echo @set_value('r_locator', $filter_params['r_locator']) ?>">
 		</div>
 
-		<div class="span3">
+		<div class="three columns">
 			<label for="name">Post Code</label>
-			<input class="span3" type="text" name="postcode" value="<?php echo @set_value('postcode', $filter_params['postcode']) ?>">
+			<input type="text" name="r_postcode" value="<?php echo @set_value('r_postcode', $filter_params['r_postcode']) ?>">
 		</div>
 
-		<div class="span16">
-			<input type="submit" class="btn primary" value="Filter">
+		<div style="padding-left: 75%; clear: both;">
+			<input type="submit" class="blue button" value="Filter">
 		</div>
+		
+		<br>
 	
 	</div> <!-- / .row -->
 
 </form>
 
 
-<br><br>
-
-<div class="row">
-
-	<div class="span16">
+<?php if ($railways): ?>
 	
-	<?php if ($railways): ?>
-	
-		<!-- <table class="condense-table bordered-tabl zebra-striped"> -->
-		<table class="simple">
-			
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>WAB</th>
-					<th>Locator</th>
-					<th>Postcode</th>
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				
-			<?php foreach ($railways as $r): ?>
-				
-				<tr>
-					<td class="title"><?php echo anchor('admin/railways/edit/' . $r->railway_id, $r->name) ?></td>
-					<td><?php echo $r->wab ?></td>
-					<td><?php echo $r->locator ?></td>
-					<td><?php echo $r->postcode ?></td>
-					<td class="ops">
-						<?php
-						echo icon_link('world', $r->url, 'Visit website', 'target="_blank"');
-						echo icon_link('map', '#', 'Show on map');
-						echo icon_link('edit', 'admin/railways/edit/' . $r->railway_id, 'Edit');
-						echo icon_link('delete', 'admin/railways/delete/' . $r->railway_id, 'Delete', 'rel="delete" data-id="' . $r->railway_id . '"');
-						?>
-					</td>
-				</tr>
-			
-			<?php endforeach; ?>
-				
-			</tbody>
-			
-		</table>
+	<table class="simple" width="100%">
 		
-		<div class="pagination add-bottom">
-			<?php echo $this->pagination->create_links(); ?>
-		</div>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>WAB</th>
+				<th>Locator</th>
+				<th>Postcode</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
 		
-	<?php else: ?>
-
-		<div class="alert-message block-message warning">No railways found.</div>
-
-	<?php endif; ?>
-	
-	</div> <!-- / .span16 -->
-	
-	<!--
-	<div class="span4 bg add-bottom">
+		<tbody>
+			
+		<?php foreach ($railways as $r): ?>
+			
+			<tr>
+				<td class="title"><?php echo anchor('admin/railways/edit/' . $r->r_id, $r->r_name) ?></td>
+				<td><?php echo $r->r_wab ?></td>
+				<td><?php echo $r->r_locator ?></td>
+				<td><?php echo $r->r_postcode ?></td>
+				<td class="ops">
+					<?php
+					echo icon_link('world', $r->r_url, 'Visit website', 'target="_blank"');
+					echo icon_link('map', current_url() . '#/', 'Show on map');
+					echo icon_link('edit', 'admin/railways/edit/' . $r->r_id, 'Edit');
+					echo icon_link('delete', 'admin/railways/delete/' . $r->r_id, 'Delete', 'rel="delete" data-id="' . $r->r_id . '"');
+					?>
+				</td>
+			</tr>
 		
-		<form class="form-stacked" method="GET" action="<?php echo site_url('admin/railways/') ?>">
+		<?php endforeach; ?>
 			
-			<div class="clearfix">
-				<label for="name">Name</label>
-				<div class="input">
-					<input class="span3" type="text" name="name" value="<?php echo @set_value('name', $filter_params['name']) ?>">
-				</div>
-			</div>
-			
-			<div class="clearfix">
-				<label for="name">WAB</label>
-				<div class="input">
-					<input class="span3" type="text" name="wab" value="<?php echo @set_value('wab', $filter_params['wab']) ?>">
-				</div>
-			</div>
-			
-			<div class="clearfix">
-				<label for="name">Locator</label>
-				<div class="input">
-					<input class="span3" type="text" name="locator" value="<?php echo @set_value('locator', $filter_params['locator']) ?>">
-				</div>
-			</div>
-			<input type="submit" class="btn primary" value="Filter">
-		</form>
+		</tbody>
 		
-	</div> <!-- .span4 -->
+	</table>
 	
+	<div class="add-bottom">
+		<?php echo $this->pagination->create_links(); ?>
+		<div class="clear"></div>
+	</div>
+	
+<?php else: ?>
 
-</div>
+	<div class="alert-box warning">No railways found.</div>
+
+<?php endif; ?>
+
+
+<div class="clear"></div>
 
 
 <div style="border: 1px solid #ccc; padding: 0px;">
@@ -133,36 +97,46 @@
 </div>
 
 
-<div id="dialog-delete" class="modal hide fade hidden">
-	<div class="modal-header">
-	<a href="#" class="close">X</a>
-		<h3>Delete Railway</h3>
-	</div>
-	<div class="modal-body">
-		<p>Are you sure you want to delete this railway?</p>
-	</div>
-	<div class="modal-footer">
-		<?php echo form_open(site_url('admin/railways/delete'), '', array(
-			'railway_id' => '0',
-			'redirect_to' => current_url(),
-		)) ?>
-		<input type="submit" class="btn danger" value="Delete">
-		<input type="reset" class="btn secondary x" value="Cancel">
-	</div>
+<div id="modal-delete" class="reveal-modal">
+	<h1>Delete Railway</h1>
+	
+	<p>Are you sure you want to delete this railway?</p>
+	
+	<a class="close-reveal-modal">&#215;</a>
+	
+	<?php echo form_open(site_url('admin/railways/delete'), '', array(
+		'railway_id' => '0',
+		'redirect_to' => current_url(),
+	)) ?>
+	<input type="submit" class="red button" value="Delete">
+	<input type="reset" class="button" value="Cancel">
+
 </div>
 
 
 <script>
-jsq.add(function(){
+jsq.add(function() {
+	
+	$("table").delegate("tr", "click", function(e){
+		if (e.target.tagName == "TD") {
+			var a = $(this).find("td.title a")[0];
+			window.location.href = $(a).attr("href");  
+		}
+	});
+	
 	$("a[rel=delete]").click(function(e){
 		// Show dialog on delete click and set hidden form ID field
-		$("#dialog-delete").modal('show');
-		$("#dialog-delete input[name=railway_id]").val($(this).data("id"));
+		$("#modal-delete").reveal({
+			animation: "fade",
+			animationSpeed: 300
+		});
+		$("#modal-delete input[name=railway_id]").val($(this).data("id"));
 		e.preventDefault();
 	});
-	$(".btn.x").click(function(){
-		// close me.
-		$(this).parents("div.modal").data("modal").hide();
-	})
+	
+	$("#modal-delete input[type=reset]").click(function(){
+		$(".close-reveal-modal").click();
+	});
+	
 })
 </script>

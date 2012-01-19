@@ -71,9 +71,9 @@ class Railways_model extends CI_Model
 		
 		$sql = "SELECT
 					railways.*,
-					CONCAT_WS(',',lat,lng)
+					CONCAT_WS(',', r_lat, r_lng)
 				FROM railways
-				WHERE railway_id = ?
+				WHERE r_id = ?
 				LIMIT 1";
 		$query = $this->db->query($sql, array($railway_id));
 		
@@ -99,9 +99,9 @@ class Railways_model extends CI_Model
 		
 		$sql = "SELECT
 					railways.*,
-					CONCAT_WS(',',lat,lng) AS latlng
+					CONCAT_WS(',', r_lat, r_lng) AS r_latlng
 				FROM railways
-				WHERE slug = ?
+				WHERE r_slug = ?
 				LIMIT 1";
 		$query = $this->db->query($sql, array($slug));
 		
@@ -127,24 +127,24 @@ class Railways_model extends CI_Model
 	
 	
 	
-	function edit($railway_id = null, $data = array())
+	function edit($r_id = null, $data = array())
 	{
-		if ( ! $railway_id) return false;
+		if ( ! $r_id) return false;
 		if (empty($data)) return false;
 		
-		$this->db->where('railway_id', $railway_id);
+		$this->db->where('r_id', $r_id);
 		return $this->db->update('railways', $data);
 	}
 	
 	
 	
 	
-	function delete($railway_id = null)
+	function delete($r_id = null)
 	{
-		if ( ! $railway_id) return false;
+		if ( ! $r_id) return false;
 		
-		$sql = 'DELETE FROM railways WHERE railway_id = ? LIMIT 1';
-		$query = $this->db->query($sql, array($railway_id));
+		$sql = 'DELETE FROM railways WHERE r_id = ? LIMIT 1';
+		$query = $this->db->query($sql, array($r_id));
 		
 		return ($this->db->affected_rows() == 1);
 	}

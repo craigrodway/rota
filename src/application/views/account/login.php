@@ -1,13 +1,13 @@
-<br><br>
+<br>
 
 <div class="row">
 	
 	<div class="five columns alpha">&nbsp;</div>
 	
-	<div class="six columns">
-	
-		<div class="panel">
-
+	<div class="six columns panel">
+		
+		<div style="padding: 25px 50px;">
+		
 			<?php echo form_open(current_url()) ?>
 			
 				<label for="email">Email address</label>
@@ -21,8 +21,8 @@
 				<?php echo anchor('account/elephant', 'Forgot your password?') ?>
 				
 			</form>
-	
-		</div> <!-- / .panel -->
+			
+		</div>
 	
 	</div> <!-- / .eight columns -->
 	
@@ -30,5 +30,3 @@
 	<div class="five columns omega">&nbsp;</div>
 	
 </div> <!-- / .row -->
-
-<br><br>
