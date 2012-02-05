@@ -68,56 +68,83 @@ if ($this->layout->has('sidebar'))
 </head>
 <body>
 	
-	<div class="container" id="body">
+	<div class="container header">
 		
-		<!-- header area -->
-		<div class="header">
+		<div class="six columns left">
+			<a href="<?php echo site_url() ?>"><img src="img/global/title.png" title="Railways on the Air"></a>
+		</div>
+		
+		<div class="ten columns right">
 			
-			<div class="six columns left">
-				<a href="<?php echo site_url() ?>"><img src="img/global/title.png" title="Railways on the Air"></a>
-			</div>
-			
-			<div class="ten columns right">
-				
-				<ul class="horizontal">
-					<?php
-					foreach ($nav['top'] as $item){
-						$cls = array('i', $item[2]);
-						$uri = $this->uri->uri_string();
-						$uri = (empty($uri)) ? 'home' : $uri;
-						if (stristr($uri, $item[0]))
-						{
-							$cls[] = 'active';
-						}
-						$cls = 'class="' . implode(' ', $cls) . '"';
-						echo '<li>' . anchor($item[0], $item[1], $cls) . '</li>';
+			<ul class="horizontal">
+				<?php
+				foreach ($nav['top'] as $item){
+					$cls = array('i', $item[2]);
+					$uri = $this->uri->uri_string();
+					$uri = (empty($uri)) ? 'home' : $uri;
+					if (stristr($uri, $item[0]))
+					{
+						$cls[] = 'active';
 					}
-					?>
-				</ul>
-				
-				<div class="clear"></div>
-				
-				<div class="status">
-					<?php if ($this->auth->logged_in()): ?>
-						<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
-					<?php endif; ?>
-				</div> <!-- / .status -->
-				
-			</div> <!-- / .right -->
+					$cls = 'class="' . implode(' ', $cls) . '"';
+					echo '<li>' . anchor($item[0], $item[1], $cls) . '</li>';
+				}
+				?>
+			</ul>
 			
 			<div class="clear"></div>
 			
-		</div> <!-- / .header -->
+			<div class="status">
+				<?php if ($this->auth->logged_in()): ?>
+					<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
+				<?php endif; ?>
+			</div> <!-- / .status -->
+			
+		</div> <!-- / .right -->
 		
-		<?php
-		$nav_class = '';
-		if ($this->session->userdata('type') == 'admin')
-		{
-			$nav_class = 'admin';
-		}
-		?>
+		<div class="clear"></div>
 		
-		<div class="sixteen columns nav <?php echo $nav_class ?>">
+	</div>
+	
+	
+	<div class="container body body-top">
+	
+		<div class="eight columns title">
+			<h4><?php echo $this->layout->get_title() ?></h4>
+		</div>
+		
+		<div class="eight columns flash">
+			<?php
+			$flashes = array('success', 'warning', 'error');
+			$flashmsgs = null;
+			foreach ($flashes as $f)
+			{
+				if ($this->session->flashdata($f))
+				{
+					$flashmsgs .= '<div class="alert alert-' . $f . '">' . $this->session->flashdata($f) . '</div>';
+				}
+			}
+			if ($flashmsgs) echo $flashmsgs;
+			?>
+		</div>
+		
+		<div class="clear"></div>
+		
+	</div>
+	
+	
+	<?php
+	$nav_class = '';
+	if ($this->session->userdata('type') == 'admin')
+	{
+		$nav_class = 'admin';
+	}
+	?>
+	
+	
+	<div class="container body nav <?php echo $nav_class ?>">
+		
+		<div class="sixteen columns">
 			<ul class="horizontal">
 				<?php foreach ($nav['primary'] as $item): ?>
 				<?php
@@ -134,30 +161,14 @@ if ($this->layout->has('sidebar'))
 			</ul>
 		</div>
 		
-		
-		<div class="sixteen columns title">
-			<h4><?php echo $this->layout->get_title() ?></h4>
-		</div>
-		
-		
-		<?php
-		$flashes = array('success', 'warning', 'error');
-		$flashmsgs = null;
-		foreach ($flashes as $f)
-		{
-			if ($this->session->flashdata($f))
-			{
-				$flashmsgs .= '<div class="alert-box ' . $f . '">' . $this->session->flashdata($f) . '</div>';
-			}
-		}
-		if ($flashmsgs) echo '<div class="sixteen columns">' . $flashmsgs . '</div>';
-		?>
-		
+	</div>
+	
+	
+	<div class="container body body-main">
 		
 		<div class="<?php echo $left_classes ?>">
 			<?php echo $this->layout->get('content') ?>
 		</div> <!-- / .content -->
-		
 		
 		<?php if ($this->layout->has('sidebar')): ?>
 		<div class="<?php echo $right_classes ?>">
@@ -165,73 +176,24 @@ if ($this->layout->has('sidebar'))
 		</div> <!-- / .sidebar -->
 		<?php endif; ?>
 		
-		
 		<div class="clear"></div>
-		
-		<br>
-		
-		<div class="sixteen columns footer">
-			<div class="eight columns alpha left">
-				<p>&copy; Bishop Auckland Radio Amateur Club. Location data by <a href="http://nearby.org.uk/">Nearby.org.uk</a>.</p>
-			</div>
-			<div class="eight columns omega right"><p>Site by <a href="http://webman.me.uk/">Craig A Rodway</a>.</p></div>
-			<div class="clear"></div>
+	
+	</div> <!-- / .body.body-main -->
+	
+	
+	<div class="container footer">
+		<div class="eight columns left">
+			<p>&copy; Bishop Auckland Radio Amateur Club. Location data by <a href="http://nearby.org.uk/">Nearby.org.uk</a>.</p>
 		</div>
-	
-	</div> <!-- / #body -->
-	
-<?php
-/*
-	
-	<div class="container main">
-		
-		<div class="row">
-	
-			<div class="span16 title">
-				<!-- <h1><?php echo (isset($title)) ? $title : $this->config->item('site_name') ?></h1> -->
-				<h1><?php echo $this->layout->get_title() ?></h1>
-			</div> <!-- / .title -->
-			
-			<?php
-			$flashes = array('success', 'warning', 'error', 'info');
-			$flashmsgs = null;
-			foreach ($flashes as $f)
-			{
-				if ($this->session->flashdata($f))
-				{
-					$flashmsgs .= '<div class="alert-message ' . $f . '"><p>' . $this->session->flashdata($f) . '</p></div>';
-				}
-			}
-			if ($flashmsgs) echo '<div class="span16">' . $flashmsgs . '</div>';
-			?>
-			
-			<div class="<?php echo $left_classes ?>">
-				
-				<?php echo $this->layout->get('content') ?>
-				
-			</div> <!-- / .body -->
-			
-			<?php if ($this->layout->has('sidebar')): ?>
-			
-			<div class="<?php echo $right_classes ?>">
-				<?php echo $this->layout->get('sidebar') ?>
-			</div> <!-- / .sidebar -->
-			
-			<?php endif; ?>
-		
-		</div> <!-- / .row -->
-		
-	</div> <!-- / .container.main -->
-	
-	
-	<?php $this->load->view('template/footer') ?>
-	*/
-	?>
+		<div class="eight columns right"><p>Site by <a href="http://webman.me.uk/">Craig A Rodway</a>.</p></div>
+		<div class="clear"></div>
+	</div>
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
 	<script src="js/amplify.min.js"></script>
 	<script src="js/tabs.js"></script>
+	<script src="js/modules/ROTA.js"></script>
 	<script src="vendor/reveal/jquery.reveal.js"></script>
 	
 	<?php

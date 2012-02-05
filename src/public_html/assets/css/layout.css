@@ -22,16 +22,25 @@ html {
 }
 
 body {
-	background: #e0e0e0;
-	padding: 0 0 20px 0;
+	background: #4180AB;
+	padding: 20px 0 20px 0;
 }
 
 
-div#body {
+div.body {
 	background: #fff;
-	border: 5px solid #cfcfcf;
-	border-top-width: 0px;
-	padding: 20px 15px 15px 15px;
+	padding: 0 15px;
+	/*border-radius: 15px;*/
+}
+
+div.body-top {
+	border-radius: 15px 15px 0 0;
+}
+
+div.body-main {
+	border-radius: 0 0 15px 15px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 
@@ -40,7 +49,7 @@ a {
 	text-decoration: none;
 }
 a:hover {
-	color: #1D82AB;
+	color: #E4EBF0;
 }
 
 
@@ -52,36 +61,45 @@ p.big { font-size: 135%; line-height: 165%; color: #666; }
 
 
 
-.header { margin-bottom: 15px; }
+.header { margin-bottom: 15px; color: #fff; }
 .header .right ul.horizontal { margin-bottom: 15px; float: right; text-align: right; }
 .header .right ul.horizontal li { margin-left: 24px; }
 .header .right .status { float: right; text-align: right; }
-.header .right ul.horizontal li a { color: #295474; text-decoration: none; font-weight: bold; }
-.header .right ul.horizontal li a:hover { color: #1D82AB; }
-
-
-
-div.nav, div.footer {
-	background: #405E52 ;
-	border-radius:3px;
+.header .right ul.horizontal li a {
+	display: inline-block;
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 90%;
+	line-height: 16px;
+	height: 16px;
 }
-div.nav.admin { background: #BF4D28; }
-div.nav.admin ul li a:hover { background: #602714; }
-div.nav ul { margin-left: 3px; }
+.header .right ul.horizontal li a:hover { color: #C7EDE8; }
+
+
+
+.flash { padding-top: 15px; }
+
+
+
+div.nav {
+	background: #BDD1DE;
+}
+div.nav.admin { background: #A6150A; }
+div.nav.admin ul li a { color: #fff; }
+div.nav.admin ul li a:hover { background: #fff; color: #A6150A; }
+div.nav ul { margin-right: 3px; }
 div.nav ul li a {
 	display: block;
-	padding: 5px;
 	font-weight: bold;
 	font-size: 95%;
-}
-div.nav ul li a {
 	display: block;
 	padding: 10px 15px;
 	text-decoration: none;
-	color: #fff;
+	color: #000;
 }
 div.nav ul li a:hover {
-	background: #202F29;
+	background: #fff;
 }
 
 
@@ -107,14 +125,14 @@ div.footer {
 
 
 div.title {
-	border-bottom: 1px solid #cfcfcf;
-	margin-bottom: 20px;
-	padding: 0;
+	padding: 15px 0;
 }
 	div.title h4 {
-		line-height: inherit;
-		margin: 15px 0;
+		line-height: 40px;
+		margin: 0;
 		padding: 0;
+		font-size: 25px;
+		font-weight: normal;
 	}
 
 
@@ -124,12 +142,15 @@ a.i {
 	padding-left: 20px;
 }
 
-.i.login { background-image: url(../img/global/icons/login.png); }
-.i.account { background-image: url(../img/global/icons/account.png); }
+.i.login { background-image: url(../img/global/icons/lock.png); }
+.i.account { background-image: url(../img/global/icons/user.png); }
 .i.news { background-image: url(../img/global/icons/news.png); }
 .i.log { background-image: url(../img/global/icons/log.png); }
-.i.register { background-image: url(../img/global/icons/tick.png); }
+.i.register { background-image: url(../img/global/icons/register.png); }
 
+.icon.add span { background-image: url(../img/global/icons/plus.png); }
+.icon.delete span { background-image: url(../img/global/icons/delete.png); }
+.icon.website span { background-image: url(../img/global/icons/world.png); }
 
 
 
@@ -139,9 +160,28 @@ a.i {
 td.title, td.title a { font-weight: bold; }
 table tbody tr td.ops { text-align: right; }
 table tbody tr td.ops a.icon-link { margin-left: 15px; }
+table tbody tr td.ops .button { margin-right: 0; margin-left: 10px; }
 
 
+/**
+ * DataTables
+ */
 
+.dataTables_paginate { float: right; margin: 0; }
+
+.dataTables_filter { /* background: #f9f9f9; margin-bottom: 10px; padding: 10px 0; */ }
+.dataTables_filter label { margin: 5px 10px; width: auto; display: block; float: right; }
+
+.dataTables_filter label,
+.dataTables_filter input { display: inline-block; margin: 0 5px 0 10px; }
+
+.paginate_enabled_next,
+.paginate_enabled_previous,
+.paginate_disabled_next,
+.paginate_disabled_previous { width: 18px; height: 18px; display: inline-block; overflow: hidden; margin: 0 0 0 5px; cursor: pointer; }
+
+.paginate_disabled_next,
+.paginate_disabled_previous { visibility: hidden; cursor: default; }
 
 /* #Page Styles
 ================================================== */
@@ -179,15 +219,15 @@ ul.railways {
 	}
 
 	ul.railways li h4 {
-		background: #80BCA3;
-		color: #fff;
+		background: #F3E25E;
+		color: #000;
 		padding: 10px 10px 5px 10px;
 		height: 64px;
 		line-height: 125%;
 	}
 
 	ul.railways li a:hover h4 {
-		background: #655643;
+		background: #FAF1AF;
 	}
 
 

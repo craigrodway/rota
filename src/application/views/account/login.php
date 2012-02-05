@@ -1,12 +1,10 @@
 <br>
 
 <div class="row">
-	
-	<div class="five columns alpha">&nbsp;</div>
-	
-	<div class="six columns panel">
+
+	<div class="panel" style="margin: 0 auto; width: 340px;">
 		
-		<div style="padding: 25px 50px;">
+		<div style="margin: 25px;">
 		
 			<?php echo form_open(current_url()) ?>
 			
@@ -25,8 +23,5 @@
 		</div>
 	
 	</div> <!-- / .eight columns -->
-	
-	
-	<div class="five columns omega">&nbsp;</div>
 	
 </div> <!-- / .row -->

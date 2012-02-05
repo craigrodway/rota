@@ -1,31 +1,22 @@
-jsq.add(function(){
+// JS tabs library
 
-	function activateTab($tab) {
-		var $activeTab = $tab.closest('dl').find('a.active'),
-				contentLocation = $tab.attr("href") + "Tab";
+var tabs = {};
 
-		//Make Tab Active
-		$activeTab.removeClass('active');
-		$tab.addClass('active');
-
-		//Show Tab Content
-		$(contentLocation).closest('.tabs-content').children('li').hide();
-		$(contentLocation).show();
-	}
-
-	$('dl.tabs').each(function () {
-		//Get all tabs
-		var tabs = $(this).children('dd').children('a');
-		tabs.click(function (e) {
-			e.preventDefault();
-			activateTab($(this));
-			window.location.hash = $(this).attr("href");
-			
-		});
-	});
-
-	if (window.location.hash) {
-		activateTab($('a[href="' + window.location.hash + '"]'));
-	}
+tabs.init = function() {
 	
-});
+	$("body").on("click", "dl.tabs > dd > a", function(e) {
+		
+		var location = $(this).attr("href");
+		if (location.charAt(0) == "#") {
+			e.preventDefault();
+			$(this).closest("dl").find("a.active").removeClass("active");
+			$(this).addClass("active");
+			$(location + "Tab").closest(".tabs-content").children("li").hide();
+			$(location + "Tab").show();
+		}
+		
+	});
+	
+}
+
+jsq.add(tabs.init);

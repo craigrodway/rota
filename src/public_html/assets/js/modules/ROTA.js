@@ -1,21 +1,19 @@
-ROTA = {};
-
-ROTA.lookup_postcode = function(pc, cb){
-	var pc = pc.replace(/\s|\s+|\t|\r|\n/g, '');
-	if (pc.length > 0){
+var ROTA = (function($, amplify){
+	
+	
+	var staticmap = function(data, cb){
 		$.ajax({
 			type: "GET",
-			url: siteurl + "/ajax/lookup_postcode/" + pc + "?",
+			data: data,
+			url: siteurl + "/ajax/staticmap",
 			success: cb
-		});
-	}	
-};
-
-ROTA.staticmap = function(data, cb){
-	$.ajax({
-		type: "GET",
-		data: data,
-		url: siteurl + "/ajax/staticmap",
-		success: cb
-	})
-}
+		})
+	}
+	
+	
+	return {
+		staticmap: staticmap
+	}
+	
+	
+})(jQuery, amplify);

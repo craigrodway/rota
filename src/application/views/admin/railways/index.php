@@ -1,13 +1,13 @@
-<p class="add-bottom">
-	<a href="<?php echo site_url('admin/railways/add') ?>" class="green button add">Add new railway</a>
+<p class="add-bottom hidden">
+	<a href="<?php echo site_url('admin/railways/add') ?>" class="green button add icon" id="add_button"><span>Add new railway</span></a>
 </p>
 
-
+<!--
 <form method="GET" action="<?php echo site_url('admin/railways/') ?>">
 
 	<div class="row panel">
 			
-		<div class="three columns alpha">
+		<div class="three columns">
 			<label for="name">Name</label>
 			<input type="text" name="r_name" value="<?php echo @set_value('r_name', $filter_params['r_name']) ?>">
 		</div>
@@ -27,20 +27,21 @@
 			<input type="text" name="r_postcode" value="<?php echo @set_value('r_postcode', $filter_params['r_postcode']) ?>">
 		</div>
 
-		<div style="padding-left: 75%; clear: both;">
+		<div class="three columns offset-by-nine half-bottom">
 			<input type="submit" class="blue button" value="Filter">
 		</div>
 		
-		<br>
+		<br><br>
 	
-	</div> <!-- / .row -->
+	</div>
 
 </form>
+-->
 
 
 <?php if ($railways): ?>
 	
-	<table class="simple" width="100%">
+	<table class="simple hidden" id="railways" width="100%">
 		
 		<thead>
 			<tr>
@@ -63,11 +64,13 @@
 				<td><?php echo $r->r_postcode ?></td>
 				<td class="ops">
 					<?php
-					echo icon_link('world', $r->r_url, 'Visit website', 'target="_blank"');
+					/*echo icon_link('world', $r->r_url, 'Visit website', 'target="_blank"');
 					echo icon_link('map', current_url() . '#/', 'Show on map');
 					echo icon_link('edit', 'admin/railways/edit/' . $r->r_id, 'Edit');
-					echo icon_link('delete', 'admin/railways/delete/' . $r->r_id, 'Delete', 'rel="delete" data-id="' . $r->r_id . '"');
+					echo icon_link('delete', 'admin/railways/delete/' . $r->r_id, 'Delete', 'rel="delete" data-id="' . $r->r_id . '"');*/
 					?>
+					<a href="<?php echo $r->r_url ?>" class="blue button website icon"><span>Visit website</span></a>
+					<a href="<?php echo site_url('admin/railways/delete/' . $r->r_id) ?>" class="red button delete icon" rel="delete" data-id="<?php echo $r->r_id ?>"><span>Delete</span></a>
 				</td>
 			</tr>
 		
@@ -108,7 +111,7 @@
 		'railway_id' => '0',
 		'redirect_to' => current_url(),
 	)) ?>
-	<input type="submit" class="red button" value="Delete">
+	<button type="submit" class="red button delete icon"><span>Delete</span></button>
 	<input type="reset" class="button" value="Cancel">
 
 </div>
@@ -123,6 +126,23 @@ jsq.add(function() {
 			window.location.href = $(a).attr("href");  
 		}
 	});
+	
+	$("table#railways").show().dataTable({
+		sDom: '<"eight columns alpha add-bottom"<"#buttons">><"eight columns omega"f><"wrapper"t<p>>',
+		bLengthChange: false,
+		bFilter: true,
+		bInfo: false,
+		bPaginate: true,
+		oLanguage: {
+			oPaginate: {
+				sNext: '<img src="img/global/icons/arrow_right2.png">',
+				sPrevious: '<img src="img/global/icons/arrow_left2.png">',
+			},
+			sSearch: "Filter: "
+		}
+	});
+	
+	$("#buttons").replaceWith($("a#add_button"));
 	
 	$("a[rel=delete]").click(function(e){
 		// Show dialog on delete click and set hidden form ID field

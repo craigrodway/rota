@@ -82,6 +82,8 @@ class AdminController extends MY_Controller
 	{
 		parent::__construct();
 		$this->auth->check('admin');
+		
+		$this->layout->add_js('jquery.dataTables.min.js');
 	}
 	
 }

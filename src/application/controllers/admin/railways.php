@@ -69,7 +69,7 @@ class Railways extends AdminController
 		$config['base_url'] = site_url('admin/railways/index/');
 		$config['suffix'] = '?' . @http_build_query($filter_params);
 		$config['total_rows'] = $this->railways_model->count_all($filter_params);
-		$config['per_page'] = 15; 
+		$config['per_page'] = 100;	//15; 
 		$config['uri_segment'] = 4;
 		$this->pagination->initialize($config); 
 		

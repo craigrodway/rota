@@ -163,11 +163,11 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 <br>
 
 
-<div class="actions" style="margin-left: 160px">
+<div class="actions" style="float:right">
 	<?php
 	$text = (isset($railway)) ? 'Save' : 'Add';
 	?>
-	<input class="large blue button" type="submit" name="submit" value="<?php echo $text ?>">
+	<input class="large right blue button" type="submit" name="submit" value="<?php echo $text ?>">
 </div>
 
 

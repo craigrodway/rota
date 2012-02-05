@@ -165,20 +165,25 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 /* #Buttons (custom)
 ================================================= */
 .button {
-	font-size: 85%;
-	padding: 7px 10px;
-	display: inline;
-	background: #777;
+	font-size: 11px;
+	padding: 8px 10px;
+	display: inline-block;
+	background: url(../img/global/button.png) repeat-x bottom #777;
 	border: none;
 	color: #fff !important;
 	cursor: pointer;
 	font-weight: bold;
 	text-decoration: none;
-	line-height: 125%;
+	line-height: 16px;
 	margin-right: 10px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
+.button.right { margin-left: 10px; margin-right: 0; }
 .button:hover {
-	text-decoration: underline;
+	text-decoration: none;
+	background-position: 0 0;
 }
 
 .button.red { background-color: #D14640; }
@@ -187,15 +192,18 @@ h6{font-size:13px;color:#bfbfbf;text-transform:uppercase;}
 .button.orange { background-color: #F38630; }
 .button.blue { background-color: #2c6da0; }
 .button.black { background-color: #333; }
-.button.white { background-color: #fff; color: #000; text-shadow: 1px 1px #fff; }
+.button.white { background-color: #fff; color: #000; }
 
 .button.small { font-size: 11px; padding: 4px 5px; }
-.button.large { font-size: 14px; padding: 10px 15px; }
+.button.large { font-size: 14px; padding: 8px 12px; }
 
-.button.right:after { content: "  \2192"; font-size: 150%; }
-.button.left:before { content: "\2190  "; font-size: 150%; }
-.button.add:before { content: "+  "; font-weight: bold; }
-
+.button.icon span {
+	padding-left: 24px;
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	display: inline-block;
+	line-height: 16px;
+}
 
 
 
@@ -221,7 +229,7 @@ table.simple tbody tr:hover td { background: #ddd; cursor: pointer; }
 table.simple tbody tr.even,
 table.simple tbody tr.alt { background: #f9f9f9; }
 table.simple tbody tr:nth-child(even) { background: #f9f9f9; }
-table.simple tbody tr td { color: #333; padding: 6px 8px; vertical-align: top; border: none; }
+table.simple tbody tr td { color: #333; padding: 6px 8px; vertical-align: middle; border: none; }
 
 
 
@@ -229,7 +237,7 @@ table.simple tbody tr td { color: #333; padding: 6px 8px; vertical-align: top; b
 /* #Alerts (ZURB)
 ==================== */
 
-div.alert-box { display: block; padding: 6px 7px; font-weight: bold; font-size: 13px; background: #eee; border: 1px solid rgba(0,0,0,0.1); margin-bottom: 12px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; position: relative; }
+/* div.alert-box { display: block; padding: 6px 7px; font-weight: bold; font-size: 13px; background: #eee; border: 1px solid rgba(0,0,0,0.1); margin-bottom: 12px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; position: relative; }
 .alert-box.success { background-color: #7fae00; color: #fff; }
 .alert-box.warning { background-color: #c08c00; color: #fff; }
 .alert-box.error { background-color: #c00000; color: #fff; }
@@ -237,7 +245,61 @@ div.alert-box { display: block; padding: 6px 7px; font-weight: bold; font-size: 
 .alert-box a.close { color: #000; position: absolute; right: 4px; top: 0; font-size: 18px; opacity: 0.2; padding: 4px; }
 .alert-box a.close:hover,.alert-box a.close:focus { opacity: 0.4; }
 
-.alert-box ul, .alert-box ul li { margin: 0; }
+.alert-box ul, .alert-box ul li { margin: 0; }*/
+
+.alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 18px;
+  /*text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);*/
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.alert, .alert-heading {
+  color: #c09853;
+}
+.alert .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 18px;
+}
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.alert-success, .alert-success .alert-heading {
+  color: #468847;
+}
+.alert-danger, .alert-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+.alert-danger,
+.alert-error,
+.alert-danger .alert-heading,
+.alert-error .alert-heading {
+  color: #b94a48;
+}
+.alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.alert-info, .alert-info .alert-heading {
+  color: #3a87ad;
+}
+.alert-block {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.alert-block > p, .alert-block > ul {
+  margin-bottom: 0;
+}
+.alert-block p + p {
+  margin-top: 5px;
+}
 
 
 
@@ -456,3 +518,4 @@ div.box {
 	.remove-bottom { margin-bottom: 0 !important; }
 	.half-bottom { margin-bottom: 10px !important; }
 	.add-bottom { margin-bottom: 20px !important; }
+	.hidden { display: none; }
