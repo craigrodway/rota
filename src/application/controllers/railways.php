@@ -93,15 +93,15 @@ class Railways extends MY_Controller
 		
 		if ($data['railway'])
 		{
-			$this->layout->set_title($data['railway']->name);
+			$this->layout->set_title($data['railway']->r_name);
 			
-			$mapconfig['center'] = $data['railway']->latlng;
+			$mapconfig['center'] = $data['railway']->r_latlng;
 			$mapconfig['zoom'] = '9';
 			$this->googlemaps->initialize($mapconfig);
 			
 			$marker = array();
-			$marker['title'] = $data['railway']->name;
-			$marker['position'] = $data['railway']->latlng;
+			$marker['title'] = $data['railway']->r_name;
+			$marker['position'] = $data['railway']->r_latlng;
 			$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
 			$this->googlemaps->add_marker($marker);
 			
@@ -109,7 +109,7 @@ class Railways extends MY_Controller
 		}
 		else
 		{
-			$this->layout->set_title('Railway information');
+			$this->layout->set_title($data['railway']->r_name);
 			$data['search'] = $this->railways_model->get_all(NULL, NULL, array('slug' => $slug));
 		}
 		

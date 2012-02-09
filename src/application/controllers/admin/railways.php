@@ -24,10 +24,10 @@ class Railways extends AdminController
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		
 		$config = array(
-			'field' => 'slug',
-			'title' => 'name',
+			'field' => 'r_slug',
+			'title' => 'r_name',
 			'table' => 'railways',
-			'id' => 'railway_id',
+			'id' => 'r_id',
 		);
 		$this->load->library('slug', $config);
 		

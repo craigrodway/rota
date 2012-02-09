@@ -31,7 +31,7 @@ var railway = (function($, amplify){
 		$("#lookup_postcode").click(function(event){
 			
 			event.preventDefault();
-			var pc = $("input#postcode").val();
+			var pc = $("input#r_postcode").val();
 			pc = pc.replace(/\s|\s+|\t|\r|\n/g, '');
 			
 			amplify.request({

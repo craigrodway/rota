@@ -82,10 +82,10 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 		<div class="inline">
 			<label for="r_postcode" <?php if (form_error('r_postcode')) echo 'class="error"' ?>>Post code</label>
 			<?php echo form_input(array(
-				'name' => 'postcode',
-				'id' => 'postcode',
+				'name' => 'r_postcode',
+				'id' => 'r_postcode',
 				'size' => '10',
-				'value' => @set_value('postcode', $railway->postcode)
+				'value' => @set_value('r_postcode', $railway->r_postcode)
 			)); ?>
 			<button class="small black button" id="lookup_postcode">Look up</button>
 		</div>
