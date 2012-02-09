@@ -152,6 +152,9 @@ a.i {
 .icon.add span { background-image: url(../img/global/icons/plus.png); }
 .icon.delete span { background-image: url(../img/global/icons/delete.png); }
 .icon.website span { background-image: url(../img/global/icons/world.png); }
+.icon.lock span { background-image: url(../img/global/icons/lock.png); }
+.icon.tick span { background-image: url(../img/global/icons/tick.png); }
+.icon.tick-round span { background-image: url(../img/global/icons/tick-round.png); }
 
 
 

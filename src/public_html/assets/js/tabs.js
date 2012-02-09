@@ -4,7 +4,7 @@ var tabs = {};
 
 tabs.init = function() {
 	
-	$("body").on("click", "dl.tabs > dd > a", function(e) {
+	$("body").on("click", "dl.tab-like > dd > a", function(e) {
 		var location = $(this).attr("href");
 		if (location.charAt(0) == "#") {
 			e.preventDefault();

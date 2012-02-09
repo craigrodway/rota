@@ -1,3 +1,5 @@
+<div class="two-thirds column alpha">
+
 <?php
 $errors = validation_errors();
 ?>
@@ -8,7 +10,7 @@ $errors = validation_errors();
 	an account. Here are just a few benefits you will receive when you have an account:</p>
 
 	<p>
-		<ul class="ticks">
+		<ul class="disc">
 			<li>Register your own or your club's station for the event</li>
 			<li>Have your details saved for next time</li>
 			<li>Post ROTA-related news updates</li>
@@ -33,8 +35,22 @@ $errors = validation_errors();
 
 <?php echo form_open(current_url()) ?>
 	
-	<div class="box">
-	
+	<div class="panel">
+		
+		<div class="inline">
+			<label for="email">Email address</label>
+			<?php echo form_input(array(
+				'name' => 'email',
+				'id' => 'email',
+				'size' => '40'
+			)); ?>
+		</div>
+		
+		<div class="inline">
+			<label>&nbsp;</label>
+			<button type="submit" name="submit" class="green button icon tick"><span>Submit</span></button>
+		</div>
+		<!--
 		<div class="clearfix remove-bottom">
 			<label for="email">Email address</label>
 			<div class="input">
@@ -43,7 +59,12 @@ $errors = validation_errors();
 				<input type="submit" class="btn primary" value="Submit">
 			</div>
 		</div>
+		-->
 
 	</div>
 	
 </form>
+
+</div>
+
+<div class="one-third column omega">&nbsp;</div>

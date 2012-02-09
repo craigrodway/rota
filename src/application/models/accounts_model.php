@@ -28,23 +28,23 @@ class Accounts_model extends CI_Model
 	
 	
 	
-	function create_account($data = array(), $send_email = false)
+	function create_account($data = array(), $send_email = FALSE)
 	{
 		if (!isset($data['email']))
 		{
-			return false;
+			return FALSE;
 		}
 		
 		$verify = random_string('alnum', 10);
 		
 		$this->db->insert('accounts', array(
-			'email' => trim($data['email']),
-			'created' => date('Y-m-d H:i:s'),
-			'enabled' => 'N',
-			'verify' => $verify
+			'a_email' => trim($data['email']),
+			'a_created' => date('Y-m-d H:i:s'),
+			'a_enabled' => 'N',
+			'a_verify' => $verify
 		));
 		
-		if ($send_email == false)
+		if ($send_email == FALSE)
 		{
 			return $verify;
 		}
@@ -53,9 +53,9 @@ class Accounts_model extends CI_Model
 			$this->load->library('parser');
 			$this->load->library('email');
 			$parsedata['verifyurl'] = site_url('account/verify/' . $verify);
-			$mailbody = $this->parser->parse('emails/create-account', $parsedata, true);
+			$mailbody = $this->parser->parse('emails/create-account', $parsedata, TRUE);
 			
-			$this->email->from('no-reply@barac.m0php.net', 'ROTA Admin');
+			$this->email->from('no-reply@barac.org.uk', 'ROTA Admin');
 			$this->email->to(trim($data['email']));
 			$this->email->subject('Railways on the Air account verification');
 			$this->email->message($mailbody);
@@ -70,11 +70,11 @@ class Accounts_model extends CI_Model
 	/**
 	 * Find and retrieve an account by the verification code
 	 */
-	function find_by_verify($code = null)
+	function find_by_verify($code = NULL)
 	{
-		if (!$code) return false;
+		if (!$code) return FALSE;
 		
-		$sql = 'SELECT * FROM accounts WHERE verify = ? LIMIT 1';
+		$sql = 'SELECT * FROM accounts WHERE a_verify = ? LIMIT 1';
 		$query = $this->db->query($sql, array($code));
 		if ($query->num_rows() == 1)
 		{
@@ -82,7 +82,7 @@ class Accounts_model extends CI_Model
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 	
@@ -93,20 +93,20 @@ class Accounts_model extends CI_Model
 	 * With the supplied verification code, set the account status 
 	 * to verified and enabled.
 	 */
-	function verify($code = null)
+	function verify($code = NULL)
 	{
 		if (!$code) return false;
 		
-		$sql = "UPDATE accounts SET verify = NULL, enabled = 'Y'
-				WHERE verify = ?";
+		$sql = "UPDATE accounts SET a_verify = NULL, a_enabled = 'Y'
+				WHERE a_verify = ?";
 		$query = $this->db->query($sql, array($code));
 		if ($this->db->affected_rows() == 1)
 		{
-			return true;
+			return TRUE;
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 	
@@ -116,15 +116,15 @@ class Accounts_model extends CI_Model
 	/**
 	 * Set an account's password to a new value
 	 */
-	function set_password($account_id = null, $password = null)
+	function set_password($account_id = NULL, $password = NULL)
 	{
-		if (!$account_id) return false;
-		if (!$password) return false;
+		if (!$account_id) return FALSE;
+		if (!$password) return FALSE;
 		
 		$hashed = $this->auth->hash_password($password);
 		
-		$sql = 'UPDATE accounts SET password = ?
-				WHERE account_id = ? LIMIT 1';
+		$sql = 'UPDATE accounts SET a_password = ?
+				WHERE a_id = ? LIMIT 1';
 		$query = $this->db->query($sql, array($hashed, $account_id));
 		return ($this->db->affected_rows() == 1);
 	}

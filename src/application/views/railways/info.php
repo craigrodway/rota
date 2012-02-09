@@ -28,21 +28,24 @@
 	
 	<div class="two-thirds column omega">
 		
-		<dl class="tabs contained">
-			<dd><a href="#railway-photos" class="active">Photos</a></dd>
+		<div class="box">
+		<dl class="subnav tab-like">
+			<dt>View more: </dt>
+			<dd class="active"><a href="#railway-photos" class="active">Photos</a></dd>
 			<dd><a href="#railway-map">Map</a></dd>
 			<dd><a href="#railway-stations">Amateur stations</a></dd>
-		</dl>
+		</dl> 
 		
+		<hr>
 		
-		<ul class="tabs-content contained">
+		<ul class="tabs-content">
 
 			<li class="active" id="railway-photosTab">
-				<img src="http://lorempixel.com/500/440/transport/1" style="padding: 5px; border: 1px solid #ccc;">
+				<img src="http://lorempixel.com/580/440/transport/1" class="scale-with-grid">
 			</li>
 			
 			<li id="railway-mapTab">
-				<div style="width: 100%; height: 452px; border: 1px solid #ccc; padding: 5px;">
+				<div style="width: 100%; height: 452px; ">
 					<?php echo $map['html'] ?>
 				</div>
 			</li>
@@ -73,6 +76,8 @@
 			</li>
 			
 		</ul>
+		
+		</div>
 		
 	</div>
 	

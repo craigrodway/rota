@@ -20,7 +20,7 @@ class Account extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-error">', '</div>');
 	}
 	
 	
@@ -82,7 +82,7 @@ class Account extends MY_Controller
 		if ($this->input->post('email'))
 		{
 			// Get email address and create account
-			$this->form_validation->set_rules('email', 'Email address', 'required|trim|valid_email|is_unique[accounts.email]');
+			$this->form_validation->set_rules('email', 'Email address', 'required|trim|valid_email|is_unique[accounts.a_email]');
 			$this->form_validation->set_message('is_unique', 'There is already an account with that email address.');
 			$email = $this->input->post('email');
 			

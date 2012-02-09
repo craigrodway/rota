@@ -14,7 +14,7 @@
 				<label for="password">Password</label>
 				<input type="password" name="password" size="40" value="">
 			
-				<input type="submit" class="green button" value="Log In">
+				<button type="submit" class="green button icon lock"><span>Log In</span></button>
 				&nbsp; &nbsp; 
 				<?php echo anchor('account/elephant', 'Forgot your password?') ?>
 				
