@@ -235,6 +235,36 @@ ul.railways {
 	}
 
 
+.cluster {
+	text-align: center;
+	font-weight: bold;
+	font-size: 11px;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #fff;
+}
+.cluster-1 { 
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	background: #C3DC00;
+	border-radius: 10px;
+}
+.cluster-2 { 
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	background: #C3DC00;
+	border-radius: 15px;
+}
+.cluster-3 { 
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	background: #C3DC00;
+	border-radius: 20px;
+}
+
 /* #Media Queries
 ================================================== */
 

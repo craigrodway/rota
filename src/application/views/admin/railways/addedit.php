@@ -6,7 +6,7 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 ?>
 
 
-<dl class="tabs contained">
+<dl class="tabs contained tab-like">
 	<dd><a href="#general" class="active">General info</a></dd>
 	<dd><a href="#photo">Photo</a></dd>
 	<dd><a href="#location">Location</a></dd>

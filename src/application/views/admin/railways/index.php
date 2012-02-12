@@ -1,42 +1,6 @@
 <p class="add-bottom hidden">
-	<a href="<?php echo site_url('admin/railways/add') ?>" class="green button add icon" id="add_button"><span>Add new railway</span></a>
+	<a href="<?php echo site_url('admin/railways/set') ?>" class="green button add icon" id="add_button"><span>Add new railway</span></a>
 </p>
-
-<!--
-<form method="GET" action="<?php echo site_url('admin/railways/') ?>">
-
-	<div class="row panel">
-			
-		<div class="three columns">
-			<label for="name">Name</label>
-			<input type="text" name="r_name" value="<?php echo @set_value('r_name', $filter_params['r_name']) ?>">
-		</div>
-
-		<div class="three columns">
-			<label for="name">WAB</label>
-			<input type="text" name="r_wab" value="<?php echo @set_value('r_wab', $filter_params['r_wab']) ?>">
-		</div>
-
-		<div class="three columns">
-			<label for="name">Locator</label>
-			<input type="text" name="r_locator" value="<?php echo @set_value('r_locator', $filter_params['r_locator']) ?>">
-		</div>
-
-		<div class="three columns">
-			<label for="name">Post Code</label>
-			<input type="text" name="r_postcode" value="<?php echo @set_value('r_postcode', $filter_params['r_postcode']) ?>">
-		</div>
-
-		<div class="three columns offset-by-nine half-bottom">
-			<input type="submit" class="blue button" value="Filter">
-		</div>
-		
-		<br><br>
-	
-	</div>
-
-</form>
--->
 
 
 <?php if ($railways): ?>
@@ -58,7 +22,7 @@
 		<?php foreach ($railways as $r): ?>
 			
 			<tr>
-				<td class="title"><?php echo anchor('admin/railways/edit/' . $r->r_id, $r->r_name) ?></td>
+				<td class="title"><?php echo anchor('admin/railways/set/' . $r->r_id, $r->r_name) ?></td>
 				<td><?php echo $r->r_wab ?></td>
 				<td><?php echo $r->r_locator ?></td>
 				<td><?php echo $r->r_postcode ?></td>
@@ -80,11 +44,6 @@
 		
 	</table>
 	
-	<div class="add-bottom">
-		<?php echo $this->pagination->create_links(); ?>
-		<div class="clear"></div>
-	</div>
-	
 <?php else: ?>
 
 	<div class="alert-box warning">No railways found.</div>
@@ -94,10 +53,7 @@
 
 <div class="clear"></div>
 
-
-<div style="border: 1px solid #ccc; padding: 0px;">
-	<?php echo $map['html']; ?>
-</div>
+<div style="border: 1px solid #ccc; padding: 0px; height: 400px; margin-top: 20px;" id="map"></div>
 
 
 <div id="modal-delete" class="reveal-modal">
@@ -118,6 +74,8 @@
 
 
 <script>
+var railways = <?php echo json_encode($railways, JSON_NUMERIC_CHECK) ?>;
+
 jsq.add(function() {
 	
 	$("table").delegate("tr", "click", function(e){
@@ -156,6 +114,58 @@ jsq.add(function() {
 	
 	$("#modal-delete input[type=reset]").click(function(){
 		$(".close-reveal-modal").click();
+	});
+	
+	$('#map').gmap3({
+		action: "init",
+		options: {
+			center: [53, -0.5],
+			zoom: 6,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+	});
+	
+	var markers = [];
+	$.each(railways, function(idx, r){
+		if (r.r_lat != null)
+		{
+			markers.push({
+				lat: r.r_lat,
+				lng: r.r_lng,
+				data: r.r_name
+			});
+		}
+	});
+	$("#map").gmap3({
+		action: "addMarkers",
+		radius: 50,
+		markers: markers,
+		marker: {
+			options: {
+				draggable: false,
+				icon: new google.maps.MarkerImage('img/markers/steamtrain.png')
+			}
+		},
+		clusters:{
+			0: {
+				content: '<div class="cluster cluster-1">CLUSTER_COUNT</div>',
+				width: 40,
+				height: 40
+			},
+			5: {
+				content: '<div class="cluster cluster-2">CLUSTER_COUNT</div>',
+				width: 50,
+				height: 50
+			},
+			10: {
+				content: '<div class="cluster cluster-3">CLUSTER_COUNT</div>',
+				width: 60,
+				height: 60
+			},
+			events: {
+				click: function(){ alert('x'); }
+			}
+		},
 	});
 	
 })

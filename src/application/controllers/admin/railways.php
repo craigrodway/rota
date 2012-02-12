@@ -32,28 +32,9 @@ class Railways extends AdminController
 		$this->load->library('slug', $config);
 		
 		//$this->layout->add_js('modules/ROTA.js');
-		$this->layout->add_js('modules/admin_railways_addedit.js');
-	}
-	
-	
-	
-	
-	/*
-	function setslugs()
-	{
-		$all_railways = $this->railways_model->get_all(NULL, NULL);
 		
-		foreach ($all_railways as $r)
-		{
-			$data = array(
-				'name' => $r->name,
-			);
-			$data['slug'] = $this->slug->create_uri($data, $r->railway_id);
-			$this->db->where('railway_id', $r->railway_id);
-			$this->db->update('railways', $data);
-		}
 	}
-	*/
+	
 	
 	
 	
@@ -62,62 +43,10 @@ class Railways extends AdminController
 	 */
 	function index($pager = 0)
 	{
-		$filter_params = $this->input->get(NULL, TRUE);
-		
-		$this->load->library('pagination', 'google_maps');
-		
-		$config['base_url'] = site_url('admin/railways/index/');
-		$config['suffix'] = '?' . @http_build_query($filter_params);
-		$config['total_rows'] = $this->railways_model->count_all($filter_params);
-		$config['per_page'] = 100;	//15; 
-		$config['uri_segment'] = 4;
-		$this->pagination->initialize($config); 
-		
-		$data['railways'] = $this->railways_model->get_all($pager, $config['per_page'], $filter_params);
-		$data['filter_params'] = $filter_params;
-		
-		// Get all railways to show on map
-		$all_railways = $this->railways_model->get_all(NULL, NULL);
-		
-		// Do map
-		$this->load->library('googlemaps');
-		$mapconfig['zoom'] = 'auto';
-		$mapconfig['cluster'] = TRUE;
-		$mapconfig['center'] = 'United Kingdom';
-		$this->googlemaps->initialize($mapconfig);
-		// Place all stations on the map
-		foreach ($all_railways as $r)
-		{
-			$latlng = "{$r->r_lat},{$r->r_lng}";
-			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
-			{
-				$marker = array();
-				$marker['position'] = $latlng;
-				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->r_id, $r->r_name));
-				$this->googlemaps->add_marker($marker);
-			}
-		}
-		
-		$data['map'] = $this->googlemaps->create_map();
-		
+		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
 		$this->layout->set_title('Railways');
 		$this->layout->set_view('content', 'admin/railways/index');
 		$this->layout->page($data);
-		
-	}
-	
-	
-	
-	
-	/**
-	 * Add a new railway
-	 */
-	function add()
-	{
-		$this->session->set_userdata('redirect_to', 'admin/railways');
-		$this->layout->set_title('Add a railway');
-		$this->layout->set_view('content', 'admin/railways/addedit');
-		$this->layout->page();
 	}
 	
 	
@@ -126,19 +55,26 @@ class Railways extends AdminController
 	/**
 	 * Page to edit a railway
 	 */
-	function edit($r_id = null)
+	function set($r_id = NULL)
 	{
-		$data['railway'] = $this->railways_model->get($r_id);
+		$data = array();
 		
-		if ( ! $data['railway'])
+		if ($r_id)
 		{
-			show_error('Could not find requested railway.', 404);
+			// Editing railway. Get it via ID.
+			if ( ! $data['railway'] = $this->railways_model->get($r_id))
+			{
+				show_error('Could not find requested railway.', 404);
+			}
+			$this->layout->set_title('Edit railway');
+		}
+		else
+		{
+			// Adding new railway
+			$this->layout->set_title('Add a railway');
 		}
 		
-		// Index page to redirect to
-		$this->session->set_userdata('redirect_to', $this->input->server('HTTP_REFERER'));
-		
-		$this->layout->set_title('Edit railway');
+		$this->layout->add_js('modules/admin_railways_addedit.js');
 		$this->layout->set_view('content', 'admin/railways/addedit');
 		$this->layout->page($data);
 	}
@@ -164,7 +100,7 @@ class Railways extends AdminController
 		
 		if ($this->form_validation->run() == FALSE)
 		{
-			return ($r_id) ? $this->edit($r_id) : $this->add();
+			return $this->set($r_id);
 		}
 		else
 		{
@@ -188,10 +124,20 @@ class Railways extends AdminController
 			if ($photo_url)
 			{
 				$photo = $this->railways_model->get_remote_image($photo_url);
-				if ($photo == false)
+				if ($photo == FALSE)
 				{
 					$this->session->set_flashdata('warning', 
 						'<strong>Problem:</strong> ' . $this->railways_model->lasterr);
+				}
+				else
+				{
+					$sizes = array('580', '220x180');
+					$this->load->library('Photo');
+					$this->photo->resize(array(
+						'file' => $photo,
+						'sizes' => $sizes
+					));
+					die();
 				}
 			}
 			
@@ -214,8 +160,7 @@ class Railways extends AdminController
 			$msg = ($op) ? $ok : $err;
 			$this->session->set_flashdata($msg_type, $msg);
 			
-			$redirect_to = $this->session->userdata('redirect_to');
-			redirect($redirect_to);
+			redirect('admin/railways');
 			
 		}
 	}
@@ -248,9 +193,7 @@ class Railways extends AdminController
 		}
 		$this->session->set_flashdata($msg_type, $msg);
 		
-		$redirect_to = $this->input->post('redirect_to');
-		$redirect_to = ($redirect_to) ? $redirect_to : 'admin/railways'; 
-		redirect($redirect_to);
+		redirect('admin/railways');
 	}
 	
 	
