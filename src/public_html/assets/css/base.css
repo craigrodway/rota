@@ -551,6 +551,22 @@ div.box {
 	form div.inline div.more {
 		margin-left: 140px;
 	}
+	
+	form div.inline div.inputs {
+		display: block;
+		padding-left: 140px;
+	}
+	
+	form div.inline label { 
+		text-align: left;
+	}
+	
+	form div.inline div.inputs label {
+		width: 240px;
+		display: block;
+		float: left;
+		text-align: left;
+	}
 
 
 /* #Misc

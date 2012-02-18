@@ -33,7 +33,7 @@ class Accounts_model extends CI_Model
 	 */
 	function get_all($page = NULL, $limit = NULL)
 	{
-		$this->db->order_by('r_name', 'asc');
+		$this->db->order_by('a_email', 'asc');
 		
 		// Only limit results if specified
 		if ($page !== NULL && $limit !== NULL)
@@ -55,6 +55,104 @@ class Accounts_model extends CI_Model
 	
 	
 	
+	/**
+	 * Get a single account by ID or email
+	 *
+	 * @param mixed $a_id		Specify either numeric account ID or email address
+	 * @return object		Account object (excluding hashed password)
+	 */
+	function get($a_id = NULL)
+	{
+		if ( ! $a_id) return FALSE;
+		
+		if (is_numeric($a_id))
+		{
+			$sql_where = ' AND a_id = ?';
+		}
+		else
+		{
+			$sql_where = ' AND a_email = ?';
+		}
+		
+		$sql = "SELECT
+					accounts.*,
+					COUNT((SELECT operators.o_id FROM operators WHERE o_a_id = a_id)) AS a_operators_count
+				FROM accounts
+				WHERE 1 = 1
+				$sql_where
+				LIMIT 1";
+		$query = $this->db->query($sql, array($a_id));
+		
+		if ($query->num_rows() == 1)
+		{
+			$account = $query->row();
+			unset($account->a_password);
+			return $account;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * Admin-side account creation - accept all values from $data param.
+	 *
+	 * @param array $data		Array of values to be set.
+	 * @return int		ID of new account
+	 */
+	public function add($data)
+	{
+		$verify = ($data['send_email'] == TRUE) ? random_string('alnum', 10) : NULL;
+		
+		$insert = $this->db->insert('accounts', array(
+			'a_email' => trim($data['a_email']),
+			'a_created' => date('Y-m-d H:i:s'),
+			'a_enabled' => $data['a_enabled'],
+			'a_verify' => $verify
+		));
+		
+		return $this->db->insert_id();
+	}
+	
+	
+	
+	
+	/**
+	 * Update details for account
+	 *
+	 * @param int $a_id		Account ID to update
+	 * @param array $data		Data to update account with (keys should match column names)
+	 * @return bool		True on successful update
+	 */
+	function edit($a_id = NULL, $data = array())
+	{
+		if ( ! $a_id) return FALSE;
+		if (empty($data)) return FALSE;
+		
+		// Don't allow these to be set
+		unset($data['a_created']);
+		unset($data['a_lastlogin']);
+		
+		$this->db->where('a_id', $a_id);
+		return $this->db->update('accounts', $data);
+	}
+	
+	
+	
+	
+	/**
+	 * Account creation function for front-end signups.
+	 *
+	 * Default account type will be user, it won't be enabled, and will need verification.
+	 *
+	 * @param array $data		Array containing email address
+	 * @param bool $send_email		Whether or not to send the verification email
+	 * @return mixed		Verification code on success, FALSE on error
+	 */
 	function create_account($data = array(), $send_email = FALSE)
 	{
 		if (!isset($data['email']))
@@ -64,12 +162,18 @@ class Accounts_model extends CI_Model
 		
 		$verify = random_string('alnum', 10);
 		
-		$this->db->insert('accounts', array(
+		$insert = $this->db->insert('accounts', array(
 			'a_email' => trim($data['email']),
+			'a_type' => 'user',
 			'a_created' => date('Y-m-d H:i:s'),
 			'a_enabled' => 'N',
 			'a_verify' => $verify
 		));
+		
+		if ($insert == FALSE)
+		{
+			return FALSE;
+		}
 		
 		if ($send_email == FALSE)
 		{
