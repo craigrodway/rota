@@ -25,6 +25,11 @@ class Railways_model extends CI_Model
 	}
 	
 	
+	
+	
+	/**
+	 * Get list of all railways as objects
+	 */
 	function get_all($page = 0, $limit = 10, $filter_params = array())
 	{
 		if ( ! empty($filter_params))
@@ -46,12 +51,16 @@ class Railways_model extends CI_Model
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 	
 	
 	
+	
+	/**
+	 * Count all railways
+	 */
 	function count_all($filter_params = array())
 	{
 		if ( ! empty($filter_params))
@@ -65,7 +74,10 @@ class Railways_model extends CI_Model
 	
 	
 	
-	function get($railway_id = null)
+	/**
+	 * Get a single railway by its ID
+	 */
+	function get($railway_id = NULL)
 	{
 		if ( ! $railway_id) return FALSE;
 		
@@ -83,13 +95,16 @@ class Railways_model extends CI_Model
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 	
 	
 	
 	
+	/**
+	 * Get a single railway using slug
+	 */
 	function get_by_slug($slug = '')
 	{
 		if ($slug == '')
@@ -118,19 +133,32 @@ class Railways_model extends CI_Model
 	
 	
 	
+	/**
+	 * Add a new railway using supplied data
+	 *
+	 * @param array $data		Array of DB columns => values to add
+	 * @return int		ID of new railway
+	 */
 	function add($data = array())
 	{
-		if (empty($data)) return false;
+		if (empty($data)) return FALSE;
 		return $this->db->insert('railways', $data);
 	}
 	
 	
 	
 	
-	function edit($r_id = null, $data = array())
+	/**
+	 * Update details for railway
+	 *
+	 * @param int $r_id		Railway ID to update
+	 * @param array $data		Data to update railway with
+	 * @return bool		True on successful update
+	 */
+	function edit($r_id = NULL, $data = array())
 	{
-		if ( ! $r_id) return false;
-		if (empty($data)) return false;
+		if ( ! $r_id) return FALSE;
+		if (empty($data)) return FALSE;
 		
 		$this->db->where('r_id', $r_id);
 		return $this->db->update('railways', $data);
@@ -139,9 +167,15 @@ class Railways_model extends CI_Model
 	
 	
 	
-	function delete($r_id = null)
+	/**
+	 * Actually delete a railway from the database
+	 *
+	 * @param int $r_id		Railway ID to delete
+	 * @return bool		True if railway has been removed
+	 */
+	function delete($r_id = NULL)
 	{
-		if ( ! $r_id) return false;
+		if ( ! $r_id) return FALSE;
 		
 		$sql = 'DELETE FROM railways WHERE r_id = ? LIMIT 1';
 		$query = $this->db->query($sql, array($r_id));
@@ -172,7 +206,7 @@ class Railways_model extends CI_Model
 		if ( ! is_really_writable($filepath))
 		{
 			$this->lasterr = "Path ($filepath) is not really writable.";
-			return false;
+			return FALSE;
 		}
 		
 		// Initialise cURL. Get remote image and save to local file
@@ -186,7 +220,7 @@ class Railways_model extends CI_Model
 		
 		// Validate request
 		$valid_types = array('image/jpeg', 'image/png', 'image/gif');
-		$status = false;
+		$status = FALSE;
 		$info = curl_getinfo($ch);
 		
 		curl_close($ch);
@@ -195,14 +229,14 @@ class Railways_model extends CI_Model
 		// Must be 200 OK and an image content type
 		if ($info['http_code'] == 200 && in_array($info['content_type'], $valid_types))
 		{
-			$status = true;
+			$status = TRUE;
 		}
 		
-		if ($status == false)
+		if ($status == FALSE)
 		{
 			@unlink($filepath);
 			$this->lasterr = "Error retrieving remote image - status code was {$info['http_code']}.";
-			return false;
+			return FALSE;
 		}
 		
 		// TODO:

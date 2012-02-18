@@ -28,6 +28,33 @@ class Accounts_model extends CI_Model
 	
 	
 	
+	/**
+	 * Get all accounts
+	 */
+	function get_all($page = NULL, $limit = NULL)
+	{
+		$this->db->order_by('r_name', 'asc');
+		
+		// Only limit results if specified
+		if ($page !== NULL && $limit !== NULL)
+		{
+			$this->db->limit($limit, $page);
+		}
+		
+		$query = $this->db->get('accounts');
+		if ($query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	
+	
+	
 	function create_account($data = array(), $send_email = FALSE)
 	{
 		if (!isset($data['email']))

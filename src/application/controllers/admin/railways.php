@@ -20,7 +20,6 @@ class Railways extends AdminController
 	{
 		parent::__construct();
 		$this->load->library('form_validation');
-		//$this->form_validation->set_error_delimiters('<div class="alert-message block-message error">', '</div>');
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		
 		$config = array(
@@ -31,8 +30,6 @@ class Railways extends AdminController
 		);
 		$this->load->library('slug', $config);
 		
-		//$this->layout->add_js('modules/ROTA.js');
-		
 	}
 	
 	
@@ -41,7 +38,7 @@ class Railways extends AdminController
 	/**
 	 * Railways listing
 	 */
-	function index($pager = 0)
+	function index()
 	{
 		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
 		$this->layout->set_title('Railways');
