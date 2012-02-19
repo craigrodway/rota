@@ -195,8 +195,8 @@ if ($this->layout->has('sidebar'))
 	<script src="js/tabs.js"></script>
 	<script src="js/modules/ROTA.js"></script>
 	<script src="vendor/reveal/jquery.reveal.js"></script>
-	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="js/gmap3.min.js"></script>
+	<!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="js/gmap3.min.js"></script> -->
 	
 	<?php
 	foreach ($this->layout->get_js() as $s)

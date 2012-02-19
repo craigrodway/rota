@@ -31,17 +31,15 @@ class Accounts_model extends CI_Model
 	/**
 	 * Get all accounts
 	 */
-	function get_all($page = NULL, $limit = NULL)
+	function get_all()
 	{
-		$this->db->order_by('a_email', 'asc');
+		$sql = "SELECT
+					accounts.*,
+					(SELECT COUNT(o_a_id) FROM operators WHERE o_a_id = a_id) AS a_operators_count
+				FROM accounts
+				ORDER BY a_email ASC";
 		
-		// Only limit results if specified
-		if ($page !== NULL && $limit !== NULL)
-		{
-			$this->db->limit($limit, $page);
-		}
-		
-		$query = $this->db->get('accounts');
+		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
 			return $query->result();
@@ -259,8 +257,29 @@ class Accounts_model extends CI_Model
 		$query = $this->db->query($sql, array($hashed, $account_id));
 		return ($this->db->affected_rows() == 1);
 	}
-
-
+	
+	
+	
+	
+	/**
+	 * Actually delete an account from the database.
+	 *
+	 * Operator profiles and event entries should also be removed via SQL CASCADE.
+	 *
+	 * @param int $a_id		Account ID to delete
+	 * @return bool		True if account has been removed
+	 */
+	function delete($a_id = NULL)
+	{
+		if ( ! $a_id) return FALSE;
+		
+		$sql = 'DELETE FROM accounts WHERE a_id = ? LIMIT 1';
+		$query = $this->db->query($sql, array($a_id));
+		
+		return ($this->db->affected_rows() == 1);
+	}
+	
+	
 }
 
 /* End of file: application/models/accounts_model.php */

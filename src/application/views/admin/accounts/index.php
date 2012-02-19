@@ -61,7 +61,7 @@
 					echo '<img src="img/global/icons/' . $verified_img . '">';
 				?></td>
 				<td class="ops">
-					<a href="<?php echo site_url('admin/profiles/' . $a->a_id) ?>" class="blue button website icon"><span>Profiles</span></a>
+					<a href="<?php echo site_url('admin/operators/' . $a->a_id) ?>" class="blue button website icon"><span>Profiles (<?php echo $a->a_operators_count ?>)</span></a>
 					<a href="<?php echo site_url('admin/accounts/delete/' . $a->a_id) ?>" class="red button delete icon" rel="delete" data-id="<?php echo $a->a_id ?>"><span>Delete</span></a>
 				</td>
 			</tr>
@@ -140,7 +140,7 @@ jsq.add(function() {
 			animation: "fade",
 			animationSpeed: 300
 		});
-		$("#modal-delete input[name=railway_id]").val($(this).data("id"));
+		$("#modal-delete input[name=a_id]").val($(this).data("id"));
 		e.preventDefault();
 	});
 	

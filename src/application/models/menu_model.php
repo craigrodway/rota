@@ -85,6 +85,7 @@ class Menu_model extends CI_Model
 		$nav = array();
 		$nav[] = array('admin/home', 'Admin home');
 		$nav[] = array('admin/accounts', 'Accounts');
+		$nav[] = array('admin/operators', 'Operators');
 		$nav[] = array('admin/events', 'Events');
 		$nav[] = array('admin/stations', 'Stations');
 		$nav[] = array('admin/news', 'News');

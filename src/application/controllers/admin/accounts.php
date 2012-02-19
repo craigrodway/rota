@@ -128,7 +128,7 @@ class Accounts extends AdminController
 				// Update
 				$op = $this->accounts_model->edit($a_id, $data);
 				$ok = "Account <strong>{$data['a_email']}</strong> has been updated.";
-				$err = 'An error occurred while updating the railway.';
+				$err = 'An error occurred while updating the account.';
 			}
 			else
 			{
@@ -145,6 +145,37 @@ class Accounts extends AdminController
 			redirect('admin/accounts');
 			
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * Delete an account (only accepts POSTed data)
+	 */
+	function delete()
+	{
+		$id = $this->input->post('a_id');
+		if ( ! $id)
+		{
+			redirect('admin/accounts');
+		}
+		
+		$delete = $this->accounts_model->delete($id);
+		
+		if ($delete == TRUE)
+		{
+			$msg_type = 'success';
+			$msg = 'The account has been deleted successfully.';
+		}
+		else
+		{
+			$msg_type = 'error';
+			$msg = 'Problem removing account - ' . $this->accounts_model->lasterr;
+		}
+		$this->session->set_flashdata($msg_type, $msg);
+		
+		redirect('admin/accounts');
 	}
 	
 	
