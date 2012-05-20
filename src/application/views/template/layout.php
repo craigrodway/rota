@@ -1,10 +1,16 @@
 <?php
-$left_classes = 'sixteen columns content';
+$left_classes = 'sixteen columns';
 $right_classes = '';
 if ($this->layout->has('sidebar'))
 {
-	$left_classes = 'twelve columns content';
+	$left_classes = 'twelve columns';
 	$right_classes = 'four columns sidebar';
+}
+
+$nav_class = '';
+if ($this->session->userdata('type') == 'admin')
+{
+	$nav_class = 'admin';
 }
 ?>
 <!DOCTYPE html>
@@ -25,7 +31,6 @@ if ($this->layout->has('sidebar'))
 	<link rel="stylesheet" href="css/base.css">
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css">
-	<link rel="stylesheet" href="vendor/reveal/reveal.css">
 	
 	<link rel="shortcut icon" href="img/global/favicon.ico">
 	<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
@@ -35,7 +40,7 @@ if ($this->layout->has('sidebar'))
 	<script type="text/javascript">
 	var baseurl = "<?php echo $this->config->item('base_url') . 'assets/' ?>";
 	var siteurl = "<?php echo site_url() ?>/";
-
+	
 	var jsq = (function(){
 		
 		var q = [];		// internal queue of functions that are added
@@ -43,8 +48,6 @@ if ($this->layout->has('sidebar'))
 		
 		// Add a function to the queue
 		fs.add = function(f){
-			//console.log(typeof(f));
-			//if (f != "undefined" OR typeof(f) != "undefined") q.push(f);
 			if (typeof(f) == "function") q.push(f);
 		};
 		
@@ -59,6 +62,7 @@ if ($this->layout->has('sidebar'))
 		
 		return fs;
 	})();
+	
 	</script>
 	
 	<!--[if lt IE 9]>
@@ -68,17 +72,18 @@ if ($this->layout->has('sidebar'))
 </head>
 <body>
 	
-	<div class="container header">
+	
+	<div class="container body">
 		
-		<div class="six columns left">
-			<a href="<?php echo site_url() ?>"><img src="img/global/title.png" title="Railways on the Air"></a>
+		<div class="eight columns logo">
+			<h1>ROTA</h1>
 		</div>
 		
-		<div class="ten columns right">
-			
+		<div class="eight columns user-nav">
 			<ul class="horizontal">
 				<?php
-				foreach ($nav['top'] as $item){
+				foreach ($nav['top'] as $item)
+				{
 					$cls = array('i', $item[2]);
 					$uri = $this->uri->uri_string();
 					$uri = (empty($uri)) ? 'home' : $uri;
@@ -92,59 +97,22 @@ if ($this->layout->has('sidebar'))
 				?>
 			</ul>
 			
-			<div class="clear"></div>
-			
 			<div class="status">
 				<?php if ($this->auth->logged_in()): ?>
-					<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
+				<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
+				<?php else: ?>
+				<p></p>
 				<?php endif; ?>
-			</div> <!-- / .status -->
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+		
+		
+		
+		
+		<div class="sixteen columns site-nav <?php echo $nav_class ?>">
 			
-		</div> <!-- / .right -->
-		
-		<div class="clear"></div>
-		
-	</div>
-	
-	
-	<div class="container body body-top">
-	
-		<div class="eight columns title">
-			<h4><?php echo $this->layout->get_title() ?></h4>
-		</div>
-		
-		<div class="eight columns flash">
-			<?php
-			$flashes = array('success', 'warning', 'error');
-			$flashmsgs = null;
-			foreach ($flashes as $f)
-			{
-				if ($this->session->flashdata($f))
-				{
-					$flashmsgs .= '<div class="alert alert-' . $f . '">' . $this->session->flashdata($f) . '</div>';
-				}
-			}
-			if ($flashmsgs) echo $flashmsgs;
-			?>
-		</div>
-		
-		<div class="clear"></div>
-		
-	</div>
-	
-	
-	<?php
-	$nav_class = '';
-	if ($this->session->userdata('type') == 'admin')
-	{
-		$nav_class = 'admin';
-	}
-	?>
-	
-	
-	<div class="container body nav <?php echo $nav_class ?>">
-		
-		<div class="sixteen columns">
 			<ul class="horizontal">
 				<?php foreach ($nav['primary'] as $item): ?>
 				<?php
@@ -159,16 +127,41 @@ if ($this->layout->has('sidebar'))
 				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
 				<?php endforeach; ?>
 			</ul>
-		</div>
+			
+			<div class="clear"></div>
+			
+		</div> <!-- / .site-nav -->
 		
-	</div>
-	
-	
-	<div class="container body body-main">
+		<div class="clear"></div>
+		
+		
+		
+		<?php
+		$flashes = array('success', 'warning', 'error');
+		$flashmsgs = null;
+		foreach ($flashes as $f)
+		{
+			if ($this->session->flashdata($f))
+			{
+				$flashmsgs .= '<div class="alert alert-' . $f . '">' . $this->session->flashdata($f) . '</div>';
+			}
+		}
+		?>
+		<?php if ($flashmsgs): ?>
+		<div class="sixteen columns flash">
+			<?php echo $flashmsgs; ?>
+		</div> <!-- / .flash -->
+		
+		<div class="clear"></div>
+		<?php endif; ?>
+		
+		
+		
 		
 		<div class="<?php echo $left_classes ?>">
+			<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
 			<?php echo $this->layout->get('content') ?>
-		</div> <!-- / .content -->
+		</div>
 		
 		<?php if ($this->layout->has('sidebar')): ?>
 		<div class="<?php echo $right_classes ?>">
@@ -177,26 +170,43 @@ if ($this->layout->has('sidebar'))
 		<?php endif; ?>
 		
 		<div class="clear"></div>
+		
+		
+		
+		
+		<div class="sixteen columns footer">
+			
+			<div class="eight columns alpha left">
+				<p>&copy; Bishop Auckland Radio Amateur Club. Location data by <a href="http://nearby.org.uk/">Nearby.org.uk</a>.</p>
+			</div>
+			<div class="eight columns omega right"><p>Site by <a href="http://webman.me.uk/">Craig A Rodway</a>.</p></div>
+			
+		</div> <!-- / .footer -->
+		
+	</div> <!-- / .container.body -->
 	
-	</div> <!-- / .body.body-main -->
 	
 	
-	<div class="container footer">
-		<div class="eight columns left">
-			<p>&copy; Bishop Auckland Radio Amateur Club. Location data by <a href="http://nearby.org.uk/">Nearby.org.uk</a>.</p>
-		</div>
-		<div class="eight columns right"><p>Site by <a href="http://webman.me.uk/">Craig A Rodway</a>.</p></div>
-		<div class="clear"></div>
+	<!-- Delete dialogs -->
+	<div id="delete_dialog" class="hidden">
+		<h1>Delete <span class="name"></span></h1>
+		<p class="text"></p>
+		<?php echo form_open('',
+			array('id' => 'delete_form'),
+			array('id' => '', 'redirect' => '', 'log' => '')
+		) ?>
+			<div style="margin: 30px 15px 15px 0; text-align: right; bottom: 0; position: absolute; right: 0;">
+				<button type="submit" class="btn icon delete"><span>Delete</span></button>
+				<a href="#" class="btn close-dialog">Cancel</a>
+			</div>
+		</form>
 	</div>
 	
 	
 	<script src="js/jquery-1.7.1.min.js"></script>
-	<script src="js/amplify.min.js"></script>
-	<script src="js/tabs.js"></script>
-	<script src="js/modules/ROTA.js"></script>
-	<script src="vendor/reveal/jquery.reveal.js"></script>
-	<!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="js/gmap3.min.js"></script> -->
+	<script src="js/jquery.simplemodal.1.4.2.min.js"></script>
+	<script src="js/default.js"></script>
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	
 	<?php
 	foreach ($this->layout->get_js() as $s)
@@ -211,10 +221,10 @@ if ($this->layout->has('sidebar'))
 	<?php
 	if ( ! empty($map))
 	{
-		//echo $map['js'];
+		echo $map['js'];
 	}
 	?>
-
+	
 
 </body>
 </html>

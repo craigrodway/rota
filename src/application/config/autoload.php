@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'session', 'settings', 'auth', 'maps'
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'form', 'rota');
+$autoload['helper'] = array('url', 'form', 'rota', 'array');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('menu_model', 'accounts_model', 'railways_model');
+$autoload['model'] = array('menu_model', 'accounts_model', 'railways_model', 'events_model');
 
 
 /* End of file autoload.php */

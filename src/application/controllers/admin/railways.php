@@ -38,9 +38,47 @@ class Railways extends AdminController
 	/**
 	 * Railways listing
 	 */
-	function index()
+	function index($page = 0)
 	{
-		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
+		$filter = $this->input->get(NULL, TRUE);
+		
+		$this->load->library(array('pagination', 'googlemaps'));
+		
+		$config['base_url'] = site_url('admin/railways/index/');
+		$config['suffix'] = '?' . @http_build_query($filter);
+		$config['total_rows'] = $this->railways_model->count_all($filter);
+		$config['per_page'] = 15; 
+		$config['uri_segment'] = 4;
+		$this->pagination->initialize($config); 
+
+		$data['railways'] = $this->railways_model->get_all($page, $config['per_page'], $filter);
+		$data['filter'] = $filter;
+
+		// Get all railways to show on map
+		$all_railways = $this->railways_model->get_all(NULL, NULL);
+
+		// Do map
+		$this->load->library('googlemaps');
+		$mapconfig['zoom'] = 'auto';
+		$mapconfig['cluster'] = TRUE;
+		$mapconfig['center'] = 'United Kingdom';
+		$this->googlemaps->initialize($mapconfig);
+		
+		// Place all stations on the map
+		foreach ($all_railways as $r)
+		{
+			$latlng = "{$r->r_lat},{$r->r_lng}";
+			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
+			{
+				$marker = array();
+				$marker['position'] = $latlng;
+				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->r_id, $r->r_name));
+				$this->googlemaps->add_marker($marker);
+			}
+		}
+
+		$data['map'] = $this->googlemaps->create_map();
+
 		$this->layout->set_title('Railways');
 		$this->layout->set_view('content', 'admin/railways/index');
 		$this->layout->page($data);

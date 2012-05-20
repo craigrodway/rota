@@ -7,6 +7,10 @@
 * 8/17/2011
 */
 
+/*
+ * http://www.colourlovers.com/palette/15/tech_light
+ */
+
 /* Table of Content
 ==================================================
 	#Site Styles
@@ -22,31 +26,71 @@ html {
 }
 
 body {
-	background: #4180AB;
-	padding: 20px 0 20px 0;
+	background: url(../img/global/page-bg.png) 0 0 #000;
+	padding: 40px 0;
 }
 
-
-div.body {
+.container.body {
 	background: #fff;
-	padding: 0 15px;
-	/*border-radius: 15px;*/
+	border: 10px solid #fff;
+	padding-top: 10px;
 }
 
-div.body-top {
-	border-radius: 15px 15px 0 0;
+
+
+.user-nav {
+	text-align: right;
+}
+.user-nav ul {
+	float: right;
+	margin-bottom: 10px;
 }
 
-div.body-main {
-	border-radius: 0 0 15px 15px;
-	padding-top: 20px;
-	padding-bottom: 20px;
+.user-nav .status {
+	display: block;
+	clear: both;
 }
+
+.site-nav {
+	background: #26ADE4;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+	.site-nav ul {
+		margin: 0 15px;
+	}
+
+	.site-nav ul li a {
+		display: block;
+		padding: 10px 15px;
+		color: #fff;
+		text-decoration: none;
+		margin-right: 2px;
+		font-weight: normal;
+	}
+	
+	.site-nav ul li a:hover,
+	.site-nav ul li a.active {
+		background: #1D82AB;
+	}
+
+.site-nav.admin {
+	background: #A6150A;
+}
+	.site-nav.admin ul li a {
+		color: #fff;
+	}
+	.site-nav.admin ul li a:hover,
+	.site-nav.admin ul li a.active {
+		background: #7D1008; 
+	}
+
 
 
 a {
-	color: #295474;
+	color: #697429 ;
 	text-decoration: none;
+	font-weight: bold;
 }
 a:hover {
 	text-decoration: underline;
@@ -61,54 +105,25 @@ p.big { font-size: 135%; line-height: 165%; color: #666; }
 
 
 
-.header { margin-bottom: 15px; color: #fff; }
-.header .right { padding-top: 15px; }
-.header .right ul.horizontal { margin-bottom: 15px; float: right; text-align: right; }
-.header .right ul.horizontal li { margin-left: 24px; }
-.header .right .status { float: right; text-align: right; }
-.header .right ul.horizontal li a {
-	display: inline-block;
-	color: #fff;
-	text-decoration: none;
-	font-weight: bold;
-	font-size: 90%;
-	line-height: 16px;
-	height: 16px;
-}
-.header .right ul.horizontal li a:hover { color: #C7EDE8; }
-
-
-
-.flash { padding-top: 15px; }
-
-
-
-div.nav {
-	background: #BDD1DE;
-}
-div.nav.admin { background: #A6150A; }
-div.nav.admin ul li a { color: #fff; }
-div.nav.admin ul li a:hover { background: #fff; color: #A6150A; }
-div.nav ul { margin-right: 3px; }
-div.nav ul li a {
-	display: block;
-	font-weight: bold;
-	font-size: 95%;
-	display: block;
-	padding: 10px 15px;
-	text-decoration: none;
-	color: #000;
-}
-div.nav ul li a:hover {
-	background: #fff;
+.flash .alert {
+	margin-bottom: 10px;
 }
 
 
+
+.content-box {
+	border: 1px solid #e8e8e8;
+	background: #fafafa;
+}
+.content-box .content-box-content {
+	margin: 10px;
+}
 
 
 div.footer {
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background: #9DAD3D;
 }
 
 	div.footer p {
@@ -118,23 +133,20 @@ div.footer {
 	}
 	
 	div.footer a {
-		color: #F6F7BD;
+		color: #fff;
 		text-decoration: none;
+		border-bottom: 1px dotted #fff;
+		padding-bottom: 1px;
 	}
 
 
 
-
-div.title {
-	padding: 15px 0;
+h2.page-title {
+	font-size: 160%;
+	font-weight: normal;
+	letter-spacing: -1px;
+	margin-bottom: 10px;
 }
-	div.title h4 {
-		line-height: 40px;
-		margin: 0;
-		padding: 0;
-		font-size: 25px;
-		font-weight: normal;
-	}
 
 
 a.i {
@@ -158,34 +170,12 @@ a.i {
 
 
 
-/**
- * Admin tables
- */
-td.title, td.title a { font-weight: bold; }
-table tbody tr td.ops { text-align: right; }
-table tbody tr td.ops a.icon-link { margin-left: 15px; }
-table tbody tr td.ops .button { margin-right: 0; margin-left: 10px; }
+
+table.filter {
+	width: 100%;
+}
 
 
-/**
- * DataTables
- */
-
-.dataTables_paginate { float: right; margin: 0; }
-
-.dataTables_filter { /* background: #f9f9f9; margin-bottom: 10px; padding: 10px 0; */ }
-.dataTables_filter label { margin: 5px 10px; width: auto; display: block; float: right; }
-
-.dataTables_filter label,
-.dataTables_filter input { display: inline-block; margin: 0 5px 0 10px; }
-
-.paginate_enabled_next,
-.paginate_enabled_previous,
-.paginate_disabled_next,
-.paginate_disabled_previous { width: 18px; height: 18px; display: inline-block; overflow: hidden; margin: 0 0 0 5px; cursor: pointer; }
-
-.paginate_disabled_next,
-.paginate_disabled_previous { visibility: hidden; cursor: default; }
 
 /* #Page Styles
 ================================================== */
@@ -235,35 +225,6 @@ ul.railways {
 	}
 
 
-.cluster {
-	text-align: center;
-	font-weight: bold;
-	font-size: 11px;
-	padding: 0;
-	margin: 0;
-	border: 1px solid #fff;
-}
-.cluster-1 { 
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	background: #C3DC00;
-	border-radius: 10px;
-}
-.cluster-2 { 
-	width: 30px;
-	height: 30px;
-	line-height: 30px;
-	background: #C3DC00;
-	border-radius: 15px;
-}
-.cluster-3 { 
-	width: 40px;
-	height: 40px;
-	line-height: 40px;
-	background: #C3DC00;
-	border-radius: 20px;
-}
 
 /* #Media Queries
 ================================================== */
