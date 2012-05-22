@@ -5,7 +5,7 @@
  */
 function icon_link($icon_file = '', $href = '', $title = '', $attrs = '')
 {
-	$format = '<a class="icon-link" href="%s" title="%s" %s><img src="%s" alt="%s"></a>';
+	$format = '<a class="icon-link delete" href="%s" title="%s" %s><img src="%s" alt="%s"></a>';
 	
 	// Format some items
 	$href = (preg_match('/^http/', $href)) ? $href : site_url($href);

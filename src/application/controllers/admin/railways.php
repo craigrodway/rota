@@ -51,8 +51,8 @@ class Railways extends AdminController
 		$config['uri_segment'] = 4;
 		$this->pagination->initialize($config); 
 
-		$data['railways'] = $this->railways_model->get_all($page, $config['per_page'], $filter);
-		$data['filter'] = $filter;
+		$this->data['railways'] = $this->railways_model->get_all($page, $config['per_page'], $filter);
+		$this->data['filter'] =& $filter;
 
 		// Get all railways to show on map
 		$all_railways = $this->railways_model->get_all(NULL, NULL);
@@ -77,11 +77,9 @@ class Railways extends AdminController
 			}
 		}
 
-		$data['map'] = $this->googlemaps->create_map();
+		$this->data['map'] = $this->googlemaps->create_map();
 
 		$this->layout->set_title('Railways');
-		$this->layout->set_view('content', 'admin/railways/index');
-		$this->layout->page($data);
 	}
 	
 	
@@ -97,7 +95,7 @@ class Railways extends AdminController
 		if ($r_id)
 		{
 			// Editing railway. Get it via ID.
-			if ( ! $data['railway'] = $this->railways_model->get($r_id))
+			if ( ! $this->data['railway'] = $this->railways_model->get($r_id))
 			{
 				show_error('Could not find requested railway.', 404);
 			}
@@ -109,9 +107,7 @@ class Railways extends AdminController
 			$this->layout->set_title('Add a railway');
 		}
 		
-		$this->layout->add_js('modules/admin_railways_addedit.js');
-		$this->layout->set_view('content', 'admin/railways/addedit');
-		$this->layout->page($data);
+		$this->layout->set_js('modules/admin_railways_addedit.js');
 	}
 	
 	

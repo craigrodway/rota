@@ -44,7 +44,7 @@ jsq.add(function() {
 			maxHeight: 320,
 			onShow: function() {
 				var container = $(this.d.container);
-				console.log(container);
+				//console.log(container);
 				container.find("span.name").text(el.data("name"));
 				container.find("p.text").html(el.data("title"));
 				container.find("form#delete_form").attr("action", el.data("url"));
@@ -53,6 +53,11 @@ jsq.add(function() {
 				//container.find("form#delete_form input[name=log]").val(el.data("log"));
 			}
 		});
+	});
+	
+	$("a.close-dialog").on("click", function(e) {
+		e.preventDefault();
+		$.modal.close();
 	});
 	
 });

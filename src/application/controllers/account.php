@@ -50,8 +50,6 @@ class Account extends MY_Controller
 		{
 			// show form
 			$this->layout->set_title('Log in with your ROTA account');
-			$this->layout->set_view('content', 'account/login');
-			$this->layout->page();
 		}
 	}
 	
@@ -100,8 +98,6 @@ class Account extends MY_Controller
 		}
 		
 		$this->layout->set_title('Create an account');
-		$this->layout->set_view('content', 'account/create');
-		$this->layout->page();
 		
 	}
 	
@@ -118,7 +114,6 @@ class Account extends MY_Controller
 			// Show simple page if no code supplied
 			$this->layout->set_title('Create an account');
 			$this->layout->set_view('content', 'account/verify1');
-			$this->layout->page();
 		}
 		else
 		{
@@ -133,7 +128,6 @@ class Account extends MY_Controller
 				$data['account'] = $account;
 				$this->layout->set_title('Verify your account');
 				$this->layout->set_view('content', 'account/verify2');
-				$this->layout->page();
 			}
 		}
 	}
@@ -173,7 +167,7 @@ class Account extends MY_Controller
 			{
 				// Now attempt to verify & enable the account
 				$verify = $this->accounts_model->verify($verify_code);
-				if (!$verify)
+				if ( ! $verify)
 				{
 					show_error('An error occurred when trying to enable your account.');
 				}

@@ -15,60 +15,118 @@
 class MY_Controller extends CI_Controller
 {
 	
-	
-	private $_tpl;		// template
-	public $data;		// view data
+	protected $data;
+	protected $json;
+	protected $view = NULL;
 	
 	
 	function __construct()
 	{
 		parent::__construct();
-		// Set template
-		$this->_tpl = 'template/layout';
-		// Enable profiling or not
-		$this->output->enable_profiler($this->config->item('profiler'));
-	}
-	
-	
-	/** 
-	 * Load the page with supplied data
-	 */
-	function page($data)
-	{
-		// header with menu
-		$header['type'] = 'normal';
-		$header['nav_main'] = $this->menu_model->nav_main();
 		
-		// Add shack menu if logged in
-		if ($this->auth->logged_in())
-		{
-			$header['nav_shack'] = $this->menu_model->nav_shack();
-		}
+		// Configure default page items and load the layout
+		$css = array('base', 'skeleton', 'layout');
+		
+		$js = array(
+			'jquery-1.7.1.min',
+			'jquery.simplemodal.1.4.2.min',
+			'default',
+			'//maps.google.com/maps/api/js?sensor=false'
+		);
+		
+		$template = 'default';
+		
+		// set layout
+		$this->layout->set_css($css)
+					 ->set_js($js)
+					 ->set_template($template);
+		
+		// Add shack menu if logged in	
+		$this->data['nav']['top'] = ($this->auth->logged_in())
+			? $this->menu_model->loggedin()
+			: $this->menu_model->guest();
 		
 		// Admin user?
-		if ($this->auth->logged_in() && $this->session->userdata('type') == 'admin')
-		{
-			$header['nav_admin'] = $this->menu_model->admin();
-			$header['type'] = 'admin';
-		}
-		
-		$default['header'] = $this->load->view('template/header', $header, true);
+		$this->data['nav']['primary'] = ($this->session->userdata('type') == 'admin') 
+			? $this->menu_model->admin()
+			: $this->menu_model->primary();
 		
 		// sidebar
 		$sidebar['news'] = array();
-		$default['sidebar'] = $this->load->view('template/sidebar', $sidebar, true);
-		
-		// Default body contents
+		$default['sidebar'] = $this->load->view('template/sidebar', $sidebar, TRUE);
 		$default['body'] = '';
 		
 		// Merge supplied data array with local data
-		$data = array_merge($default, $data);
+		$this->data = array_merge($default, $this->data);
 		
-		if (array_key_exists('hide_sidebar', $data)) $data['sidebar'] = null;
+		if (array_key_exists('hide_sidebar', $this->data)) $this->data['sidebar'] = NULL;
 		
-		$this->load->view($this->_tpl, $data);
+		// Allow the profiler to be shown using the GET var if we're in dev mode
+		if (ENVIRONMENT == 'development' && $this->input->get('profiler'))
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 	
+	
+	
+	/**
+	 * Remap the CI request, running the requested method and (auto-)loading the view
+	 */
+	public function _remap($method, $arguments)
+	{
+		if (method_exists($this, $method))
+		{
+			// Requested method exists in the class - run it
+			call_user_func_array(array($this, $method), array_slice($this->uri->rsegments, 2));
+		}
+		else
+		{
+			// Doesn't exist - show 404 error.
+			show_404(strtolower(get_class($this)) . '/' . $method);
+		}
+		
+		// The class function has ran, done its stuff and set $this->data vars...
+		// ... now auto-load the view.
+		$this->_load_view();
+	}
+	
+	
+	
+	
+	/** 
+	 * Auto-load the view based on path.
+	 *
+	 * If $view is FALSE, then don't.
+	 */
+	private function _load_view()
+	{
+		// Back out if we've explicitly set the view to FALSE
+		if ($this->view === FALSE)
+		{
+			return;
+		}
+		
+		// If the JSON data is set, respond with JSON data instead of whole page
+		if (is_array($this->json))
+		{
+			$this->output->set_content_type('text/json');
+			$this->output->set_output(json_encode($this->json));
+			return;
+		}
+		
+		if ( ! ($this->layout->has_content('content') OR $this->layout->has_view('content')))
+		{
+			$view = $this->router->directory . $this->router->class . '/' . $this->router->method;
+			$this->layout->set_view('content', $view);
+		}
+		
+		// Load the variables from $this->data so they can be accessed in the layout view
+		$this->load->vars($this->data);
+		
+		// Finally load the template as the final view (it should echo $content at least)
+		$this->load->view($this->layout->get_template());
+	}
 	
 }
 
@@ -82,8 +140,6 @@ class AdminController extends MY_Controller
 	{
 		parent::__construct();
 		$this->auth->check('admin');
-		
-		$this->layout->add_js('jquery.dataTables.min.js');
 	}
 	
 }

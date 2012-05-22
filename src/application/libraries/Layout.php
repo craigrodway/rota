@@ -24,23 +24,38 @@ class Layout
 {
 
 
-	private $CI;
-	private $title;
-	private $js;
-	private $views; 
-	private $content;
-	private $template;
+	private $_CI;
+	private $_title;
+	private $_js = array();
+	private $_views = array(); 
+	private $_content = array();
+	private $_template;
 	public $lasterr;
 	
 	
 	function __construct()
 	{
-		$this->CI =& get_instance();
-		// Page template view file
-		$this->template = 'template/layout';
-		$this->js = array();
-		$this->views = array();
-		$this->content = array();
+		$this->_CI =& get_instance();
+	}
+	
+	
+	
+	
+	public function set_template($template = '')
+	{
+		if ($template !== '')
+		{
+			$this->_template = $template;
+			return $this;
+		}
+	}
+	
+	
+	
+	
+	public function get_template()
+	{
+		return 'template/' . $this->_template;
 	}
 	
 	
@@ -67,7 +82,7 @@ class Layout
 	{
 		if ($type == 'full')
 		{
-			return $this->title . ' - ' . $this->CI->config->item('site_name');
+			return $this->title . ' - ' . $this->_CI->config->item('site_name');
 		}
 		elseif ($type == 'page')
 		{
@@ -81,19 +96,112 @@ class Layout
 	/**
 	 * Add a javascript file for this page
 	 */
-	public function add_js($file = '')
+	public function set_js($js = '', $dir = 'js/')
 	{
-		$this->js[] = $file;
-		return true;
+		if ( ! is_array($js))
+		{
+			$js = array($js);
+		}
+		
+		foreach ($js as $src)
+		{
+			// Check if the file being added is remote or not.
+			// Valid remote formats: http://example.com/file.js -OR- //example.com/file.js
+			$remote = (preg_match('/^(http:|\/\/)/', $src));
+			
+			// Add the appropriate path'd file to array
+			$this->_js[] = ($remote) ? $src : $dir . $src . '.js';
+		}
+		return $this;
 	}
 	
 	
 	
 	
+	/**
+	 * Returns HTML string of <script> tags used to load javascript files in view
+	 */
 	public function get_js()
 	{
-		return $this->js;
+		$html = '';
+		
+		// loop over each js source
+		foreach ($this->_js as $src)
+		{
+			// set source with local scripts directory
+			$html .= '<script src="' . $src . '"></script>' . "\n";
+		}
+		
+		return $html;
 	}
+	
+	
+	
+	
+	public function clear_js()
+	{
+		$this->_js = array();
+		return $this;
+	}
+	
+	
+	
+	
+	/**
+	 * Set array element to $_css
+	 */
+	function set_css($css, $dir = 'css/')
+	{
+		// If the supplied $css var is not an array, make an array from it first
+		if ( ! is_array($css))
+		{
+			$css = array($css);
+		}
+		
+		// Loop through each $css element and add it to $_css
+		foreach ($css as $src)
+		{
+			// Check if the file being added is remote or not.
+			// Valid remote formats: http://example.com/file.js -OR- //example.com/file.js
+			$remote = (preg_match('/^(http:|\/\/)/', $src));
+			
+			// Add the appropriate path'd file to array
+			$this->_css[] = ($remote) ? $src : $dir . $src . '.css';
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	
+	/**
+	 * Returns html used to load css files in view
+	 */
+	function get_css()
+	{
+		$html = '';
+		
+		foreach ($this->_css as $src)
+		{
+			$html .= '<link href="' . $src . '" rel="stylesheet" type="text/css">' . "\n";
+		}
+		
+		return $html;
+	}
+	
+	
+	
+	
+	/**
+	 * Clears $_css array
+	 */
+	function clear_css()
+	{
+		$this->_css = array();
+		return $this;
+	}
+
 	
 	
 	
@@ -103,7 +211,7 @@ class Layout
 	 */
 	public function set_view($section, $view)
 	{
-		$this->views[$section] = $view;
+		$this->_views[$section] = $view;
 	}
 	
 	
@@ -114,7 +222,7 @@ class Layout
 	 */
 	public function set_content($section, $content)
 	{
-		$this->content[$section] = $content;
+		$this->_content[$section] = $content;
 	}
 	
 	
@@ -123,62 +231,23 @@ class Layout
 	/**
 	 * Get the content for a given section. Content overrides views.
 	 */
-	public function get($section)
+	public function get($section, $data = array())
 	{
-		if ( ! empty($this->content[$section]))
+		if ( ! empty($this->_content[$section]))
 		{
 			// Have actual content - return this
-			$content = $this->content[$section];
+			$content = $this->_content[$section];
 		}
-		elseif ( ! empty($this->views[$section]))
+		elseif ( ! empty($this->_views[$section]))
 		{
 			// View has been set - load the view file into variable
-			$content = $this->CI->load->view($this->views[$section], NULL, TRUE);
+			$content = $this->_CI->load->view($this->_views[$section], $data, TRUE);
 		}
 		else
 		{
-			// Nothing at all!
-			$content = 'No content to show';
+			$content = 'No content set.';
 		}
 		return $content;
-	}
-	
-	
-	
-	
-	/**
-	 * Load the actual page with all provided data
-	 */
-	public function page($data = array())
-	{
-		// Add shack menu if logged in
-		if ($this->CI->auth->logged_in())
-		{
-			$data['nav']['top'] = $this->CI->menu_model->loggedin();
-		}
-		else
-		{
-			$data['nav']['top'] = $this->CI->menu_model->guest();
-		}
-		
-		// Admin user? 
-		if ($this->CI->session->userdata('type') == 'admin')
-		{
-			$data['nav']['primary'] = $this->CI->menu_model->admin();
-		}
-		else
-		{
-			$data['nav']['primary'] = $this->CI->menu_model->primary();
-		}
-		
-		// Load variables if set
-		if ( ! empty($data))
-		{
-			$this->CI->load->vars($data);
-		}
-		
-		// Load the whole page layout
-		$this->CI->load->view($this->template);
 	}
 	
 	
@@ -189,9 +258,24 @@ class Layout
 	 */
 	public function has($section)
 	{
-		$_content = ! empty($this->content[$section]);
-		$_view = ! empty($this->views[$section]);
+		$_content = ! empty($this->_content[$section]);
+		$_view = ! empty($this->_views[$section]);
 		return ( $_content OR $_view );
+	}
+	
+	
+	
+	public function has_view($section)
+	{
+		return ( ! empty($this->_views[$section]));
+	}
+	
+	
+	
+	
+	public function has_content($section)
+	{
+		return ( ! empty($this->_content[$section]));
 	}
 	
 	

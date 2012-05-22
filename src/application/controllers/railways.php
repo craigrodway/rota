@@ -42,8 +42,6 @@ class Railways extends MY_Controller
 		$data['tab'] = 'grid';
 		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
 		$this->layout->set_title('Railways');
-		$this->layout->set_view('content', 'railways/index');
-		$this->layout->page($data);
 	}
 	
 	
@@ -81,7 +79,6 @@ class Railways extends MY_Controller
 		
 		$this->layout->set_title('Railways map');
 		$this->layout->set_view('content', 'railways/index');
-		$this->layout->page($data);
 	}
 	
 	
@@ -114,7 +111,6 @@ class Railways extends MY_Controller
 		}
 		
 		$this->layout->set_view('content', 'railways/info');
-		$this->layout->page($data);
 	}
 	
 	
@@ -123,7 +119,7 @@ class Railways extends MY_Controller
 	public function _remap($method, $params = array())
 	{
 		// If requested method isn't any of these, look it up as a railway slug
-		if (in_array($method, array('index', 'edit', 'grid', 'map')))
+		if (in_array($method, array('index', 'grid', 'map')))
 		{
 			$this->$method();
 		}
