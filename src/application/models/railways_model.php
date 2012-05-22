@@ -12,9 +12,17 @@
  * http://opensource.org/licenses/OSL-3.0
  */
 
-class Railways_model extends CI_Model
+class Railways_model extends MY_Model
 {
 	
+	
+	protected $_table = 'railways';
+	protected $_primary = 'r_id';
+	
+	protected $_filter_types = array(
+		'like' => array('r_name', 'r_slug', 'r_wab', 'r_postcode', 'r_locator'),
+	);
+
 	
 	public $lasterr;
 	
@@ -28,159 +36,12 @@ class Railways_model extends CI_Model
 	
 	
 	/**
-	 * Get list of all railways as objects
-	 */
-	function get_all($page = 0, $limit = 10, $filter_params = array())
-	{
-		if ( ! empty($filter_params))
-		{
-			$this->db->like(array_filter($filter_params, 'strlen'));
-		}
-		$this->db->order_by('r_name', 'asc');
-		
-		// Only limit results if specified (explicitly supply NULL to get ALL railways)
-		if ($page !== NULL && $limit !== NULL)
-		{
-			$this->db->limit($limit, $page);
-		}
-		
-		$query = $this->db->get('railways');
-		if ($query->num_rows() > 0)
-		{
-			return $query->result();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	
-	
-	
-	/**
-	 * Count all railways
-	 */
-	function count_all($filter_params = array())
-	{
-		if ( ! empty($filter_params))
-		{
-			$this->db->like(array_filter($filter_params, 'strlen'));
-		}
-		$query = $this->db->get('railways');
-		return $query->num_rows();
-	}
-	
-	
-	
-	
-	/**
-	 * Get a single railway by its ID
-	 */
-	function get($railway_id = NULL)
-	{
-		if ( ! $railway_id) return FALSE;
-		
-		$sql = "SELECT
-					railways.*,
-					CONCAT_WS(',', r_lat, r_lng)
-				FROM railways
-				WHERE r_id = ?
-				LIMIT 1";
-		$query = $this->db->query($sql, array($railway_id));
-		
-		if ($query->num_rows() == 1)
-		{
-			return $query->row();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	
-	
-	
-	/**
 	 * Get a single railway using slug
 	 */
 	function get_by_slug($slug = '')
 	{
-		if ($slug == '')
-		{
-			return FALSE;
-		}
-		
-		$sql = "SELECT
-					railways.*,
-					CONCAT_WS(',', r_lat, r_lng) AS r_latlng
-				FROM railways
-				WHERE r_slug = ?
-				LIMIT 1";
-		$query = $this->db->query($sql, array($slug));
-		
-		if ($query->num_rows() == 1)
-		{
-			return $query->row();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	
-	
-	
-	/**
-	 * Add a new railway using supplied data
-	 *
-	 * @param array $data		Array of DB columns => values to add
-	 * @return int		ID of new railway
-	 */
-	function add($data = array())
-	{
-		if (empty($data)) return FALSE;
-		return $this->db->insert('railways', $data);
-	}
-	
-	
-	
-	
-	/**
-	 * Update details for railway
-	 *
-	 * @param int $r_id		Railway ID to update
-	 * @param array $data		Data to update railway with
-	 * @return bool		True on successful update
-	 */
-	function edit($r_id = NULL, $data = array())
-	{
-		if ( ! $r_id) return FALSE;
-		if (empty($data)) return FALSE;
-		
-		$this->db->where('r_id', $r_id);
-		return $this->db->update('railways', $data);
-	}
-	
-	
-	
-	
-	/**
-	 * Actually delete a railway from the database
-	 *
-	 * @param int $r_id		Railway ID to delete
-	 * @return bool		True if railway has been removed
-	 */
-	function delete($r_id = NULL)
-	{
-		if ( ! $r_id) return FALSE;
-		
-		$sql = 'DELETE FROM railways WHERE r_id = ? LIMIT 1';
-		$query = $this->db->query($sql, array($r_id));
-		
-		return ($this->db->affected_rows() == 1);
+		parent::limit(1);
+		return parent::get_by('r_slug', $slug);
 	}
 	
 	

@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+require(APPPATH . '/presenters/Railway_presenter.php');
+
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -45,17 +47,29 @@ class Railways extends AdminController
 		$this->load->library(array('pagination', 'googlemaps'));
 		
 		$config['base_url'] = site_url('admin/railways/index/');
-		$config['suffix'] = '?' . @http_build_query($filter);
-		$config['total_rows'] = $this->railways_model->count_all($filter);
+		//$config['suffix'] = '?' . @http_build_query($filter);
+		$config['total_rows'] = $this->railways_model->count_all();
 		$config['per_page'] = 15; 
 		$config['uri_segment'] = 4;
-		$this->pagination->initialize($config); 
+		$this->pagination->initialize($config);
+		
+		$this->railways_model->set_filter($filter)
+							 ->order_by('r_name', 'asc')
+							 ->limit(15, $page);
 
-		$this->data['railways'] = $this->railways_model->get_all($page, $config['per_page'], $filter);
+		$this->data['railways'] = $this->railways_model->get_all();
 		$this->data['filter'] =& $filter;
-
+		
+		
+		foreach ($this->data['railways'] as &$railway)
+		{
+			$railway = new Railway_presenter($railway);
+		}
+		
 		// Get all railways to show on map
-		$all_railways = $this->railways_model->get_all(NULL, NULL);
+		$this->railways_model->clear_filter()
+							 ->limit($this->railways_model->count_all());
+		$all_railways = $this->railways_model->get_all();
 
 		// Do map
 		$this->load->library('googlemaps');
@@ -65,18 +79,18 @@ class Railways extends AdminController
 		$this->googlemaps->initialize($mapconfig);
 		
 		// Place all stations on the map
-		foreach ($all_railways as $r)
+		foreach ($all_railways as &$r)
 		{
-			$latlng = "{$r->r_lat},{$r->r_lng}";
-			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
+			$r = new Railway_presenter($r);
+			if (strlen($r->latlng()) > 1 && ! preg_match('/0\.0/', $r->latlng()))
 			{
 				$marker = array();
-				$marker['position'] = $latlng;
-				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->r_id, $r->r_name));
+				$marker['position'] = $r->latlng();
+				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->get('r_id'), $r->get('r_name')));
 				$this->googlemaps->add_marker($marker);
 			}
 		}
-
+		
 		$this->data['map'] = $this->googlemaps->create_map();
 
 		$this->layout->set_title('Railways');
@@ -95,10 +109,11 @@ class Railways extends AdminController
 		if ($r_id)
 		{
 			// Editing railway. Get it via ID.
-			if ( ! $this->data['railway'] = $this->railways_model->get($r_id))
+			if ( ! $railway = $this->railways_model->get($r_id))
 			{
 				show_error('Could not find requested railway.', 404);
 			}
+			$this->data['railway'] = new Railway_presenter($railway);
 			$this->layout->set_title('Edit railway');
 		}
 		else

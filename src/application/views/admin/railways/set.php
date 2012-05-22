@@ -1,7 +1,7 @@
 <?php
 $errors = validation_errors();
 echo form_open('admin/railways/save');
-if (isset($railway)) echo form_hidden('r_id', $railway->r_id);
+if (isset($railway)) echo form_hidden('r_id', $railway->get('r_id'));
 if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</ul></div>';
 ?>
 

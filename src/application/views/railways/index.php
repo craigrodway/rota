@@ -1,5 +1,5 @@
 <p class="big">The <strong>Railways on the Air</strong> event is not just about amateur 
-radio and making contacts - it&apos;s also about celebrating the unique 
+radio and making contacts - it&#39;s also about celebrating the unique 
 position railways hold in our national heritage.</p>
 
 <p>Find out more about the railways that have hosted amateur stations over the years ...</p>

@@ -78,18 +78,18 @@
 		<?php foreach ($railways as $r): ?>
 			
 			<tr>
-				<td class="title"><?php echo anchor('admin/railways/set/' . $r->r_id, $r->r_name) ?></td>
-				<td><?php echo $r->r_wab ?></td>
-				<td><?php echo $r->r_locator ?></td>
-				<td><?php echo $r->r_postcode ?></td>
+				<td class="title"><?php echo anchor('admin/railways/set/' . $r->get('r_id'), $r->get('r_name')) ?></td>
+				<td><?php echo $r->get('r_wab') ?></td>
+				<td><?php echo $r->get('r_locator') ?></td>
+				<td><?php echo $r->get('r_postcode') ?></td>
 				<td class="icon">
-					<?php echo icon_link('silk/world', $r->r_url, 'Visit website', 'target="_blank"') ?>
+					<?php echo icon_link('silk/world', $r->get('r_url'), 'Visit website', 'target="_blank"') ?>
 				</td>
 				<td class="icon">
-					<?php echo icon_link('silk/edit', 'admin/railways/set/' . $r->r_id, 'Edit') ?>
+					<?php echo icon_link('silk/edit', 'admin/railways/set/' . $r->get('r_id'), 'Edit') ?>
 				</td>
 				<td class="icon">
-					<?php echo icon_link('silk/delete', 'admin/railways/delete/' . $r->r_id, 'Delete', 'rel="delete" data-id="' . $r->r_id . '"') ?>
+					<?php echo icon_link('silk/delete', 'admin/railways/delete/' . $r->get('r_id'), 'Delete', 'rel="delete" data-id="' . $r->get('r_id') . '"') ?>
 				</td>
 			</tr>
 		
