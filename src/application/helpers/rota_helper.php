@@ -5,7 +5,20 @@
  */
 function icon_link($icon_file = '', $href = '', $title = '', $attrs = '')
 {
-	$format = '<a class="icon-link delete" href="%s" title="%s" %s><img src="%s" alt="%s"></a>';
+	$format = '<a class="icon-link" href="%s" title="%s" %s><img src="%s" alt="%s"></a>';
+	
+	$attr_str = '';
+	if (is_array($attrs))
+	{
+		foreach ($attrs as $attr => $value)
+		{
+			$attr_str .= $attr . '="' . $value . '" ';
+		}
+	}
+	else
+	{
+		$attr_str = $attrs;
+	}
 	
 	// Format some items
 	$href = (preg_match('/^http/', $href)) ? $href : site_url($href);
@@ -14,7 +27,7 @@ function icon_link($icon_file = '', $href = '', $title = '', $attrs = '')
 	return sprintf($format,
 		$href,
 		$title,
-		$attrs,
+		$attr_str,
 		$imgsrc,
 		$title
 	);

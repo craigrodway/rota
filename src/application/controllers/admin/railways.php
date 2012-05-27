@@ -44,7 +44,7 @@ class Railways extends AdminController
 	{
 		$filter = $this->input->get(NULL, TRUE);
 		
-		$this->load->library(array('pagination', 'googlemaps'));
+		$this->load->library('pagination');
 		
 		$config['base_url'] = site_url('admin/railways/index/');
 		//$config['suffix'] = '?' . @http_build_query($filter);
@@ -60,38 +60,10 @@ class Railways extends AdminController
 		$this->data['railways'] = $this->railways_model->get_all();
 		$this->data['filter'] =& $filter;
 		
-		
 		foreach ($this->data['railways'] as &$railway)
 		{
 			$railway = new Railway_presenter($railway);
 		}
-		
-		// Get all railways to show on map
-		$this->railways_model->clear_filter()
-							 ->limit($this->railways_model->count_all());
-		$all_railways = $this->railways_model->get_all();
-
-		// Do map
-		$this->load->library('googlemaps');
-		$mapconfig['zoom'] = 'auto';
-		$mapconfig['cluster'] = TRUE;
-		$mapconfig['center'] = 'United Kingdom';
-		$this->googlemaps->initialize($mapconfig);
-		
-		// Place all stations on the map
-		foreach ($all_railways as &$r)
-		{
-			$r = new Railway_presenter($r);
-			if (strlen($r->latlng()) > 1 && ! preg_match('/0\.0/', $r->latlng()))
-			{
-				$marker = array();
-				$marker['position'] = $r->latlng();
-				$marker['infowindow_content'] = addslashes(anchor('admin/railways/edit/' . $r->get('r_id'), $r->get('r_name')));
-				$this->googlemaps->add_marker($marker);
-			}
-		}
-		
-		$this->data['map'] = $this->googlemaps->create_map();
 
 		$this->layout->set_title('Railways');
 	}
@@ -119,10 +91,11 @@ class Railways extends AdminController
 		else
 		{
 			// Adding new railway
+			$this->data['railway'] = new Railway_presenter();
 			$this->layout->set_title('Add a railway');
 		}
 		
-		$this->layout->set_js('modules/admin_railways_addedit.js');
+		//$this->layout->set_js('modules/admin_railways_addedit.js');
 	}
 	
 	
@@ -190,20 +163,20 @@ class Railways extends AdminController
 			if ($r_id)
 			{
 				// Update
-				$op = $this->railways_model->edit($r_id, $data);
+				$op = $this->railways_model->update($r_id, $data);
 				$ok = "<strong>{$data['r_name']}</strong> has been updated successfully.";
 				$err = 'An error occurred while updating the railway.';
 			}
 			else
 			{
 				// Add
-				$op = $this->railways_model->add($data);
+				$op = $this->railways_model->insert($data);
 				$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
 				$err = 'An error occurred while adding the railway';
 			}
 			
-			$msg_type = ($op) ? 'success' : 'error';
-			$msg = ($op) ? $ok : $err;
+			$msg_type = ($op !== FALSE) ? 'success' : 'error';
+			$msg = ($op !== FALSE) ? $ok : $err;
 			$this->session->set_flashdata($msg_type, $msg);
 			
 			redirect('admin/railways');
@@ -219,7 +192,9 @@ class Railways extends AdminController
 	 */
 	function delete()
 	{
-		$id = $this->input->post('railway_id');
+		$this->view = FALSE;
+		
+		$id = $this->input->post('id');
 		if ( ! $id)
 		{
 			redirect('admin/railways');

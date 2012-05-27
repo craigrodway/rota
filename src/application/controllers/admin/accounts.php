@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+require(APPPATH . '/presenters/Account_presenter.php');
+
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -29,12 +31,31 @@ class Accounts extends AdminController
 	/**
 	 * Accounts listing
 	 */
-	function index()
+	function index($page = 0)
 	{
-		$data['accounts'] = $this->accounts_model->get_all();
+		$filter = $this->input->get(NULL, TRUE);
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = site_url('admin/accounts/index/');
+		$config['total_rows'] = $this->accounts_model->count_all();
+		$config['per_page'] = 15; 
+		$config['uri_segment'] = 4;
+		$this->pagination->initialize($config);
+		
+		$this->accounts_model->set_filter($filter)
+							 ->order_by('a_email', 'asc')
+							 ->limit(15, $page);
+		
+		$this->data['accounts'] = $this->accounts_model->get_all();
+		$this->data['filter'] =& $filter;
+		
+		foreach ($this->data['accounts'] as &$account)
+		{
+			$account = new Account_presenter($account);
+		}
+		
 		$this->layout->set_title('Accounts');
-		$this->layout->set_view('content', 'admin/accounts/index');
-		$this->layout->page($data);
 	}
 	
 	
@@ -61,9 +82,6 @@ class Accounts extends AdminController
 			// Adding new account
 			$this->layout->set_title('Add a new account');
 		}
-		
-		$this->layout->set_view('content', 'admin/accounts/addedit');
-		$this->layout->page($data);
 	}
 	
 	

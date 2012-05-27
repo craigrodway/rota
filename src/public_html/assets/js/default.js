@@ -24,7 +24,7 @@ jsq.add(function() {
 	
 	
 	// "Delete" dialogs
-	$("body").on("click", "a.delete", function(e) {
+	$("body").on("click", "a[rel='delete']", function(e) {
 		
 		e.preventDefault();
 		e.stopImmediatePropagation();
@@ -46,11 +46,9 @@ jsq.add(function() {
 				var container = $(this.d.container);
 				//console.log(container);
 				container.find("span.name").text(el.data("name"));
-				container.find("p.text").html(el.data("title"));
+				container.find("p.text").html(el.data("text"));
 				container.find("form#delete_form").attr("action", el.data("url"));
-				container.find("form#delete_form input[name=id]").val(el.data("id"));
-				container.find("form#delete_form input[name=redirect]").val(el.data("redirect"));
-				//container.find("form#delete_form input[name=log]").val(el.data("log"));
+				container.find("form#delete_form input[name=id]").val(el.data("id")); 
 			}
 		});
 	});

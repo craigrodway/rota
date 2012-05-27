@@ -42,7 +42,7 @@ class Account extends MY_Controller
 			}
 			else
 			{
-				$this->session->set_flashdata('success', 'You are now been logged in!');
+				$this->session->set_flashdata('success', 'You are now logged in!');
 				redirect();
 			}
 		}

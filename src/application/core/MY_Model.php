@@ -184,7 +184,8 @@ class MY_Model extends CI_Model
 	{
 		$sql = 'SELECT *
 				FROM `' . $this->_table . '`
-				WHERE 1 = 1'.
+				WHERE 1 = 1 ' .
+				$this->filter_sql() .
 				$this->order_sql() .
 				$this->limit_sql();
 		
@@ -216,12 +217,17 @@ class MY_Model extends CI_Model
 
 	/**
 	 * Get rows where the key matches value
+	 *
+	 * @param string $key		DB column name to select on
+	 * @param string $value		Value the column should be to match
 	 */
-	public function get_by($key, $value)
+	public function get_by($key, $value, $limit = '')
 	{
 		$sql = 'SELECT * 
 				FROM `' . $this->_table . '` 
-				WHERE `' . $key .'` = ?';
+				WHERE `' . $key .'` = ?' .
+				$this->order_sql() .
+				$this->limit_sql();
 		
 		$query = $this->db->query($sql, array($value));
 		if ($query->num_rows() > 0)
@@ -270,7 +276,7 @@ class MY_Model extends CI_Model
 	 * @param string $where_extra		In addition to updating on primary key - additional clause
 	 * @return bool
 	 */
-	public function update($id, $data = array(), $where_extra = '')
+	public function update($id, $data, $where_extra = '')
 	{
 		$where = ' `' . $this->_primary . '` = ' . $this->db->escape($id) . ' ';
 		
@@ -296,7 +302,7 @@ class MY_Model extends CI_Model
 		$sql = 'DELETE FROM `' . $this->_table . '` 
 				WHERE `' . $this->_primary . '` = ?
 				LIMIT 1';
-		return $this->db->query($sql, array($p_id));
+		return $this->db->query($sql, array($id));
 	}
 
 

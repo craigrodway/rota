@@ -1,7 +1,7 @@
 <?php
 $errors = validation_errors();
 echo form_open('admin/railways/save');
-if (isset($railway)) echo form_hidden('r_id', $railway->get('r_id'));
+if (isset($railway)) echo form_hidden('r_id', $railway->r_id());
 if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</ul></div>';
 ?>
 
@@ -18,7 +18,7 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 			'name' => 'r_name',
 			'id' => 'r_name',
 			'size' => '40',
-			'value' => @set_value('r_name', $railway->r_name)
+			'value' => set_value('r_name', $railway->r_name())
 		)); ?>
 	</div>
 
@@ -28,7 +28,7 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 			'name' => 'r_url',
 			'id' => 'r_url',
 			'size' => '50',
-			'value' => @set_value('r_url', $railway->r_url)
+			'value' => @set_value('r_url', $railway->r_url())
 		)); ?>
 	</div>
 
@@ -39,7 +39,7 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 			'id' => 'r_info_src',
 			'cols' => '50',
 			'rows' => '10',
-			'value' => @set_value('r_info_src', $railway->r_info_src)
+			'value' => @set_value('r_info_src', $railway->r_info_src())
 		)); ?>
 	</div>	
 	

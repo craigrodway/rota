@@ -78,19 +78,13 @@
 		<?php foreach ($railways as $r): ?>
 			
 			<tr>
-				<td class="title"><?php echo anchor('admin/railways/set/' . $r->get('r_id'), $r->get('r_name')) ?></td>
-				<td><?php echo $r->get('r_wab') ?></td>
-				<td><?php echo $r->get('r_locator') ?></td>
-				<td><?php echo $r->get('r_postcode') ?></td>
-				<td class="icon">
-					<?php echo icon_link('silk/world', $r->get('r_url'), 'Visit website', 'target="_blank"') ?>
-				</td>
-				<td class="icon">
-					<?php echo icon_link('silk/edit', 'admin/railways/set/' . $r->get('r_id'), 'Edit') ?>
-				</td>
-				<td class="icon">
-					<?php echo icon_link('silk/delete', 'admin/railways/delete/' . $r->get('r_id'), 'Delete', 'rel="delete" data-id="' . $r->get('r_id') . '"') ?>
-				</td>
+				<td class="title"><?php echo anchor('admin/railways/set/' . $r->r_id(), $r->r_name()) ?></td>
+				<td><?php echo $r->r_wab() ?></td>
+				<td><?php echo $r->r_locator() ?></td>
+				<td><?php echo $r->r_postcode() ?></td>
+				<td class="icon"><?php echo $r->website_icon() ?></td>
+				<td class="icon"><?php echo $r->edit_icon() ?></td>
+				<td class="icon"><?php echo $r->delete_icon() ?></td>
 			</tr>
 		
 		<?php endforeach; ?>
@@ -106,14 +100,9 @@
 	
 <?php else: ?>
 
-	<div class="alert-box warning">No railways found.</div>
+	<div class="alert warning">No railways found.</div>
 
 <?php endif; ?>
 
 
 <div class="clear"></div>
-
-
-<div style="border: 1px solid #ccc; padding: 0px;">
-	<?php echo $map['html']; ?>
-</div>

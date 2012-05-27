@@ -12,7 +12,7 @@
  * http://opensource.org/licenses/OSL-3.0
  */
 
-class Accounts_model extends CI_Model
+class Accounts_model extends MY_Model
 {
 	
 	
@@ -36,13 +36,15 @@ class Accounts_model extends CI_Model
 		$sql = "SELECT
 					accounts.*,
 					(SELECT COUNT(o_a_id) FROM operators WHERE o_a_id = a_id) AS a_operators_count
-				FROM accounts
-				ORDER BY a_email ASC";
+				FROM accounts" . 
+				$this->filter_sql() .
+				$this->order_sql() .
+				$this->limit_sql();
 		
 		$query = $this->db->query($sql);
 		if ($query->num_rows() > 0)
 		{
-			return $query->result();
+			return $query->result_array();
 		}
 		else
 		{
@@ -83,8 +85,8 @@ class Accounts_model extends CI_Model
 		
 		if ($query->num_rows() == 1)
 		{
-			$account = $query->row();
-			unset($account->a_password);
+			$account = $query->row_array();
+			unset($account['a_password']);
 			return $account;
 		}
 		else
@@ -97,11 +99,27 @@ class Accounts_model extends CI_Model
 	
 	
 	/**
+	 * Account creation function. Adds a 'created' timestamp
+	 *
+	 * @param array $data		Array of data of CB columns => values
+	 * @return mixed		Int: auto_incremement ID; False on failure
+	 */
+	public function insert($data)
+	{
+		$data['a_created'] = date('Y-m-d H:i:s');
+		return parent::insert($data);
+	}
+	
+	
+	
+	
+	/**
 	 * Admin-side account creation - accept all values from $data param.
 	 *
 	 * @param array $data		Array of values to be set.
 	 * @return int		ID of new account
 	 */
+	/*
 	public function add($data)
 	{
 		$verify = ($data['send_email'] == TRUE) ? random_string('alnum', 10) : NULL;
@@ -115,6 +133,7 @@ class Accounts_model extends CI_Model
 		
 		return $this->db->insert_id();
 	}
+	*/
 	
 	
 	
@@ -124,24 +143,20 @@ class Accounts_model extends CI_Model
 	 *
 	 * @param int $a_id		Account ID to update
 	 * @param array $data		Data to update account with (keys should match column names)
+	 * @param string $where		Any additional WHERE clauses to use
 	 * @return bool		True on successful update
 	 */
-	function edit($a_id = NULL, $data = array())
+	public function update($id, $data, $where = '')
 	{
-		if ( ! $a_id) return FALSE;
-		if (empty($data)) return FALSE;
-		
-		// Don't allow these to be set
+		// Ensure these are not set
 		unset($data['a_created']);
 		unset($data['a_lastlogin']);
-		
-		$this->db->where('a_id', $a_id);
-		return $this->db->update('accounts', $data);
+		return parent::update($id, $data, $where);
 	}
 	
 	
 	
-	
+		
 	/**
 	 * Account creation function for front-end signups.
 	 *
@@ -151,6 +166,7 @@ class Accounts_model extends CI_Model
 	 * @param bool $send_email		Whether or not to send the verification email
 	 * @return mixed		Verification code on success, FALSE on error
 	 */
+	/*
 	function create_account($data = array(), $send_email = FALSE)
 	{
 		if (!isset($data['email']))
@@ -192,14 +208,14 @@ class Accounts_model extends CI_Model
 		}
 		
 	}
-	
+	*/
 	
 	
 	
 	/**
 	 * Find and retrieve an account by the verification code
 	 */
-	function find_by_verify($code = NULL)
+	/*function find_by_verify($code = NULL)
 	{
 		if (!$code) return FALSE;
 		
@@ -214,47 +230,30 @@ class Accounts_model extends CI_Model
 			return FALSE;
 		}
 	}
-	
+	*/
 	
 	
 	
 	/**
 	 * With the supplied verification code, set the account status 
 	 * to verified and enabled.
+	 *
+	 * @param string $code		The verification code of the account to enable
+	 * @return bool
 	 */
-	function verify($code = NULL)
-	{
-		if (!$code) return false;
+	function verify($code)
+	{		
+		$sql = "UPDATE
+					accounts
+				SET
+					a_verify = NULL,
+					a_enabled = 'Y'
+				WHERE
+					a_verify = ?
+				LIMIT 1";
 		
-		$sql = "UPDATE accounts SET a_verify = NULL, a_enabled = 'Y'
-				WHERE a_verify = ?";
-		$query = $this->db->query($sql, array($code));
-		if ($this->db->affected_rows() == 1)
-		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	
-	
-	
-	/**
-	 * Set an account's password to a new value
-	 */
-	function set_password($account_id = NULL, $password = NULL)
-	{
-		if (!$account_id) return FALSE;
-		if (!$password) return FALSE;
+		$this->db->query($sql, array($code));
 		
-		$hashed = $this->auth->hash_password($password);
-		
-		$sql = 'UPDATE accounts SET a_password = ?
-				WHERE a_id = ? LIMIT 1';
-		$query = $this->db->query($sql, array($hashed, $account_id));
 		return ($this->db->affected_rows() == 1);
 	}
 	
@@ -262,19 +261,21 @@ class Accounts_model extends CI_Model
 	
 	
 	/**
-	 * Actually delete an account from the database.
+	 * Set an account's password to a new value
 	 *
-	 * Operator profiles and event entries should also be removed via SQL CASCADE.
-	 *
-	 * @param int $a_id		Account ID to delete
-	 * @return bool		True if account has been removed
+	 * @param int $account_id		ID of account to update
+	 * @param string $password		Plain-text password to set (it will be hashed)
 	 */
-	function delete($a_id = NULL)
+	function set_password($account_id, $password)
 	{
-		if ( ! $a_id) return FALSE;
+		$hashed = $this->auth->hash_password($password);
 		
-		$sql = 'DELETE FROM accounts WHERE a_id = ? LIMIT 1';
-		$query = $this->db->query($sql, array($a_id));
+		$sql = 'UPDATE accounts
+				SET a_password = ?
+				WHERE a_id = ?
+				LIMIT 1';
+		
+		$query = $this->db->query($sql, array($hashed, $account_id));
 		
 		return ($this->db->affected_rows() == 1);
 	}

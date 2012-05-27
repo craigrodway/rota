@@ -73,11 +73,11 @@ if ($this->session->userdata('type') == 'admin')
 	
 	<div class="container body">
 		
-		<div class="eight columns logo">
+		<div class="six columns logo">
 			<h1>ROTA</h1>
 		</div>
 		
-		<div class="eight columns user-nav">
+		<div class="ten columns user-nav">
 			<ul class="horizontal">
 				<?php
 				foreach ($nav['top'] as $item)
@@ -141,7 +141,7 @@ if ($this->session->userdata('type') == 'admin')
 		{
 			if ($this->session->flashdata($f))
 			{
-				$flashmsgs .= '<div class="alert alert-' . $f . '">' . $this->session->flashdata($f) . '</div>';
+				$flashmsgs .= '<div class="alert ' . $f . '">' . $this->session->flashdata($f) . '</div>';
 			}
 		}
 		?>

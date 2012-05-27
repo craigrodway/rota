@@ -57,7 +57,7 @@ class Menu_model extends CI_Model
 		$nav[] = array('shack/news', 'Post news update', 'news');
 		$nav[] = array('shack/upload-log', 'Upload log', 'log');
 		$nav[] = array('shack/account', 'My account', 'account');
-		$nav[] = array('account/logout', 'Log out', 'login');
+		$nav[] = array('account/logout', 'Log out', 'logout');
 		return $nav;
 	}
 	
