@@ -56,6 +56,7 @@ class Accounts extends AdminController
 		}
 		
 		$this->layout->set_title('Accounts');
+		$this->layout->set_view('links', 'admin/accounts/index-links');
 	}
 	
 	
@@ -71,15 +72,17 @@ class Accounts extends AdminController
 		if ($a_id)
 		{
 			// Editing account. Get it via ID.
-			if ( ! $data['account'] = $this->accounts_model->get($a_id))
+			if ( ! $account = $this->accounts_model->get($a_id))
 			{
 				show_error('Could not find requested account.', 404);
 			}
+			$this->data['account'] = new Account_presenter($account);
 			$this->layout->set_title('Edit account');
 		}
 		else
 		{
 			// Adding new account
+			$this->data['account'] = new Account_presenter();
 			$this->layout->set_title('Add a new account');
 		}
 	}

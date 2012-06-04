@@ -7,10 +7,10 @@ if ($this->layout->has('sidebar'))
 	$right_classes = 'four columns sidebar';
 }
 
-$nav_class = '';
+$body_class = 'type_guest';
 if ($this->session->userdata('type') == 'admin')
 {
-	$nav_class = 'admin';
+	$body_class = 'type_admin';
 }
 ?>
 <!DOCTYPE html>
@@ -68,13 +68,37 @@ if ($this->session->userdata('type') == 'admin')
 	<![endif]-->
 
 </head>
-<body>
+<body class="<?php echo $body_class ?>">
 	
 	
 	<div class="container body">
 		
+		<div class="sixteen columns site-nav">
+			
+			<ul class="horizontal">
+				<?php foreach ($nav['primary'] as $item): ?>
+				<?php
+				$cls = '';
+				$uri = $this->uri->uri_string();
+				$uri = (empty($uri)) ? 'home' : $uri;
+				if (stristr($uri, $item[0]))
+				{
+					$cls = 'class="active""';
+				}
+				?>
+				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+				<?php endforeach; ?>
+			</ul>
+			
+			<div class="clear"></div>
+			
+		</div> <!-- / .site-nav -->
+		
+		<div class="clear"></div>
+		
+		
 		<div class="six columns logo">
-			<h1>ROTA</h1>
+			<h1><a href="<?php echo site_url() ?>"><img src="img/global/title3.png" alt="Railways on the Air"></a></h1>
 		</div>
 		
 		<div class="ten columns user-nav">
@@ -104,34 +128,8 @@ if ($this->session->userdata('type') == 'admin')
 			</div>
 		</div>
 		
-		<div class="clear"></div>
 		
-		
-		
-		
-		<div class="sixteen columns site-nav <?php echo $nav_class ?>">
-			
-			<ul class="horizontal">
-				<?php foreach ($nav['primary'] as $item): ?>
-				<?php
-				$cls = '';
-				$uri = $this->uri->uri_string();
-				$uri = (empty($uri)) ? 'home' : $uri;
-				if (stristr($uri, $item[0]))
-				{
-					$cls = 'class="active""';
-				}
-				?>
-				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
-				<?php endforeach; ?>
-			</ul>
-			
-			<div class="clear"></div>
-			
-		</div> <!-- / .site-nav -->
-		
-		<div class="clear"></div>
-		
+		<div class="sixteen columns sub_header"><hr></div>
 		
 		
 		<?php
@@ -154,10 +152,18 @@ if ($this->session->userdata('type') == 'admin')
 		<?php endif; ?>
 		
 		
+		<div class="row add-bottom">
+			<div class="six columns">
+				<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
+			</div>
+			<div class="ten columns" style="padding-top: 7px">
+				<?php echo $this->layout->get('links') ?>
+			</div>
+		</div>
 		
+		<div class="clear"></div>
 		
 		<div class="<?php echo $left_classes ?>">
-			<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
 			<?php echo $this->layout->get('content') ?>
 		</div>
 		

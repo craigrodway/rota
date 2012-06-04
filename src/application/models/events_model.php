@@ -12,11 +12,12 @@
  * http://opensource.org/licenses/OSL-3.0
  */
 
-class Events_model extends CI_Model
+class Events_model extends MY_Model
 {
 	
 	
-	public $lasterr;
+	protected $_table = 'events';
+	protected $_primary = 'e_year';
 	
 	
 	function __construct()
@@ -26,28 +27,23 @@ class Events_model extends CI_Model
 	
 	
 	
-	
-	/**
-	 * Get all of the events
-	 */
-	function get_all()
+	public function set_active()
 	{
-		$sql = "SELECT
-					events.*,
-					IF(CURDATE() > e_end_date, 1, 0) AS 'e_should_be_current',
-					(SELECT COUNT(s_o_id) FROM stations WHERE s_e_id = e_id) AS e_stations_count
-				FROM events
-				ORDER BY e_year DESC";
+		$sql = 'UPDATE events SET e_current = "N"';
+		$this->db->query($sql);
 		
-		$query = $this->db->query($sql);
-		if ($query->num_rows() > 0)
-		{
-			return $query->result();
-		}
-		else
-		{
-			return FALSE;
-		}
+		$sql = 'UPDATE
+					events cur
+				JOIN
+					events prev
+						ON (YEAR(prev.e_end_date) = YEAR(cur.e_end_date)-1)
+				SET
+					cur.e_current = "Y"
+				WHERE
+					CURDATE()
+						BETWEEN prev.e_end_date + INTERVAL 1 DAY 
+						AND cur.e_end_date';
+		return $this->db->query($sql);
 	}
 	
 	

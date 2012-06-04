@@ -1,16 +1,6 @@
-<p class="add-bottom">
-	<a href="<?php echo site_url('admin/railways/set') ?>" class="green button add icon" id="add_button"><span>Add new railway</span></a>
-</p>
-
-
-
 <form method="GET" action="<?php echo site_url('admin/railways/') ?>">
 
-	<div class="boxfill">
-	
-		<div class="boxfill-heading">
-			Filter
-		</div>
+	<div class="boxfill filter">
 	
 		<table class="filter">
 			<tr>
@@ -45,7 +35,7 @@
 				
 				<td>
 					<label>&nbsp;</label>
-					<input type="submit" class="blue button" value="Filter">
+					<input type="submit" class="black button" value="Filter">
 				</td>
 				
 			</tr>

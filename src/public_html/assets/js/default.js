@@ -16,7 +16,7 @@ jsq.add(function() {
 	
 	// Table row clicking
 	$("body").on("click", "table.simple tr", function(e) {
-		if (e.target.tagName == "TD") {
+		if (e.target.tagName == "TD" || e.target.tagName == "IMG") {
 			var a = $(this).find("td.title a")[0];
 			window.location.href = $(a).attr("href");  
 		}

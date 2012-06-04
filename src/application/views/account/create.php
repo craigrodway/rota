@@ -48,18 +48,8 @@ $errors = validation_errors();
 		
 		<div class="inline">
 			<label>&nbsp;</label>
-			<button type="submit" name="submit" class="green button icon tick"><span>Submit</span></button>
+			<button type="submit" name="submit" class="black button icon tick"><span>Submit</span></button>
 		</div>
-		<!--
-		<div class="clearfix remove-bottom">
-			<label for="email">Email address</label>
-			<div class="input">
-				<input type="text" name="email" size="40" value="">
-				<br><br>
-				<input type="submit" class="btn primary" value="Submit">
-			</div>
-		</div>
-		-->
 
 	</div>
 	

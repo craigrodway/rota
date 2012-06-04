@@ -32,3 +32,28 @@ function icon_link($icon_file = '', $href = '', $title = '', $attrs = '')
 		$title
 	);
 }
+
+
+
+
+/**
+ * Parse a date for format and calendar correctness, and return as Y-m-d format
+ */
+function parse_date($date)
+{	
+	if( ! preg_match('/^[0-3]{1}[0-9]{1}\/[0-1]{1}[0-9]{1}\/[0-9]{4}$/', $date) )
+		return NULL;
+	
+	// Check is valid date
+	list($d, $m, $y) = explode("/", $date);
+	if ( ! checkdate ($m, $d, $y))
+	{
+		return NULL;
+	}
+	
+	// Convert to Y-m-d format
+	$date = explode('/', $date);
+	$mysql_date = $date[2] . '-' . $date[1] . '-' . $date[0];
+	
+	return $mysql_date;
+}

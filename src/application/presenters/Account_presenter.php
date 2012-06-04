@@ -42,8 +42,8 @@ class Account_presenter extends ROTA_Presenter
 			
 			case 'icon':
 				return ($enabled)
-					? '<img src="img/global/icons/pid/green_tick.png" alt="Enabled">'
-					: '<img src="img/global/icons/pid/red_cross.png" alt="Disabled">';
+					? '<img src="img/global/icons/silk/bullet_tick.png" alt="Enabled">'
+					: '<img src="img/global/icons/silk/bullet_cross.png" alt="Disabled">';
 			break;
 		}
 	}
@@ -61,8 +61,8 @@ class Account_presenter extends ROTA_Presenter
 			
 			case 'icon':
 				return ($verified)
-					? '<img src="img/global/icons/pid/green_tick.png" alt="Verified">'
-					: '<img src="img/global/icons/pid/red_cross.png" alt="Waiting verification">';
+					? '<img src="img/global/icons/silk/bullet_tick.png" alt="Verified">'
+					: '<img src="img/global/icons/silk/bullet_cross.png" alt="Waiting verification">';
 			break;
 		}
 	}

@@ -245,7 +245,7 @@ class Layout
 		}
 		else
 		{
-			$content = 'No content set.';
+			$content = '';	//'No content set.';
 		}
 		return $content;
 	}

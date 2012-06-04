@@ -1,8 +1,3 @@
-<p class="add-bottom hidden">
-	<a href="<?php echo site_url('admin/accounts/set') ?>" class="green button add icon" id="add_button"><span>Add new account</span></a>
-</p>
-
-
 <?php if ($accounts): ?>
 	
 	<table class="simple" id="accounts" width="100%">

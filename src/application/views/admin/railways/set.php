@@ -1,8 +1,8 @@
 <?php
 $errors = validation_errors();
-echo form_open('admin/railways/save');
+echo form_open('', array('id' => 'railways_set'));
 if (isset($railway)) echo form_hidden('r_id', $railway->r_id());
-if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</ul></div>';
+if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></div>';
 ?>
 
 
@@ -312,40 +312,9 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 
 */?>
 
-
-<br>
-
-
 <div class="actions" style="padding-left: 150px">
 	<?php
 	$text = (isset($railway)) ? 'Save' : 'Add';
 	?>
-	<input class="blue button" type="submit" name="submit" value="<?php echo $text ?>">
+	<button class="black button icon tick"><span><?php echo $text ?></span></button>
 </div>
-
-
-<script>
-/*jsq.add(function(){
-	//railways.init();
-	/*$("#lookup_postcode").click(function(event){
-		event.preventDefault();
-		$("div#map").html("");
-		ROTA.lookup_postcode($("input#postcode").val(), function(data){
-			if (data.status == "ok"){
-				$("input#locator").val(data.data.locator);
-				var coords = data.data.latlng;
-				coords = coords.split(",");
-				$("input[name=lat]").val(coords[0]);
-				$("input[name=lng]").val(coords[1]);
-				var mapdata = { coords: data.data.latlng, size: "460x200" };
-				ROTA.staticmap(mapdata, function(data){
-					$('<img>').appendTo("div#map").attr("src", data.src);
-					$("div#map").show();
-				});
-			} else {
-				alert("Error: " + data.msg);
-			}
-		});
-	})
-});*/
-</script>

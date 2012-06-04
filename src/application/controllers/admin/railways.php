@@ -66,6 +66,7 @@ class Railways extends AdminController
 		}
 
 		$this->layout->set_title('Railways');
+		$this->layout->set_view('links', 'admin/railways/index-links');
 	}
 	
 	
@@ -95,93 +96,82 @@ class Railways extends AdminController
 			$this->layout->set_title('Add a railway');
 		}
 		
-		//$this->layout->set_js('modules/admin_railways_addedit.js');
-	}
-	
-	
-	
-	
-	/**
-	 * Add new or update a railway
-	 */
-	function save()
-	{
-		$r_id = $this->input->post('r_id');
-		
-		$this->form_validation
-			->set_rules('r_name', 'Railway name', 'required|trim|max_length[100]')
-			->set_rules('r_url', 'Web address', 'trim|prep_url')
-			->set_rules('r_info_src', 'trim')
-			->set_rules('r_photo_url', 'Photo URL')
-			->set_rules('r_postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
-			->set_rules('r_locator', 'Locator square', 'strtoupper|trim|max_length[8]')
-			->set_rules('r_wab', 'WAB', 'strtoupper|trim');
-		
-		if ($this->form_validation->run() == FALSE)
+		if ($this->input->post())
 		{
-			return $this->set($r_id);
-		}
-		else
-		{
-			// OK!
+			$this->form_validation
+				->set_rules('r_name', 'Railway name', 'required|trim|max_length[100]')
+				->set_rules('r_url', 'Web address', 'trim|prep_url')
+				->set_rules('r_info_src', 'trim')
+				->set_rules('r_photo_url', 'Photo URL')
+				->set_rules('r_postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
+				->set_rules('r_locator', 'Locator square', 'strtoupper|trim|max_length[8]')
+				->set_rules('r_wab', 'WAB', 'strtoupper|trim');
 			
-			$data['r_name'] = $this->input->post('r_name');
-			$data['r_url'] = $this->input->post('r_url');
-			$data['r_info_src'] = strip_tags($this->input->post('r_info_src'));
-			$data['r_info_html'] = nl2br($data['r_info_src']);
-			$data['r_postcode'] = $this->input->post('r_postcode');
-			$data['r_wab'] = $this->input->post('r_wab');
-			$data['r_locator'] = $this->input->post('r_locator');
-			$data['r_lat'] = $this->input->post('r_lat');
-			$data['r_lng'] = $this->input->post('r_lng');
-			$data['r_slug'] = ($r_id)
-				? $this->slug->create_uri($data, $r_id)
-				: $this->slug->create_uri($data);
-			
-			$photo_url = $this->input->post('r_photo_url');
-			
-			if ($photo_url)
+			if ($this->form_validation->run())
 			{
-				$photo = $this->railways_model->get_remote_image($photo_url);
-				if ($photo == FALSE)
+				// OK!
+				$data = array(
+					'r_name' => $this->input->post('r_name'),
+					'r_url' => $this->input->post('r_url'),
+					'r_info_src' => strip_tags($this->input->post('r_info_src')),
+					'r_info_html' => nl2br($data['r_info_src']),
+					'r_postcode' => $this->input->post('r_postcode'),
+					'r_wab' => $this->input->post('r_wab'),
+					'r_locator' => $this->input->post('r_locator'),
+					'r_lat' => $this->input->post('r_lat'),
+					'r_lng' => $this->input->post('r_lng'),
+					'r_slug' => ($r_id) ? $this->slug->create_uri($data, $r_id)	: $this->slug->create_uri($data),
+				);
+				
+				$photo_url = $this->input->post('r_photo_url');
+				
+				if ($photo_url)
 				{
-					$this->session->set_flashdata('warning', 
-						'<strong>Problem:</strong> ' . $this->railways_model->lasterr);
+					$photo = $this->railways_model->get_remote_image($photo_url);
+					if ($photo === FALSE)
+					{
+						$this->session->set_flashdata('warning', 
+							'<strong>Problem:</strong> ' . $this->railways_model->lasterr);
+					}
+					else
+					{
+						$sizes = array('580', '220x180');
+						$this->load->library('Photo');
+						$this->photo->resize(array(
+							'file' => $photo,
+							'sizes' => $sizes
+						));
+						die();
+					}
+				}
+				
+				if ($r_id)
+				{
+					// Update
+					$op = $this->railways_model->update($r_id, $data);
+					$ok = "<strong>{$data['r_name']}</strong> has been updated successfully.";
+					$err = 'An error occurred while updating the railway.';
 				}
 				else
 				{
-					$sizes = array('580', '220x180');
-					$this->load->library('Photo');
-					$this->photo->resize(array(
-						'file' => $photo,
-						'sizes' => $sizes
-					));
-					die();
+					// Add
+					$op = $this->railways_model->insert($data);
+					$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
+					$err = 'An error occurred while adding the railway';
 				}
-			}
+				
+				$msg_type = ($op !== FALSE) ? 'success' : 'error';
+				$msg = ($op !== FALSE) ? $ok : $err;
+				$this->session->set_flashdata($msg_type, $msg);
+				
+				redirect('admin/railways');
+				
+			}		// End validation == OK
 			
-			if ($r_id)
-			{
-				// Update
-				$op = $this->railways_model->update($r_id, $data);
-				$ok = "<strong>{$data['r_name']}</strong> has been updated successfully.";
-				$err = 'An error occurred while updating the railway.';
-			}
-			else
-			{
-				// Add
-				$op = $this->railways_model->insert($data);
-				$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
-				$err = 'An error occurred while adding the railway';
-			}
-			
-			$msg_type = ($op !== FALSE) ? 'success' : 'error';
-			$msg = ($op !== FALSE) ? $ok : $err;
-			$this->session->set_flashdata($msg_type, $msg);
-			
-			redirect('admin/railways');
-			
-		}
+		}	// End input POST
+		
+		//$this->layout->set_js('modules/admin_railways_addedit.js');
+		
 	}
 	
 	

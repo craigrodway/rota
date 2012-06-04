@@ -12,14 +12,17 @@
  */
 
 /* Table of Content
-==================================================
+====================
 	#Site Styles
 	#Page Styles
 	#Media Queries
-	#Font-Face */
+	#Font-Face
+	
+	*/
+
 
 /* #Site Styles
-================================================== */
+==================== */
 
 html {
 	overflow-y: scroll;
@@ -27,18 +30,24 @@ html {
 
 body {
 	background: url(../img/global/page-bg.png) 0 0 #000;
-	padding: 40px 0;
+	padding: 0 0 40px 0;
 }
 
 .container.body {
 	background: #fff;
 	border: 10px solid #fff;
-	padding-top: 10px;
+	border-top-width: 0;
+	padding-top: 0px;
 }
 
 
+.sub_header hr {
+	margin-bottom: 20px;
+}
+
 
 .user-nav {
+	padding-top: 8px;
 	text-align: right;
 }
 .user-nav ul {
@@ -57,8 +66,8 @@ body {
 }
 
 .site-nav {
-	background: #26ADE4;
-	margin-top: 10px;
+	background: #2093C2;
+	margin-top: 0px;
 	margin-bottom: 20px;
 }
 	.site-nav ul {
@@ -79,21 +88,22 @@ body {
 		background: #1D82AB;
 	}
 
-.site-nav.admin {
+body.type_admin .site-nav {
 	background: #A6150A;
 }
-	.site-nav.admin ul li a {
+	body.type_admin .site-nav ul li a {
 		color: #fff;
 	}
-	.site-nav.admin ul li a:hover,
-	.site-nav.admin ul li a.active {
+	body.type_admin .site-nav ul li a:hover,
+	body.type_admin .site-nav ul li a.active {
 		background: #7D1008; 
 	}
 
 
 
 a {
-	color: #697429 ;
+	/*color: #697429;*/
+	color: #2093C2 ;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -105,13 +115,19 @@ a:hover {
 p.big { font-size: 135%; line-height: 165%; color: #666; }
 
 
+
+.logo h1 {
+	margin: 0;
+}
+
+
 .left { text-align: left; }
 .right { text-align: right; }
 
 
 
 .flash .alert {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 
@@ -128,7 +144,7 @@ p.big { font-size: 135%; line-height: 165%; color: #666; }
 div.footer {
 	margin-top: 20px;
 	margin-bottom: 20px;
-	background: #9DAD3D;
+	background: #2093C2 ;
 }
 
 	div.footer p {
@@ -144,10 +160,14 @@ div.footer {
 		padding-bottom: 1px;
 	}
 
+body.type_admin .footer {
+	background: #A6150A;
+}
 
 
 h2.page-title {
-	font-size: 160%;
+	font-size: 23px;
+	line-height: 23px;
 	font-weight: normal;
 	letter-spacing: -1px;
 	margin-bottom: 10px;
@@ -166,6 +186,7 @@ a.i {
 .i.news { background-image: url(../img/global/icons/pid/news.png); }
 .i.log { background-image: url(../img/global/icons/pid/log.png); }
 .i.register { background-image: url(../img/global/icons/pid/person.png); }
+.i.add { background-image: url(../img/global/icons/add.png); }
 
 .icon.add span { background-image: url(../img/global/icons/plus.png); }
 .icon.delete span { background-image: url(../img/global/icons/delete.png); }
@@ -176,6 +197,21 @@ a.i {
 
 
 
+ul.icon_links li a {
+	margin-right: 23px;
+}
+
+ul.icon_links.right {
+	float: right;
+}
+
+ul.icon_links.right li a {
+	margin-left: 23px;
+	margin-right: 0;
+}
+
+
+
 
 table.filter {
 	width: 100%;
@@ -183,8 +219,138 @@ table.filter {
 
 
 
+
+
+table.jCalendar {
+	border: 0px solid #fff;
+	background: #f5f5f5;
+	border-collapse: separate;
+	border-spacing: 4px;
+}
+table.jCalendar th {
+	background: #4DBCE9;
+	color: #fff;
+	font-weight: bold;
+	padding: 3px 5px;
+}
+
+table.jCalendar td {
+	background: #ddd;
+	color: #000;
+	padding: 2px 4px;
+	text-align: center;
+	border: 1px solid #ddd;
+}
+table.jCalendar td.other-month {
+	background: #fff;
+	color: #aaa;
+	border-color: #fff;
+}
+table.jCalendar td.today {
+	background: #D1E751;
+	color: #000;
+	border-color: #D1E751;
+}
+table.jCalendar td.selected {
+	background: #f66;
+	color: #fff;
+}
+table.jCalendar td.selected.dp-hover {
+	background: #f33;
+	color: #fff;
+}
+table.jCalendar td.dp-hover,
+table.jCalendar tr.activeWeekHover td {
+	background: #fff;
+	color: #000;
+}
+table.jCalendar tr.selectedWeek td {
+	background: #f66;
+	color: #fff;
+}
+table.jCalendar td.disabled, table.jCalendar td.disabled.dp-hover {
+	background: #bbb;
+	color: #888;
+	border-color: #bbb;
+}
+table.jCalendar td.unselectable,
+table.jCalendar td.unselectable:hover,
+table.jCalendar td.unselectable.dp-hover {
+	background: #fff;
+	color: #888;
+}
+div.dp-popup {
+	position: relative;
+	background: #f5f5f5;
+	font-size: 11px;
+	padding: 2px;
+	width: 185px;
+	line-height: 1.2em;
+}
+div#dp-popup {
+	position: absolute;
+	z-index: 199;
+}
+div.dp-popup h2 {
+	font-size: 12px;
+	text-align: center;
+	margin: 2px 0;
+	padding: 2px 0;
+	line-height: inherit;
+}
+a#dp-close {
+	font-size: 11px;
+	padding: 4px 0;
+	text-align: center;
+	display: block;
+}
+a#dp-close:hover {
+	text-decoration: underline;
+}
+div.dp-popup a {
+	color: #000;
+	text-decoration: none;
+	padding: 3px 2px 0;
+}
+div.dp-popup div.dp-nav-prev {
+	position: absolute;
+	top: 2px;
+	left: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-prev a {
+	float: left;
+}
+/* Opera needs the rules to be this specific otherwise it doesn't change the cursor back to pointer after you have disabled and re-enabled a link */
+div.dp-popup div.dp-nav-prev a, div.dp-popup div.dp-nav-next a {
+	cursor: pointer;
+}
+div.dp-popup div.dp-nav-prev a.disabled, div.dp-popup div.dp-nav-next a.disabled {
+	cursor: default;
+}
+div.dp-popup div.dp-nav-next {
+	position: absolute;
+	top: 2px;
+	right: 4px;
+	width: 100px;
+}
+div.dp-popup div.dp-nav-next a {
+	float: right;
+}
+div.dp-popup a.disabled {
+	cursor: default;
+	color: #aaa;
+}
+div.dp-popup td {
+	cursor: pointer;
+}
+div.dp-popup td.disabled {
+	cursor: default;
+}
+
+
 /* #Page Styles
-================================================== */
+==================== */
 
 
 
