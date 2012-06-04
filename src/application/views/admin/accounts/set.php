@@ -78,10 +78,10 @@ if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</u
 		<div class="inputs">
 			<label class="input"><?php echo form_radio(array(
 				'name' => 'a_type',
-				'id' => 'a_type_user',
-				'value' => 'user',
-				'checked' => ($account->a_type('text') == 'user')
-			)); ?> User</label>
+				'id' => 'a_type_member',
+				'value' => 'member',
+				'checked' => ($account->a_type('text') == 'member')
+			)); ?> Member</label>
 			<div class="clear"></div>
 			<label class="input"><?php echo form_radio(array(
 				'name' => 'a_type',

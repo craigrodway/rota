@@ -80,7 +80,7 @@ class Account_presenter extends ROTA_Presenter
 			case 'html':
 				$label = ucfirst($type);
 				$types = array(
-					'user' => 'blue',
+					'member' => 'blue',
 					'admin' => 'red',
 				);
 				
@@ -91,14 +91,14 @@ class Account_presenter extends ROTA_Presenter
 			
 			case 'icon':
 				$types = array(
-					'user' => 'img/global/icons/pid/person.png',
+					'member' => 'img/global/icons/pid/person.png',
 					'admin' => 'img/global/icons/pid/admin.png',
 				);
 				
 				$img = element($type, $types, NULL);
 				
 				return ($img !== NULL)
-					? '<img src="' . $img . '" alt="Usertype: ' . $type . '">'
+					? '<img src="' . $img . '" alt="Account type: ' . $type . '">'
 					: '';
 			break;
 		}
