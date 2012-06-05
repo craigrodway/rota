@@ -1,6 +1,6 @@
 <?php
 $errors = validation_errors();
-echo form_open('admin/accounts/save');
+echo form_open('', array('id' => 'accounts_set'));
 if (isset($account)) echo form_hidden('a_id', $account->a_id());
 if ( ! empty($errors)) echo '<div class="alert-box error"><ul>' . $errors . '</ul></div>';
 ?>

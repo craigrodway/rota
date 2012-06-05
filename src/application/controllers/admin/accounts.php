@@ -85,87 +85,78 @@ class Accounts extends AdminController
 			$this->data['account'] = new Account_presenter();
 			$this->layout->set_title('Add a new account');
 		}
-	}
-	
-	
-	
-	
-	/**
-	 * Add new or update account
-	 */
-	function save()
-	{
-		$a_id = $this->input->post('a_id');
 		
-		// Determine which validation rules to set
-		if ($a_id)
+		if ($this->input->post())
 		{
-			// Got ID - updating.
-			$this->form_validation
-				->set_rules('a_email', 'Email address', 'required|trim|max_length[100]|valid_email')
-				->set_rules('a_password1', 'Password', 'trim')
-				->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
-				->set_rules('a_type', 'Account type', 'alpha')
-				->set_rules('a_enabled', 'Enabled', '');
-		}
-		else
-		{
-			// No ID - adding new account
-			$this->form_validation
-				->set_rules('a_email', 'Email address', 'required|trim|max_length[100]|valid_email|is_unique[accounts.a_email]')
-				->set_rules('a_password1', 'Password', 'trim|required|max_length[100]')
-				->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
-				->set_rules('a_type', 'Account type', 'alpha')
-				->set_rules('a_enabled', 'Enabled', '');
-		}
-		
-		if ($this->form_validation->run() == FALSE)
-		{
-			return $this->set($a_id);
-		}
-		else
-		{
-			// OK!
-			
-			$data['a_email'] = $this->input->post('a_email');
-			$data['a_type'] = $this->input->post('a_type');
-			$data['a_enabled'] = $this->input->post('a_enabled');
-			
-			// Set password if set
-			if ($this->input->post('a_password1'))
-			{
-				$data['a_password'] = $this->auth->hash_password($this->input->post('a_password1'));
-			}
-			
-			// If adding new account and verification email is requested - set flag for model to do email
-			if ( ! $a_id && $this->input->post('a_verify') == 'send')
-			{
-				$data['send_email'] = TRUE;
-			}
-			
-			// Do required action depending on whether an account is being created or updated
+			// Determine which validation rules to set
 			if ($a_id)
 			{
-				// Update
-				$op = $this->accounts_model->edit($a_id, $data);
-				$ok = "Account <strong>{$data['a_email']}</strong> has been updated.";
-				$err = 'An error occurred while updating the account.';
+				// Got ID - updating.
+				$this->form_validation
+					->set_rules('a_email', 'Email address', 'required|trim|max_length[100]|valid_email')
+					->set_rules('a_password1', 'Password', 'trim')
+					->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
+					->set_rules('a_type', 'Account type', 'alpha')
+					->set_rules('a_enabled', 'Enabled', '');
 			}
 			else
 			{
-				// Add
-				$op = $this->accounts_model->add($data);
-				$ok = "Account has been created for <strong>{$data['a_email']}</strong>.";
-				$err = 'An error occurred while adding the account.';
+				// No ID - adding new account
+				$this->form_validation
+					->set_rules('a_email', 'Email address', 'required|trim|max_length[100]|valid_email|is_unique[accounts.a_email]')
+					->set_rules('a_password1', 'Password', 'trim|required|max_length[100]')
+					->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
+					->set_rules('a_type', 'Account type', 'alpha')
+					->set_rules('a_enabled', 'Enabled', '');
 			}
 			
-			$msg_type = ($op) ? 'success' : 'error';
-			$msg = ($op) ? $ok : $err;
-			$this->session->set_flashdata($msg_type, $msg);
+			if ($this->form_validation->run())
+			{
+				// OK!
+				$data = array(
+					'a_email' => $this->input->post('a_email'),
+					'a_type' => $this->input->post('a_type'),
+					'a_enabled' => $this->input->post('a_enabled'),
+				);
+				
+				// Set password if supplied
+				if ($this->input->post('a_password1'))
+				{
+					$data['a_password'] = $this->auth->hash_password($this->input->post('a_password1'));
+				}
+				
+				// If adding new account and verification email is requested - set flag for model to do email
+				if ( ! $a_id && $this->input->post('a_verify') == 'send')
+				{
+					$data['send_email'] = TRUE;
+				}
+				
+				// Do required action depending on whether an account is being created or updated
+				if ($a_id)
+				{
+					// Update
+					$op = $this->accounts_model->update($a_id, $data);
+					$ok = "Account <strong>{$data['a_email']}</strong> has been updated.";
+					$err = 'An error occurred while updating the account.';
+				}
+				else
+				{
+					// Add
+					$op = $this->accounts_model->insert($data);
+					$ok = "Account has been created for <strong>{$data['a_email']}</strong>.";
+					$err = 'An error occurred while adding the account.';
+				}
+				
+				$msg_type = ($op) ? 'success' : 'error';
+				$msg = ($op) ? $ok : $err;
+				$this->session->set_flashdata($msg_type, $msg);
+				
+				redirect('admin/accounts');
+				
+			}		// end of validation == TRUE
 			
-			redirect('admin/accounts');
-			
-		}
+		}		// end of POST check
+		
 	}
 	
 	
@@ -176,15 +167,15 @@ class Accounts extends AdminController
 	 */
 	function delete()
 	{
-		$id = $this->input->post('a_id');
+		$this->view = FALSE;
+		
+		$id = $this->input->post('id');
 		if ( ! $id)
 		{
 			redirect('admin/accounts');
 		}
 		
-		$delete = $this->accounts_model->delete($id);
-		
-		if ($delete == TRUE)
+		if ($this->accounts_model->delete($id))
 		{
 			$msg_type = 'success';
 			$msg = 'The account has been deleted successfully.';

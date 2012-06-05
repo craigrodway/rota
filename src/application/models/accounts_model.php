@@ -16,7 +16,8 @@ class Accounts_model extends MY_Model
 {
 	
 	
-	public $lasterr;
+	protected $_table = 'accounts';
+	protected $_primary = 'a_id';
 	
 	
 	function __construct()
