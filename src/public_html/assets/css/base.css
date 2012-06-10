@@ -518,6 +518,7 @@ div.boxfill-heading {
 /* #Forms
 ==================== */
 
+	
 	form {
 		margin-bottom: 20px; }
 	fieldset {
@@ -537,10 +538,7 @@ div.boxfill-heading {
 		font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: #333;
 		margin: 0;
-		/* width: 100%;
-		margin-right: 20px;
-		max-width: 210px; */
-		display: block;
+		/*display: block;*/
 		margin-bottom: 20px;
 		background: #fff; }
 	select {
@@ -562,7 +560,8 @@ div.boxfill-heading {
 		font-weight: bold;
 		font-size: 13px;  }
 	select {
-		width: 220px; }
+		/*width: 220px; */
+		min-width: 120px; }
 	input[type="checkbox"] {
 		display: inline; }
 	label span,
@@ -572,52 +571,53 @@ div.boxfill-heading {
 		color: #444; }
 	
 	
-	/* Inline form elements. Just wrap in <div class="inline"> */
-	form div.inline {
-		margin-bottom: 20px;
-		display: block;
+	table.form {
+		width: 100%;
+		border-collapse: 0;
+		border-spacing: 0;
 	}
-	
-	form div.inline label {
-		width: 120px;
-		display: block;
-		float: left;
-		text-align: right;
-		margin-right: 20px;
-		padding-top: 5px;
-	}
-	
-	form div.inline input,
-	form div.inline select,
-	form div.inline textarea {
-		display: inline-block;
+	table.form tr td {
+		padding: 10px 5px;
 		margin: 0;
+		vertical-align: middle;
+		border-bottom: 0px solid #eee;
 	}
 	
-	form div.inline div.more {
-		margin-left: 140px;
-	}
-	
-	form div.inline div.inputs {
-		display: block;
-		padding-left: 140px;
-	}
-	
-	form div.inline label { 
-		text-align: left;
-	}
-	
-	form div.inline div.inputs label {
-		width: 240px;
-		display: block;
-		float: left;
-		text-align: left;
-	}
-	
-	form label.input {
+	table.form tr td.input label {
 		font-weight: normal;
 	}
 
+	table.form tr.nob td {
+		border-width: 0;
+	}
+
+	table.form tr.vat td {
+		vertical-align: top;
+	}
+
+	table.form tr td.title {
+		width: 180px;
+		text-align: right;
+		padding-right: 20px;
+	}
+
+	table.form span.hint {
+		clear: left;
+		text-align: right;
+		font-size: 85%;
+		color: #999;
+		/* background: #fdd; */
+	}
+
+	table.form td.input input,
+	table.form td.input select,
+	table.form td.input textarea {
+		margin-bottom: 0;
+	}
+	
+	div.form-actions {
+		 margin-left: 220px;
+	}
 
 
 

@@ -24,7 +24,7 @@ class Railway_presenter extends ROTA_Presenter
 		
 		if ( ! $lat && ! $lng)
 		{
-			return '';
+			return FALSE;
 		}
 		else
 		{

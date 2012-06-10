@@ -105,6 +105,12 @@ class Account_presenter extends ROTA_Presenter
 	}
 	
 	
+	public function operators_icon()
+	{
+		return icon_link('silk/club', 'admin/operators/?o_a_id=' . $this->a_id(), 'View operator profiles');
+	}
+	
+	
 	public function edit_icon()
 	{
 		return icon_link('silk/edit', 'admin/accounts/set/' . $this->a_id(), 'Edit');

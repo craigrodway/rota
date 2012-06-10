@@ -234,7 +234,7 @@ table.jCalendar th {
 	padding: 3px 5px;
 }
 
-table.jCalendar td {
+table.jCalendar tr td {
 	background: #ddd;
 	color: #000;
 	padding: 2px 4px;

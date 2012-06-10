@@ -29,7 +29,9 @@
 				<td><?php echo $a->a_created('d M Y, H:i') ?></td>
 				<td><?php echo $a->a_lastlogin('d M Y, H:i', 'Never') ?></td>
 				
-				<td class="icon"><?php echo $a->profiles_icon() ?></td>
+				<td class="icon">
+					<?php if ($a->a_operator_count() > 0) echo $a->operators_icon() ?>
+				</td>
 				<td class="icon"><?php echo $a->edit_icon() ?></td>
 				<td class="icon"><?php echo $a->delete_icon() ?></td>
 			</tr>

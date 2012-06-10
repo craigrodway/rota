@@ -36,7 +36,7 @@ class Accounts_model extends MY_Model
 	{
 		$sql = "SELECT
 					accounts.*,
-					(SELECT COUNT(o_a_id) FROM operators WHERE o_a_id = a_id) AS a_operators_count
+					(SELECT COUNT(o_a_id) FROM operators WHERE o_a_id = a_id) AS a_operator_count
 				FROM accounts" . 
 				$this->filter_sql() .
 				$this->order_sql() .
@@ -77,7 +77,7 @@ class Accounts_model extends MY_Model
 		
 		$sql = "SELECT
 					accounts.*,
-					COUNT((SELECT operators.o_id FROM operators WHERE o_a_id = a_id)) AS a_operators_count
+					(SELECT COUNT(o_a_id) FROM operators WHERE o_a_id = a_id) AS a_operator_count
 				FROM accounts
 				WHERE 1 = 1
 				$sql_where
