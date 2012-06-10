@@ -27,7 +27,16 @@ class Events_model extends MY_Model
 	
 	
 	
-	public function set_active()
+	
+	public function get_current()
+	{
+		$this->limit(1);
+		return $this->get_by('e_current', 'Y');
+	}
+	
+	
+	
+	public function set_current()
 	{
 		$sql = 'UPDATE events SET e_current = "N"';
 		$this->db->query($sql);

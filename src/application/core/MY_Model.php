@@ -119,6 +119,15 @@ class MY_Model extends CI_Model
 		}
 		return $this;
 	}
+	
+	
+	
+	
+	public function clear_limit()
+	{
+		$this->_limit = '';
+		$this->_offset = '';
+	}
 
 
 
@@ -221,7 +230,7 @@ class MY_Model extends CI_Model
 	 * @param string $key		DB column name to select on
 	 * @param string $value		Value the column should be to match
 	 */
-	public function get_by($key, $value, $limit = '')
+	public function get_by($key, $value)
 	{
 		$sql = 'SELECT * 
 				FROM `' . $this->_table . '` 
@@ -230,13 +239,13 @@ class MY_Model extends CI_Model
 				$this->limit_sql();
 		
 		$query = $this->db->query($sql, array($value));
-		if ($query->num_rows() > 0)
+		if ($this->_limit === 1)
 		{
-			return $query->result_array();
+			return $query->row_array();
 		}
 		else
 		{
-			return $query->row_array();
+			return $query->result_array();
 		}
 	}
 

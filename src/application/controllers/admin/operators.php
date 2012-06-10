@@ -94,7 +94,7 @@ class Operators extends AdminController
 		{
 			$this->form_validation
 				->set_rules('o_id', 'Operator ID', '')
-				->set_rules('o_a_id', 'Account ID', 'required')
+				->set_rules('o_a_id', 'Account ID', '')
 				->set_rules('o_type', 'Type', 'required|alpha')
 				->set_rules('o_name', 'Name', 'required')
 				->set_rules('o_callsign', 'Callsign', 'required|min_length[4]|max_length[10]|strtoupper')

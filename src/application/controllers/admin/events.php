@@ -109,7 +109,7 @@ class Events extends AdminController
 				$msg = ($op !== FALSE) ? $ok : $err;
 				$this->session->set_flashdata($msg_type, $msg);
 				
-				$this->events_model->set_active();
+				$this->events_model->set_current();
 				
 				redirect('admin/events');
 			}

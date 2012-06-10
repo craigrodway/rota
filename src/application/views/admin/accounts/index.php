@@ -11,7 +11,7 @@
 				<th>Created</th>
 				<th>Last login</th>
 				
-				<th class="op">&nbsp;</th>
+				<th class="op" style="width: 40px">&nbsp;</th>
 				<th class="op">&nbsp;</th>
 				<th class="op">&nbsp;</th>
 			</tr>
@@ -30,7 +30,13 @@
 				<td><?php echo $a->a_lastlogin('d M Y, H:i', 'Never') ?></td>
 				
 				<td class="icon">
-					<?php if ($a->a_operator_count() > 0) echo $a->operators_icon() ?>
+					<?php
+					if ($a->a_operator_count() > 0)
+					{
+						echo $a->operators_icon();
+						echo ' (' . $a->a_operator_count() . ')';
+					}
+					?>
 				</td>
 				<td class="icon"><?php echo $a->edit_icon() ?></td>
 				<td class="icon"><?php echo $a->delete_icon() ?></td>
