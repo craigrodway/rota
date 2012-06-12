@@ -33,6 +33,8 @@ class Stations extends AdminController
 	 */
 	function index($year = NULL)
 	{
+		$this->data['filter'] = $this->input->get();
+		
 		if ( ! $year)
 		{
 			$event = $this->events_model->get_current();
@@ -45,7 +47,12 @@ class Stations extends AdminController
 		
 		$this->data['year'] = $year;
 		
-		$this->stations_model->set_filter(array('s_e_year' => (int) $year));
+		if ( ! element('s_e_year', $this->data['filter']))
+		{
+			$this->data['filter']['s_e_year'] = $year;
+		}
+		
+		$this->stations_model->set_filter($this->data['filter']);
 		$this->stations_model->order_by('s_date_registered', 'desc');
 		$this->data['stations'] = $this->stations_model->get_all();
 		
@@ -54,17 +61,9 @@ class Stations extends AdminController
 			$station = new Station_presenter($station);
 		}
 		
-		$this->events_model->order_by('e_year', 'DESC');
-		$this->events_model->clear_limit();
-		$this->data['events'] = $this->events_model->get_all();
-		
-		foreach ($this->data['events'] as &$event)
-		{
-			$event = new Event_presenter($event);
-		}
+		$this->data['events'] = $this->events_model->dropdown('e_year');
 		
 		$this->layout->set_title('Stations');
-		$this->layout->set_view('links', 'admin/stations/index-links');
 	}
 	
 	
@@ -136,8 +135,9 @@ class Stations extends AdminController
 			
 		}
 		
-		$this->data['operators'] = $this->operators_model->dropdown('o_callsign');
-		$this->data['events'] = $this->events_model->get_dropdown('e_year');		
+		$this->data['operators'] = $this->operators_model->dropdown('o_callsign_o_name');
+		$this->data['events'] = $this->events_model->dropdown('e_year');		
+		$this->data['railways'] = $this->railways_model->dropdown('r_name');
 	}
 	
 	

@@ -440,14 +440,20 @@ class MY_Model extends CI_Model
 		
 		// Build SQL string to select the key and value
 		
-		$sql = " SELECT `$key`, `$value` FROM `{$this->_table}` ";
-		
-		if ($enabled != '')
+		if (method_exists($this, 'dropdown_query'))
 		{
-			$sql .= " AND `$enabled` = 1 ";
+			$sql = $this->dropdown_query();
 		}
-		
-		$sql .= " ORDER BY `$value` ASC ";
+		else
+		{
+			$sql = " SELECT `$key`, `$value` FROM `{$this->_table}` ";
+			if ($enabled != '')
+			{
+				$sql .= " AND `$enabled` = 1 ";
+			}
+			
+			$sql .= " ORDER BY `$value` ASC ";
+		}
 		
 		$result = $this->db->query($sql)->result_array();
 		

@@ -4,8 +4,14 @@
 	
 		<table class="filter">
 			<tr>
+				<td><label for="o_callsign">Callsign</label></td>
+				<td><label for="o_name">Name</label></td>
+				<td><label for="name">Account email</label></td>
+				<td><label for="name">Operator type</label></td>
+				<td></td>
+			</tr>
+			<tr>
 				<td>
-					<label for="o_callsign">Callsign</label>
 					<?php echo form_input(array(
 						'name' => 'o_callsign',
 						'value' => element('o_callsign', $filter),
@@ -13,21 +19,18 @@
 					)) ?>
 				</td>
 				<td>
-					<label for="o_name">Name</label>
 					<?php echo form_input(array(
 						'name' => 'o_name',
 						'value' => element('o_name', $filter),
 					)); ?>
 				</td>
 				<td>
-					<label for="name">Account email</label>
 					<?php echo form_input(array(
 						'name' => 'a_email',
 						'value' => element('a_email', $filter),
 					)) ?>
 				</td>
 				<td>
-					<label for="name">Operator type</label>
 					<?php
 					$types = array(
 						'' => '(Any)',
@@ -39,11 +42,11 @@
 				</td>
 				
 				<td>
-					<label>&nbsp;</label>
 					<input type="submit" class="black button" value="Filter">
 				</td>
 				
 			</tr>
+			
 		</table>
 	
 	</div>

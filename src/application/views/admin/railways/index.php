@@ -4,29 +4,31 @@
 	
 		<table class="filter">
 			<tr>
+				<td><label for="name">Name</label></td>
+				<td><label for="name">WAB</label></td>
+				<td><label for="name">Locator</label></td>
+				<td><label for="name">Post Code</label></td>
+				<td></td>
+			</tr>
 				<td>
-					<label for="name">Name</label>
 					<?php echo form_input(array(
 						'name' => 'r_name',
 						'value' => element('r_name', $filter),
 					)) ?>
 				</td>
 				<td>
-					<label for="name">WAB</label>
 					<?php echo form_input(array(
 						'name' => 'r_wab',
 						'value' => element('r_wab', $filter),
 					)); ?>
 				</td>
 				<td>
-					<label for="name">Locator</label>
 					<?php echo form_input(array(
 						'name' => 'r_locator',
 						'value' => element('r_locator', $filter),
 					)) ?>
 				</td>
 				<td>
-					<label for="name">Post Code</label>
 					<?php echo form_input(array(
 						'name' => 'r_postcode',
 						'value' => element('r_postcode', $filter),
@@ -34,7 +36,6 @@
 				</td>
 				
 				<td>
-					<label>&nbsp;</label>
 					<input type="submit" class="black button" value="Filter">
 				</td>
 				

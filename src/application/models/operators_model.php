@@ -55,6 +55,24 @@ class Operators_model extends MY_Model
 	
 	
 	
+	/**
+	 * Custom query for dropdowns to get the name and the callsign
+	 */
+	public function dropdown_query()
+	{
+		$sql = 'SELECT
+					o_id,
+					CONCAT(o_callsign, " (", o_name, ")") AS o_callsign_o_name
+				FROM
+					operators
+				ORDER BY
+					o_callsign ASC';
+		return $sql;
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/models/operators_model.php */

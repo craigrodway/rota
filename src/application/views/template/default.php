@@ -73,28 +73,6 @@ if ($this->session->userdata('type') == 'admin')
 	
 	<div class="container body">
 		
-		<div class="sixteen columns site-nav">
-			
-			<ul class="horizontal">
-				<?php foreach ($nav['primary'] as $item): ?>
-				<?php
-				$cls = '';
-				$uri = $this->uri->uri_string();
-				$uri = (empty($uri)) ? 'home' : $uri;
-				if (stristr($uri, $item[0]))
-				{
-					$cls = 'class="active""';
-				}
-				?>
-				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
-				<?php endforeach; ?>
-			</ul>
-			
-			<div class="clear"></div>
-			
-		</div> <!-- / .site-nav -->
-		
-		<div class="clear"></div>
 		
 		
 		<div class="six columns logo">
@@ -129,7 +107,30 @@ if ($this->session->userdata('type') == 'admin')
 		</div>
 		
 		
-		<div class="sixteen columns sub_header"><hr></div>
+		
+		<div class="sixteen columns site-nav">
+			
+			<ul class="horizontal">
+				<?php foreach ($nav['primary'] as $item): ?>
+				<?php
+				$cls = '';
+				$uri = $this->uri->uri_string();
+				$uri = (empty($uri)) ? 'home' : $uri;
+				if (stristr($uri, $item[0]))
+				{
+					$cls = 'class="active""';
+				}
+				?>
+				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+				<?php endforeach; ?>
+			</ul>
+			
+			<div class="clear"></div>
+			
+		</div> <!-- / .site-nav -->
+		
+		
+		<div class="clear"></div>
 		
 		
 		<?php
@@ -156,7 +157,7 @@ if ($this->session->userdata('type') == 'admin')
 			<div class="six columns">
 				<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
 			</div>
-			<div class="ten columns" style="padding-top: 7px">
+			<div class="ten columns">
 				<?php echo $this->layout->get('links') ?>
 			</div>
 		</div>

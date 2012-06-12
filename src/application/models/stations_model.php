@@ -21,6 +21,7 @@ class Stations_model extends MY_Model
 	
 	protected $_filter_types = array(
 		'where' => array('s_e_year'),
+		'like' => array('o_callsign', 'o_name', 'r_name'),
 	);
 	
 	
@@ -42,6 +43,21 @@ class Stations_model extends MY_Model
 				. $this->order_sql()
 				. $this->limit_sql();
 		return $this->db->query($sql)->result_array();
+	}
+	
+	
+	
+	
+	public function get($s_id)
+	{
+		$sql = 'SELECT *
+				FROM stations
+				LEFT JOIN events ON s_e_year = e_year
+				LEFT JOIN operators ON s_o_id = o_id
+				LEFT JOIN railways ON s_r_id = r_id
+				WHERE s_id = ?
+				LIMIT 1';
+		return $this->db->query($sql, array($s_id))->row_array();
 	}
 	
 	
