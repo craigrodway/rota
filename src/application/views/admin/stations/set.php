@@ -95,3 +95,6 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 	<?php $text = (isset($station)) ? 'Save' : 'Add'; ?>
 	<button class="black button icon tick"><span><?php echo $text ?></span></button>
 </div>
+
+
+</form>

@@ -89,7 +89,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					'name' => 'o_url',
 					'id' => 'o_url',
 					'size' => 50,
-					'value' => @set_value('o_url', $operator->r_url())
+					'value' => @set_value('o_url', $operator->o_url())
 				)); ?>
 			</td>
 		</tr>

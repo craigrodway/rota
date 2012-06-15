@@ -81,9 +81,9 @@
 		<tr>
 			<td><?php echo $s->s_e_year() ?></td>
 			<td class="icon"><?php echo $s->operator->o_type('icon') ?></td>
-			<td><?php echo $s->operator->o_callsign() ?></td>
-			<td><?php echo $s->operator->o_name() ?></td>
-			<td><?php echo $s->railway->r_name() ?></td>
+			<td><?php echo anchor('admin/operators/set/' . $s->s_o_id(), $s->operator->o_callsign()) ?></td>
+			<td><?php echo anchor('admin/operators/set/' . $s->s_o_id(), $s->operator->o_name()) ?></td>
+			<td><?php echo anchor('admin/railways/set/' . $s->s_r_id(), $s->railway->r_name()) ?></td>
 			<td class="icon title"><?php echo $s->edit_icon() ?></td>
 			<td class="icon"><?php echo $s->delete_icon() ?></td>
 		</tr>

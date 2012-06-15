@@ -35,6 +35,7 @@ class Operators extends AdminController
 	function index($page = 0)
 	{
 		$filter = $this->input->get(NULL, TRUE);
+		$this->operators_model->set_filter($filter);
 		
 		$this->load->library('pagination');
 		
@@ -42,11 +43,12 @@ class Operators extends AdminController
 		$config['total_rows'] = $this->operators_model->count_all();
 		$config['per_page'] = 15; 
 		$config['uri_segment'] = 4;
+		$config['use_page_numbers'] = TRUE;
+		$config['suffix'] = '?' . @http_build_query($filter);
 		$this->pagination->initialize($config);
 		
-		$this->operators_model->set_filter($filter)
-							 ->order_by('o_callsign', 'asc')
-							 ->limit(15, $page);
+		$this->operators_model->order_by('o_callsign', 'asc')
+							  ->limit(15, $page);
 		
 		$this->data['operators'] = $this->operators_model->get_all();
 		$this->data['filter'] =& $filter;
@@ -170,6 +172,84 @@ class Operators extends AdminController
 		$this->session->set_flashdata($msg_type, $msg);
 		
 		redirect('admin/operators');
+	}
+	
+	
+	
+	
+	/**
+	 * Merge two or more operator accounts into one
+	 */ 
+	public function merge()
+	{
+		$this->view = FALSE;
+		
+		$operator_ids = $this->input->post('o_ids');
+		
+		if (empty($operator_ids))
+		{
+			$this->session->set_flashdata('warning', 'No operators selected for merging.');
+			redirect('admin/operators');
+		}
+		
+		// Loop through all operators and get info
+		foreach ($operator_ids as $o_id)
+		{
+			echo "Operator ID $o_id...\n";
+			$operator = $this->operators_model->get($o_id);
+			// Loop through the attributes and add to array of all operator info
+			foreach ($operator as $key => $value)
+			{
+				if ( ! empty($value))
+				{
+					$operators[$key][] = $value;
+				}
+				$operators[$key] = array_unique($operators[$key]);
+			}
+		}
+		
+		foreach ($operators as $key => $values)
+		{
+			$new_value = implode(', ', $values);
+			if ($new_value !== ', ')
+			{
+				$new_operator[$key] = $new_value;
+			}
+			else
+			{
+				$new_operator[$key] = $new_value = NULL;
+			}
+		}
+		
+		// Unset or set specific values
+		unset($new_operator['o_id']);
+		$new_operator['o_a_id'] = $operators['o_a_id'][0];
+		$new_operator['o_type'] = $operators['o_type'][0];
+		
+		// Add new operator to database
+		$new_o_id = $this->operators_model->insert($new_operator);
+		
+		// Update the stations listing to reference the new operator ID
+		$o_ids = implode(',', $operator_ids);
+		$sql = 'UPDATE stations SET s_o_id = ? WHERE s_o_id IN(' . $o_ids . ')';
+		$update_stations = $this->db->query($sql, array($new_o_id));
+		
+		// Remove old operators
+		$sql = 'DELETE FROM operators WHERE o_id IN (' . $o_ids . ')';
+		$delete_old = $this->db->query($sql);
+		
+		if ($new_o_id !== FALSE && $update_stations && $delete_old)
+		{
+			$this->session->set_flashdata('success', 'Operators have been merged!');
+			$url = 'admin/operators/set/' . $new_o_id;
+		}
+		else
+		{
+			$this->session->set_flashdata('error', 'Failed to merge operators.');
+			$url = 'admin/operators';
+		}
+		
+		redirect($url);
 	}
 	
 	

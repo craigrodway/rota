@@ -61,7 +61,7 @@ class Event_presenter extends ROTA_Presenter
 	
 	public function view_stations_icon()
 	{
-		return icon_link('silk/transmit', 'admin/stations/?e_year=' . $this->e_year(), 'View stations');
+		return icon_link('silk/transmit', 'admin/stations/?s_e_year=' . $this->e_year(), 'View stations');
 	}
 	
 	

@@ -31,23 +31,21 @@ class Stations extends AdminController
 	/**
 	 * Stations listing
 	 */
-	function index($year = NULL)
+	function index()
 	{
 		$this->data['filter'] = $this->input->get();
 		
-		if ( ! $year)
+
+		$event = $this->events_model->get_current();
+		if ( ! $event)
 		{
-			$event = $this->events_model->get_current();
-			if ( ! $event)
-			{
-				show_error('Could not find current event.');
-			}
-			$year = element('e_year', $event);
+			show_error('Could not find current event.');
 		}
+		$year = element('e_year', $event);
 		
 		$this->data['year'] = $year;
 		
-		if ( ! element('s_e_year', $this->data['filter']))
+		if ( ! array_key_exists('s_e_year', $_GET) && empty($_GET))
 		{
 			$this->data['filter']['s_e_year'] = $year;
 		}
@@ -86,51 +84,39 @@ class Stations extends AdminController
 		}
 		else
 		{
-			// Adding new station registration
-			$this->data['station'] = new Station_presenter();
-			$this->layout->set_title('Add a new station registration');
+			$this->session->set_flashdata('warning', 'Cannot add new station from here.');
+			redirect('admin/stations');
 		}
 		
 		if ($this->input->post())
 		{
 			$this->form_validation
-				->set_rules('e_year', 'Year', 'required|trim|exact_length[4]|is_natural_no_zero')
-				->set_rules('e_start_date', 'Start date', 'required');
+				->set_rules('s_e_year', 'Year', 'required|trim|exact_length[4]|is_natural_no_zero')
+				->set_rules('s_o_id', 'Operator', 'required|integer|is_natural_no_zero')
+				->set_rules('s_r_id', 'Railway', 'required|integer|is_natural_no_zero');
 			
 			if ($this->form_validation->run())
 			{
-				$start_date = $this->input->post('e_start_date');
-				$end_date = date('Y-m-d', strtotime('+1 day', strtotime($start_date)));
-				
 				$data = array(
-					'e_year' => $this->input->post('e_year'),
-					'e_start_date' => $start_date,
-					'e_end_date' => $end_date,
-					'e_current' => 'N',
+					's_e_year' => $this->input->post('s_e_year'),
+					's_o_id' => $this->input->post('s_o_id'),
+					's_r_id' => $this->input->post('s_r_id'),
+					's_num_contacts' => $this->input->post('s_num_contacts'),
 				);
 				
-				if ($e_year)
+				// Update
+				$op = $this->stations_model->update($s_id, $data);
+				
+				if ($op)
 				{
-					// Update
-					$op = $this->events_model->update($e_year, $data);
-					$ok = "The <strong>{$e_year}</strong> event has been updated successfully.";
-					$err = 'An error occurred while updating the event.';
+					$this->session->set_flashdata('success', 'The station entry has been updated.');
 				}
 				else
 				{
-					// Add
-					$op = $this->events_model->insert($data);
-					$ok = "The <strong>{$e_year}</strong> event has been added successfully.";
-					$err = 'An error occurred while adding the event.';
+					$this->session->set_flashdata('error', 'An error occurred while updating the event.');
 				}
 				
-				$msg_type = ($op !== FALSE) ? 'success' : 'error';
-				$msg = ($op !== FALSE) ? $ok : $err;
-				$this->session->set_flashdata($msg_type, $msg);
-				
-				$this->events_model->set_active();
-				
-				redirect('admin/events');
+				redirect('admin/stations/set/' . $s_id);
 			}
 			
 		}

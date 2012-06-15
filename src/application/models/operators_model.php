@@ -35,6 +35,23 @@ class Operators_model extends MY_Model
 	
 	
 	/**
+	 * Count all rows in table without any filtering at all
+	 */
+	 public function count_all()
+	 {
+		$sql = 'SELECT COUNT(*) AS c
+				FROM `' . $this->_table . '`
+				LEFT JOIN accounts ON o_a_id = a_id
+				WHERE 1=1'
+				. $this->filter_sql();
+		
+		$row = $this->db->query($sql)->row_array();
+		return $row['c'];
+	 }
+	
+	
+	
+	/**
 	 * Get all rows from the table
 	 *
 	 * @return array 		DB result array

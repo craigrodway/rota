@@ -20,7 +20,7 @@ class Stations_model extends MY_Model
 	protected $_primary = 's_id';
 	
 	protected $_filter_types = array(
-		'where' => array('s_e_year'),
+		'where' => array('s_e_year', 's_o_id', 's_r_id'),
 		'like' => array('o_callsign', 'o_name', 'r_name'),
 	);
 	

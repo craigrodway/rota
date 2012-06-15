@@ -43,18 +43,20 @@ class Railways extends AdminController
 	function index($page = 0)
 	{
 		$filter = $this->input->get(NULL, TRUE);
+		$this->railways_model->set_filter($filter);
 		
 		$this->load->library('pagination');
 		
 		$config['base_url'] = site_url('admin/railways/index/');
-		//$config['suffix'] = '?' . @http_build_query($filter);
 		$config['total_rows'] = $this->railways_model->count_all();
 		$config['per_page'] = 15; 
 		$config['uri_segment'] = 4;
+		$config['use_page_numbers'] = TRUE;
+		$config['suffix'] = '?' . @http_build_query($filter);
 		$this->pagination->initialize($config);
 		
-		$this->railways_model->set_filter($filter)
-							 ->order_by('r_name', 'asc')
+		
+		$this->railways_model->order_by('r_name', 'asc')
 							 ->limit(15, $page);
 
 		$this->data['railways'] = $this->railways_model->get_all();

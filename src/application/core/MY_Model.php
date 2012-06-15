@@ -322,7 +322,13 @@ class MY_Model extends CI_Model
 	 */
 	 public function count_all()
 	 {
-		return $this->db->count_all($this->_table);
+		$sql = 'SELECT COUNT(*) AS c
+				FROM `' . $this->_table . '`
+				WHERE 1=1'
+				. $this->filter_sql();
+		
+		$row = $this->db->query($sql)->row_array();
+		return $row['c'];
 	 }
 
 

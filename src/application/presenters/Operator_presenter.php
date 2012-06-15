@@ -54,6 +54,12 @@ class Operator_presenter extends ROTA_Presenter
 	}
 	
 	
+	public function stations_icon()
+	{
+		return icon_link('silk/transmit', 'admin/stations/?s_o_id=' . $this->o_id(), 'View stations');
+	}
+	
+	
 	public function account_icon()
 	{
 		return icon_link('silk/account', 'admin/accounts/set/' . $this->o_a_id(), 'Edit account');

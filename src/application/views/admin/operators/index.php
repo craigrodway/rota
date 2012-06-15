@@ -55,14 +55,18 @@
 
 <?php if ($operators): ?>
 	
+	<?php echo form_open('admin/operators/merge') ?>
+	
 	<table class="simple" id="operators" width="100%">
 		
 		<thead>
 			<tr>
+				<th style="width: 20px">Merge</th>
 				<th style="width: 20px">Type</th>
 				<th style="width: 100px">Callsign</th>
 				<th>Name</th>
 				<th>Account email</th>
+				<th class="op">&nbsp;</th>
 				<th class="op">&nbsp;</th>
 				<th class="op">&nbsp;</th>
 				<th class="op">&nbsp;</th>
@@ -74,10 +78,19 @@
 		<?php foreach ($operators as $o): ?>
 			
 			<tr>
+				<td style="text-align: center">
+					<?php echo form_input(array(
+						'type' => 'checkbox',
+						'name' => 'o_ids[]',
+						'id' => 'o_ids',
+						'value' => $o->o_id(),
+					)); ?>
+				</td>
 				<td><?php echo $o->o_type('icon') ?></td>
 				<td><?php echo $o->o_callsign() ?></td>
-				<td class="title"><?php echo anchor('admin/operators/set/' . $o->o_id(), $o->o_name()) ?></td>
+				<td class="title"><?php echo anchor('admin/operators/set/' . $o->o_id(), $o->get('o_name', '<em>(Unknown)</em>')) ?></td>
 				<td><?php echo $o->a_email() ?>
+				<td class="icon"><?php echo $o->stations_icon() ?></td>
 				<td class="icon"><?php echo $o->account_icon() ?></td>
 				<td class="icon"><?php echo $o->edit_icon() ?></td>
 				<td class="icon"><?php echo $o->delete_icon() ?></td>
@@ -89,10 +102,17 @@
 		
 	</table>
 	
-	<div class="add-bottom">
-		<?php echo $this->pagination->create_links(); ?>
+	<div class="row">
+		<div class="eight columns alpha">
+			<input class="black button" type="submit" value="Merge">
+		</div>
+		<div class="eight colums omega">
+			<?php echo $this->pagination->create_links(); ?>
+		</div>
 		<div class="clear"></div>
 	</div>
+	
+	</form>
 	
 <?php else: ?>
 
