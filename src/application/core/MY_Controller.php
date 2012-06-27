@@ -47,7 +47,7 @@ class MY_Controller extends CI_Controller
 			: $this->menu_model->guest();
 		
 		// Admin user?
-		$this->data['nav']['primary'] = ($this->session->userdata('type') == 'admin') 
+		$this->data['nav']['primary'] = ($this->session->userdata('a_type') == 'admin') 
 			? $this->menu_model->admin()
 			: $this->menu_model->primary();
 		

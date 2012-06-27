@@ -17,7 +17,7 @@ class Operator_presenter extends ROTA_Presenter
 	}
 	
 	
-	public function o_type($format = 'icon')
+	public function o_type($format = 'icon', $img_tag = TRUE)
 	{
 		$type = element('o_type', $this->data);
 		switch ($format)
@@ -45,6 +45,11 @@ class Operator_presenter extends ROTA_Presenter
 				);
 				
 				$img = element($type, $types, NULL);
+				
+				if ($img_tag == FALSE && $img !== NULL)
+				{
+					return $img;
+				}
 				
 				return ($img !== NULL)
 					? '<img src="' . $img . '" alt="Operator type: ' . $type . '">'

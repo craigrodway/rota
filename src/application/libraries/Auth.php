@@ -29,7 +29,7 @@ class Auth
 	
 	public function logged_in()
 	{
-		return ($this->CI->session->userdata('account_id'));
+		return ($this->CI->session->userdata('a_id'));
 	}
 	
 	
@@ -58,7 +58,7 @@ class Auth
 		else
 		{
 			$ok_types = explode(',', $type);
-			if (in_array($this->CI->session->userdata('type'), $ok_types))
+			if (in_array($this->CI->session->userdata('a_type'), $ok_types))
 			{
 				$auth_ok = true;
 			}
@@ -137,12 +137,12 @@ class Auth
 	 */
 	public function logout()
 	{
-		$account_id = $this->CI->session->userdata('account_id');
+		$a_id = $this->CI->session->userdata('a_id');
 		
 		// Set session data to NULL (include all fields!)
-		$sessdata['account_id'] = null;
-		$sessdata['email'] = null;
-		$sessdata['type'] = null;
+		$sessdata['a_id'] = null;
+		$sessdata['a_email'] = null;
+		$sessdata['a_type'] = null;
 		
 		// Set empty session data
 		$this->CI->session->set_userdata($sessdata);
@@ -152,7 +152,7 @@ class Auth
 		$this->CI->session->sess_destroy();
 		
 		// Verify session has been destroyed by retrieving info that should have gone 
-		return (!$this->CI->session->userdata('account_id'));
+		return (!$this->CI->session->userdata('a_id'));
 	}
 	
 	
@@ -193,9 +193,9 @@ class Auth
 			$this->CI->db->query($sql, array($timestamp, $account->a_id));
 			
 			// Gather info for session
-			$sessdata['account_id'] = $account->a_id;
-			$sessdata['email'] = $account->a_email;
-			$sessdata['type'] = $account->a_type;
+			$sessdata['a_id'] = $account->a_id;
+			$sessdata['a_email'] = $account->a_email;
+			$sessdata['a_type'] = $account->a_type;
 			
 			// Set session data
 			$this->CI->session->set_userdata($sessdata);

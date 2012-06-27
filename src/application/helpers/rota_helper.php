@@ -57,3 +57,17 @@ function parse_date($date)
 	
 	return $mysql_date;
 }
+
+
+
+
+/**
+ * Selected tab class output
+ */
+function tab_selected($var, $current)
+{
+	if ($var === $current)
+	{
+		return ' class="selected" ';
+	}
+}

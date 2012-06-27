@@ -8,7 +8,7 @@ if ($this->layout->has('sidebar'))
 }
 
 $body_class = 'type_guest';
-if ($this->session->userdata('type') == 'admin')
+if ($this->session->userdata('a_type') == 'admin')
 {
 	$body_class = 'type_admin';
 }
@@ -99,7 +99,7 @@ if ($this->session->userdata('type') == 'admin')
 			
 			<div class="status">
 				<?php if ($this->auth->logged_in()): ?>
-				<em>Logged in as <strong><?php echo $this->session->userdata('email') ?></strong>.</em>
+				<em>Logged in as <strong><?php echo $this->session->userdata('a_email') ?></strong>.</em>
 				<?php else: ?>
 				<p></p>
 				<?php endif; ?>

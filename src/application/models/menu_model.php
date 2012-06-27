@@ -54,10 +54,23 @@ class Menu_model extends CI_Model
 	function loggedin()
 	{
 		$nav = array();
-		$nav[] = array('shack/news', 'Post news update', 'news');
-		$nav[] = array('shack/upload-log', 'Upload log', 'log');
+		$nav[] = array('shack/news/post', 'Post news update', 'news');
+		$nav[] = array('shack/account/upload-log', 'Upload log', 'log');
 		$nav[] = array('shack/account', 'My account', 'account');
 		$nav[] = array('account/logout', 'Log out', 'logout');
+		return $nav;
+	}
+	
+	
+	
+	
+	public function account()
+	{
+		$nav = array();
+		$nav[] = array('shack/account', 'Account details');
+		$nav[] = array('shack/operators', 'Radio operator profiles');
+		$nav[] = array('shack/stations', 'Event registrations');
+		$nav[] = array('shack/news', 'My news items');
 		return $nav;
 	}
 	
