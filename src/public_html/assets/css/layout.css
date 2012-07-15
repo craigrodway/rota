@@ -33,11 +33,12 @@ html {
 
 body {
 	background: #fff;	/*#f9f9fa;	/*url(../img/global/page-bg.png) 0 0 #000;*/
-	padding: 0 0 40px 0;
+	padding: 0;
 }
 
 .container.body {
 	padding-top: 20px;
+	margin-bottom: 20px;
 	background: #fff;
 	border: 0px solid #fff;
 	border-top-width: 0;
@@ -52,8 +53,11 @@ body {
 
 div.nav {
 	margin-top: 20px;
-	margin-bottom: 20px;
 	background: #2093C2;
+}
+
+div.subnav {
+	background: #1D82AB;
 }
 
 .user-nav {
@@ -75,11 +79,7 @@ div.nav {
 	padding-left: 23px;
 }
 
-.site-nav {
-	background: #2093C2;
-	/* margin-top: 20px;
-	margin-bottom: 20px; */
-}
+
 	.site-nav ul {
 		margin: 0;	/* 15px;*/
 	}
@@ -98,6 +98,15 @@ div.nav {
 		background: #1D82AB;
 	}
 
+/* Sub-navigation bar */
+div.subnav .site-nav ul li a:hover,
+div.subnav .site-nav ul li a.active {
+	background: #186E92;
+	color: #fff;
+} 
+
+
+
 body.type_admin .nav {
 	background: #A6150A;
 }
@@ -111,7 +120,6 @@ body.type_admin .site-nav {
 	body.type_admin .site-nav ul li a.active {
 		background: #7D1008; 
 	}
-
 
 
 a {
@@ -406,15 +414,16 @@ ul.railways {
 	}
 
 	ul.railways li h4 {
-		background: #F3E25E;
+		background: #D1E751;
 		color: #000;
 		padding: 10px 10px 5px 10px;
-		height: 64px;
+		height: 52px;
 		line-height: 125%;
+		font-size: 100%;
 	}
 
 	ul.railways li a:hover h4 {
-		background: #FAF1AF;
+		background: #DDED7D;
 	}
 
 

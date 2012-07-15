@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller
 	 *
 	 * If $view is FALSE, then don't.
 	 */
-	private function _load_view()
+	protected function _load_view()
 	{
 		// Back out if we've explicitly set the view to FALSE
 		if ($this->view === FALSE)
@@ -111,7 +111,7 @@ class MY_Controller extends CI_Controller
 		if (is_array($this->json))
 		{
 			$this->output->set_content_type('application/json');
-			$this->output->set_output(json_encode($this->json));
+			$this->output->set_output(json_encode($this->json, JSON_NUMERIC_CHECK));
 			return;
 		}
 		
@@ -124,7 +124,7 @@ class MY_Controller extends CI_Controller
 			}
 			else
 			{
-				$this->layout->set_content('content', '<div class="alert error" style="font-size: 12px"><strong>System error</strong> - required view file not found.</div>');
+				$this->layout->set_content('content', '<div class="alert error" style="font-size: 12px"><strong>System error</strong> - required view file not found (' . $view . ')</div>');
 			}
 		}
 		

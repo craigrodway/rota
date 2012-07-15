@@ -41,7 +41,20 @@ class Menu_model extends CI_Model
 		$nav[] = array('news', 'News');
 		$nav[] = array('contact', 'Contact');
 		$nav[] = array('stations', 'Stations');
-		$nav[] = array('railways', 'Railways');
+		$nav[] = array('railways/map', 'Railways');
+		return $nav;
+	}
+	
+	
+	
+	/**
+	 * Main navigation for guests
+	 */
+	function subnav_railways()
+	{
+		$nav = array();
+		$nav[] = array('railways/map', 'Map');
+		$nav[] = array('railways/list', 'List');
 		return $nav;
 	}
 	

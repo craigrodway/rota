@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+require(APPPATH . '/presenters/Railway_presenter.php');
+
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -124,6 +126,44 @@ class Ajax extends MY_Controller
 		}
 		
 		$this->json =& $json;
+	}
+	
+	
+	
+	/**
+	 * All railways with location data in GeoJSON format
+	 */
+	public function railways_geojson()
+	{
+		$geojson = array(
+			'type' => 'FeaturesCollection',
+			'features' => array(),
+		);
+		
+		$railways = presenters('Railway', $this->railways_model->get_all());
+		
+		foreach ($railways as &$r)
+		{
+			if ( ! $r->latlng()) continue;
+			
+			$feature = array(
+				'type' => 'Feature',
+				'id' => $r->r_id(),
+				'properties' => array(
+					'name' => $r->r_name(),
+					'amenity' => 'Railway',
+					'popupContent' => anchor('railways/' . $r->r_slug(), $r->r_name()),
+				),
+				'geometry' => array(
+					'type' => 'Point',
+					'coordinates' => array($r->r_lng(), $r->r_lat()),
+				)
+			);
+			
+			$geojson['features'][] = $feature;
+		}
+		
+		$this->json =& $geojson;
 	}
 	
 	

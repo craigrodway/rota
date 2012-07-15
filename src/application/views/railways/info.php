@@ -1,27 +1,27 @@
-<?php if ($railway): ?>
+<?php if (isset($railway)): ?>
 
 	<div class="one-third column alpha">
 		
 		<h3>Description</h3>
 		<div class="add-bottom">
-		<?php if ( ! empty($railway->r_info_html)): ?>
-			<?php echo $railway->r_info_html ?>
+		<?php if ($railway->r_info_html()): ?>
+			<?php echo $railway->r_info_html() ?>
 		<?php else: ?>
 			<?php if ($this->auth->logged_in()): ?>
-				<p>This railway doesn't have any information about it! Why not 
+				<p>This railway doesn&rsquo;t have any information about it! Why not 
 				be the first to add something?</p>
-				<a href="<?php echo site_url('railways/edit/' . $railway->r_slug) ?>" class="small btn">Add description</a>
+				<a href="<?php echo site_url('railways/edit/' . $railway->r_slug()) ?>" class="small black button">Add description</a>
 			<?php else: ?>
-				<p>This railway doesn't have any information about it! If you 
+				<p>This railway doesn&rsquo;t have any information about it! If you 
 				had an account, you could be the first to add something.</p>
-				<a href="<?php echo site_url('account/create') ?>" class="small btn">Create an account</a>
+				<a href="<?php echo site_url('account') ?>" class="small btn">Log in or Create an account</a>
 			<?php endif; ?>
 		<?php endif; ?>
 		</div>
 		
-		<p class="add-bottom"><?php echo anchor($railway->r_url, 'Visit website') ?></p>
-		<p class="add-bottom"><strong>WAB area:</strong> <br><?php echo $railway->r_wab ?></p>
-		<p class="add-bottom"><strong>Locator square:</strong> <br><?php echo $railway->r_locator ?></p>
+		<p class="add-bottom"><?php echo anchor($railway->r_url(), 'Visit website') ?></p>
+		<p class="add-bottom"><strong>WAB area:</strong> <br><?php echo $railway->r_wab() ?></p>
+		<p class="add-bottom"><strong>Locator square:</strong> <br><?php echo $railway->r_locator() ?></p>
 		
 	</div> <!-- / .span-one-third -->
 	
@@ -46,7 +46,7 @@
 			
 			<li id="railway-mapTab">
 				<div style="width: 100%; height: 452px; ">
-					<?php echo $map['html'] ?>
+					
 				</div>
 			</li>
 			
@@ -83,28 +83,19 @@
 	
 
 <script>
-jsq.add(function(){
-	// Tell the Google Map to refresh itself when tab is changed
-	$(".tabs").bind("change", function(e){
-		if ($(e.target).attr("href") == "#railway-map"){
-			var center = map.getCenter();
-			google.maps.event.trigger(map, 'resize');
-			map.setCenter(center);
-		}
-	})
-})
+
 </script>
 
 <?php else: ?>
 
 <div class="alert-message block-message error">
-	<p>Sorry! We couldn&apos;t find the railway requested. Please check the 
+	<p>Sorry! We couldn&rsquo;t find the railway requested. Please check the 
 	address and try again.</p><br>
 	<?php if ( ! empty($search)): ?>
 	<p>Do any of these sound like the one you&apos;re after?</p><br>
 	<ul>
 	<?php foreach ($search as $r): ?>
-		<li><?php echo anchor('railways/' . $r->slug, $r->name) ?></li>
+		<li><?php echo anchor('railways/' . $r->r_slug(), $r->r_name()) ?></li>
 	<?php endforeach; ?>
 	</ul>
 	<br>

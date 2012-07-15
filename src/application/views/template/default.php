@@ -30,6 +30,10 @@ if ($this->session->userdata('a_type') == 'admin')
 	
 	<?php echo $this->layout->get_css() ?>
 	
+	<!--[if lte IE 8]>
+	<link rel="stylesheet" href="vendor/leaflet/leaflet.ie.css" />
+	<![endif]-->
+	
 	<link rel="shortcut icon" href="img/global/favicon.ico">
 	<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="img/global/apple-touch-icon-72x72.png">
@@ -71,8 +75,7 @@ if ($this->session->userdata('a_type') == 'admin')
 <body class="<?php echo $body_class ?>">
 	
 	
-	<div class="container body">
-		
+	<div class="container body" id="header">
 		
 		
 		<div class="six columns logo">
@@ -125,8 +128,9 @@ if ($this->session->userdata('a_type') == 'admin')
 					<?php foreach ($nav['primary'] as $item): ?>
 					<?php
 					$cls = '';
+					$parts = explode('/', $item[0]);
 					$regex = str_replace('/', '\/', "{$item[0]}");
-					if (preg_match("/^$regex/", $uri))
+					if (preg_match("/^{$parts[0]}/", $uri))
 					{
 						$cls = 'class="active""';
 					}
@@ -146,6 +150,55 @@ if ($this->session->userdata('a_type') == 'admin')
 	</div>
 	
 	
+	
+	<?php if (isset($subnav)): ?>
+	
+	<div class="subnav">
+		<div class="container">
+			
+			<div class="sixteen columns site-nav">
+				
+				<ul class="horizontal">
+					<?php
+					$uri = $this->uri->uri_string();
+					$uri = (empty($uri)) ? 'home' : $uri;
+					?>
+					<?php foreach ($subnav as $item): ?>
+					<?php
+					$cls = '';
+					$regex = str_replace('/', '\/', "{$item[0]}");
+					if (preg_match("/^$regex/", $uri))
+					{
+						$cls = 'class="active""';
+					}
+					?>
+					<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+					<?php endforeach; ?>
+				</ul>
+				
+				<div class="clear"></div>
+				
+			</div> <!-- / .site-nav -->
+			
+			<div class="clear"></div>
+			
+		</div>
+	</div>
+	
+	<?php endif; ?>
+	
+	
+	
+	
+	<?php if ($this->layout->has('content_full')): ?>
+	
+	
+	<div class="body">
+	<?php echo $this->layout->get('content_full') ?>
+	</div>
+	
+	
+	<?php else: ?>
 	
 	
 	<div class="container body">	
@@ -214,6 +267,9 @@ if ($this->session->userdata('a_type') == 'admin')
 		</div> <!-- / .footer -->
 		
 	</div> <!-- / .container.body -->
+	
+	
+	<?php endif; ?>
 	
 	
 	

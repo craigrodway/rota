@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+require(APPPATH . '/presenters/Railway_presenter.php');
+
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -19,7 +21,7 @@ class Railways extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('Googlemaps');
+		$this->data['subnav'] = $this->menu_model->subnav_railways();
 	}
 	
 	
@@ -30,7 +32,7 @@ class Railways extends MY_Controller
 	 */
 	function index()
 	{
-		return $this->grid();
+		$this->map();
 	}
 	
 	
@@ -38,10 +40,8 @@ class Railways extends MY_Controller
 	
 	function grid()
 	{
-		
-		$data['tab'] = 'grid';
-		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
-		$this->layout->set_title('Railways');
+		$this->data['railways'] = presenters('Railway', $this->railways_model->get_all(NULL, NULL));
+		$this->layout->set_title('Railways list');
 	}
 	
 	
@@ -49,36 +49,10 @@ class Railways extends MY_Controller
 	
 	function map()
 	{
-		$data['tab'] = 'map';
-		$data['railways'] = $this->railways_model->get_all(NULL, NULL);
-		
-		// Do map
-		$this->load->library('googlemaps');
-		$mapconfig['zoom'] = 'auto';
-		$mapconfig['cluster'] = TRUE;
-		$mapconfig['center'] = 'United Kingdom';
-		$this->googlemaps->initialize($mapconfig);
-		
-		// Place all stations on the map
-		foreach ($data['railways'] as $r)
-		{
-			$latlng = "{$r->r_lat},{$r->r_lng}";
-			if (strlen($latlng) > 1 && ! preg_match('/0\.0/', $latlng))
-			{
-				$marker = array();
-				$marker['title'] = $r->r_name;
-				$marker['position'] = $latlng;
-				$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
-				// TODO: Use a view for the infowindow content (add desc + photo?)
-				$marker['infowindow_content'] = addslashes(anchor('railways/' . $r->r_slug, $r->r_name));
-				$this->googlemaps->add_marker($marker);
-			}
-		}
-		
-		$data['map'] = $this->googlemaps->create_map();
-		
+		$this->layout->set_view('content_full', 'railways/map');
+		$this->layout->set_css('../vendor/leaflet/leaflet');
+		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing'));
 		$this->layout->set_title('Railways map');
-		$this->layout->set_view('content', 'railways/index');
 	}
 	
 	
@@ -86,47 +60,48 @@ class Railways extends MY_Controller
 	
 	public function info($slug)
 	{
-		$data['railway'] = $this->railways_model->get_by_slug($slug);
+		// Set view file manually due to remapping
+		$this->layout->set_view('content', 'railways/info');
 		
-		if ($data['railway'])
+		// Attempt to find railway by the supplied URL slug
+		$railway = $this->railways_model->get_by_slug($slug);
+		
+		if ($railway)
 		{
-			$this->layout->set_title($data['railway']->r_name);
-			
-			$mapconfig['center'] = $data['railway']->r_latlng;
-			$mapconfig['zoom'] = '9';
-			$this->googlemaps->initialize($mapconfig);
-			
-			$marker = array();
-			$marker['title'] = $data['railway']->r_name;
-			$marker['position'] = $data['railway']->r_latlng;
-			$marker['icon'] = base_url('assets/img/markers/steamtrain.png');
-			$this->googlemaps->add_marker($marker);
-			
-			$data['map'] = $this->googlemaps->create_map();
+			// Found it. Load it.
+			$r = new Railway_presenter($railway);
+			$this->layout->set_title($r->r_name());
+			$this->data['railway'] = $r;
 		}
 		else
 		{
-			$this->layout->set_title($data['railway']->r_name);
-			$data['search'] = $this->railways_model->get_all(NULL, NULL, array('slug' => $slug));
+			// Not found. Load 'search' suggestion page
+			$this->layout->set_title('Railways');
+			$this->data['search'] = presenters('Railway', $this->railways_model->get_all(NULL, NULL, array('slug' => $slug)));
 		}
-		
-		$this->layout->set_view('content', 'railways/info');
 	}
 	
 	
 	
-	
-	public function _remap($method, $params = array())
+	/**
+	 * Remap the CI request, running the requested method and (auto-)loading the view
+	 */
+	public function _remap($method, $arguments)
 	{
-		// If requested method isn't any of these, look it up as a railway slug
-		if (in_array($method, array('index', 'grid', 'map')))
+		if (in_array($method, array('index', 'list', 'map')))
 		{
-			$this->$method();
+			// Requested method exists in the class - run it
+			if ($method == 'list') $method = 'grid';
+			call_user_func_array(array($this, $method), array_slice($this->uri->rsegments, 2));
 		}
 		else
 		{
 			$this->info($method);
 		}
+		
+		// The class function has ran, done its stuff and set $this->data vars...
+		// ... now auto-load the view.
+		$this->_load_view();
 	}
 	
 	
