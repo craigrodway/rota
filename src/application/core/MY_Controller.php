@@ -110,7 +110,7 @@ class MY_Controller extends CI_Controller
 		// If the JSON data is set, respond with JSON data instead of whole page
 		if (is_array($this->json))
 		{
-			$this->output->set_content_type('text/json');
+			$this->output->set_content_type('application/json');
 			$this->output->set_output(json_encode($this->json));
 			return;
 		}
@@ -118,7 +118,14 @@ class MY_Controller extends CI_Controller
 		if ( ! ($this->layout->has_content('content') OR $this->layout->has_view('content')))
 		{
 			$view = $this->router->directory . $this->router->class . '/' . $this->router->method;
-			$this->layout->set_view('content', $view);
+			if (file_exists(APPPATH . "views/$view.php"))
+			{
+				$this->layout->set_view('content', $view);
+			}
+			else
+			{
+				$this->layout->set_content('content', '<div class="alert error" style="font-size: 12px"><strong>System error</strong> - required view file not found.</div>');
+			}
 		}
 		
 		// Load the variables from $this->data so they can be accessed in the layout view
@@ -139,7 +146,30 @@ class AdminController extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
+		// Hard auth check for admin access
 		$this->auth->check('admin');
+	}
+	
+}
+
+
+
+
+class ShackController extends MY_Controller
+{
+	
+	function __construct()
+	{
+		parent::__construct();
+		// If not logged in, redirect to login/account creation with a nice message.
+		// Also store URI to redirect to
+		//if ( ! $this->auth->check('member', TRUE))
+		if ( ! $this->auth->logged_in())
+		{
+			$this->session->set_flashdata('warning', 'You need to log in with an account to do that.');
+			$this->session->set_userdata('uri', $this->uri->uri_string());
+			redirect('account');
+		}
 	}
 	
 }

@@ -26,6 +26,13 @@ class Account extends MY_Controller
 	
 	
 	
+	public function index()
+	{
+		//$this->layout->set_title('Log In or');
+	}
+	
+	
+	
 	function login()
 	{
 		if ($this->input->post('email'))

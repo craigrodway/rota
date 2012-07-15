@@ -10,7 +10,6 @@ jsq.add(function() {
 			$(this).addClass("selected");
 			$(location + "Tab").closest(".htabs-content").children("li").hide();
 			$(location + "Tab").show();
-			console.log(location + "Tab");
 		}
 	});
 	

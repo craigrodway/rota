@@ -9,6 +9,9 @@
 
 /*
  * http://www.colourlovers.com/palette/15/tech_light
+ *
+ * Blue
+ * 2093C2
  */
 
 /* Table of Content
@@ -46,6 +49,13 @@ body {
 }
 
 
+
+div.nav {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background: #2093C2;
+}
+
 .user-nav {
 	padding-top: 8px;
 	text-align: right;
@@ -67,11 +77,11 @@ body {
 
 .site-nav {
 	background: #2093C2;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	/* margin-top: 20px;
+	margin-bottom: 20px; */
 }
 	.site-nav ul {
-		margin: 0 15px;
+		margin: 0;	/* 15px;*/
 	}
 
 	.site-nav ul li a {
@@ -88,6 +98,9 @@ body {
 		background: #1D82AB;
 	}
 
+body.type_admin .nav {
+	background: #A6150A;
+}
 body.type_admin .site-nav {
 	background: #A6150A;
 }
@@ -403,6 +416,109 @@ ul.railways {
 	ul.railways li a:hover h4 {
 		background: #FAF1AF;
 	}
+
+
+/* Shack - Stations
+==================== */
+
+div.row.station {
+	margin-bottom: 20px;
+}
+div.row.station.heading {
+	border-top: 1px solid #ddd;
+	padding-top: 20px;
+}
+
+	div.row.station .station-year h3 {
+		margin: 0;
+		padding: 0;
+		line-height: normal;
+		font-size: 120%;
+		color: #2093C2;
+	}
+	
+	div.row.station .station-operator .callsign,
+	div.row.station .station-operator .name {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	
+	div.row.station .station-operator .callsign {
+		font-size: 110%;
+		font-weight: bold;
+		margin-right: 10px;
+		color: #aec81c;
+	}
+	
+	div.row.station .station-operator .name {
+		color: #666;
+		font-size: 85%;
+		font-weight: bold;
+	}
+	
+	div.row.station .station-railway .railway {
+		margin-top: 5px;
+		display: block;
+	}
+	
+	div.row.station .ops {
+		text-align: right;
+	}
+		div.row.station .ops a {
+			margin-left: 8px;
+		}
+
+
+
+
+/* Autocomplete
+========== */
+
+
+.autocomplete-w1 { position:absolute; top:0px; left:0px; margin:8px 0 0 6px; /* IE6 fix: */ _background:none; _margin:0; }
+.autocomplete { border:1px solid #999; background:#FFF; cursor:default; text-align:left; max-height:350px; overflow:auto; margin:-6px 6px 6px -6px; /* IE6 specific: */ _height:350px;  _margin:0; _overflow-x:hidden; }
+.autocomplete .selected { background:#F0F0F0; }
+.autocomplete div { padding:2px 5px; white-space:nowrap; }
+.autocomplete strong { font-weight:normal; color:#3399FF; }
+
+
+/* autocomplete */
+/*
+input.autocomplete-loading
+{
+	background-image:url(autocomplete.gif);
+	background-position: center right;
+	background-repeat:no-repeat;
+}
+ul.autocomplete 
+{
+	position: absolute;
+	overflow: hidden;
+	background-color: #fff;
+	border: 1px solid ButtonShadow;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	color: #000;
+	display:none;
+	z-index:1000;
+}
+ul.autocomplete li 
+{
+  display: block; 
+  padding: 4px; 
+  overflow: hidden;
+  width: 100%;
+  cursor:pointer;
+  margin: 0;
+}
+
+ul.autocomplete li.selected 
+{
+  background-color: Highlight ; 
+  color: #fff;
+}
+*/
 
 
 

@@ -106,32 +106,49 @@ if ($this->session->userdata('a_type') == 'admin')
 			</div>
 		</div>
 		
+	</div>
+	
+	
+	
+	
+	<div class="nav">
 		
-		
-		<div class="sixteen columns site-nav">
+		<div class="container">
 			
-			<ul class="horizontal">
-				<?php foreach ($nav['primary'] as $item): ?>
-				<?php
-				$cls = '';
-				$uri = $this->uri->uri_string();
-				$uri = (empty($uri)) ? 'home' : $uri;
-				if (stristr($uri, $item[0]))
-				{
-					$cls = 'class="active""';
-				}
-				?>
-				<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
-				<?php endforeach; ?>
-			</ul>
+			<div class="sixteen columns site-nav">
+				
+				<ul class="horizontal">
+					<?php
+					$uri = $this->uri->uri_string();
+					$uri = (empty($uri)) ? 'home' : $uri;
+					?>
+					<?php foreach ($nav['primary'] as $item): ?>
+					<?php
+					$cls = '';
+					$regex = str_replace('/', '\/', "{$item[0]}");
+					if (preg_match("/^$regex/", $uri))
+					{
+						$cls = 'class="active""';
+					}
+					?>
+					<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+					<?php endforeach; ?>
+				</ul>
+				
+				<div class="clear"></div>
+				
+			</div> <!-- / .site-nav -->
 			
 			<div class="clear"></div>
 			
-		</div> <!-- / .site-nav -->
+		</div>
 		
-		
-		<div class="clear"></div>
-		
+	</div>
+	
+	
+	
+	
+	<div class="container body">	
 		
 		<?php
 		$flashes = array('success', 'warning', 'error');
@@ -153,6 +170,7 @@ if ($this->session->userdata('a_type') == 'admin')
 		<?php endif; ?>
 		
 		
+		<?php if (strlen($this->layout->get_title()) > 0): ?>
 		<div class="row add-bottom">
 			<div class="six columns">
 				<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
@@ -161,8 +179,8 @@ if ($this->session->userdata('a_type') == 'admin')
 				<?php echo $this->layout->get('links') ?>
 			</div>
 		</div>
-		
 		<div class="clear"></div>
+		<?php endif; ?>
 		
 		<div class="<?php echo $left_classes ?>">
 			<?php echo $this->layout->get('content') ?>
@@ -170,6 +188,13 @@ if ($this->session->userdata('a_type') == 'admin')
 		
 		<?php if ($this->layout->has('sidebar')): ?>
 		<div class="<?php echo $right_classes ?>">
+			
+			<div style="margin-bottom: 20px">
+				<a href="<?php echo site_url('shack/stations/register') ?>">
+					<img src="img/global/register-station.png">
+				</a>
+			</div>
+			
 			<?php echo $this->layout->get('sidebar'); ?>
 		</div> <!-- / .sidebar -->
 		<?php endif; ?>

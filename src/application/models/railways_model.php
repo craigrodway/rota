@@ -48,6 +48,28 @@ class Railways_model extends MY_Model
 	
 	
 	/**
+	 * Railways associated with stations registered by the provided account ID
+	 *
+	 * @param int $a_id		Account ID
+	 * @return array
+	 */
+	function get_past($a_id)
+	{
+		$sql = 'SELECT DISTINCT railways.*
+				FROM railways
+				LEFT JOIN stations ON r_id = s_r_id
+				LEFT JOIN operators ON s_o_id = o_id
+				WHERE o_a_id = ? ' . 
+				$this->order_sql() .
+				$this->limit_sql();
+		
+		return $this->db->query($sql, array($a_id))->result_array();
+	}
+	
+	
+	
+	
+	/**
 	 * Get an image from remote server and save locally
 	 *
 	 * @param string $url		URL of picture to retrieve

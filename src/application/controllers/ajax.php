@@ -102,6 +102,31 @@ class Ajax extends MY_Controller
 	}
 	
 	
+	
+	
+	public function railways()
+	{
+		$q = $this->input->get('query');
+		$this->railways_model->set_filter(array('r_name' => $q));
+		$this->railways_model->order_by('r_name', 'asc');
+		$railways = $this->railways_model->get_all();
+		
+		$json = array(
+			'query' => $q,
+			'suggestions' => array(),
+			'data' => array()
+		);
+		
+		foreach ($railways as $r)
+		{
+			$json['suggestions'][] = $r['r_name'];
+			$json['data'][] = $r['r_id'];
+		}
+		
+		$this->json =& $json;
+	}
+	
+	
 }
 
 /* End of file home.php */

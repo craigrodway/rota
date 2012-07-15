@@ -20,7 +20,7 @@ class Stations_model extends MY_Model
 	protected $_primary = 's_id';
 	
 	protected $_filter_types = array(
-		'where' => array('s_e_year', 's_o_id', 's_r_id'),
+		'where' => array('s_e_year', 's_o_id', 's_r_id', 'o_a_id'),
 		'like' => array('o_callsign', 'o_name', 'r_name'),
 	);
 	
@@ -31,6 +31,11 @@ class Stations_model extends MY_Model
 	}
 	
 	
+	
+	
+	/**
+	 * Get all of the station registrations
+	 */
 	public function get_all()
 	{
 		$sql = 'SELECT *
@@ -42,22 +47,61 @@ class Stations_model extends MY_Model
 				. $this->filter_sql()
 				. $this->order_sql()
 				. $this->limit_sql();
+		
 		return $this->db->query($sql)->result_array();
 	}
 	
 	
 	
 	
+	/**
+	 * Get a single station registration by ID
+	 *
+	 * @param int $s_id		Station ID
+	 * @return array
+	 */
 	public function get($s_id)
 	{
 		$sql = 'SELECT *
-				FROM stations
+				FROM `' . $this->_table . '`
 				LEFT JOIN events ON s_e_year = e_year
 				LEFT JOIN operators ON s_o_id = o_id
 				LEFT JOIN railways ON s_r_id = r_id
 				WHERE s_id = ?
 				LIMIT 1';
+		
 		return $this->db->query($sql, array($s_id))->row_array();
+	}
+	
+	
+	
+	
+	/**
+	 * Get rows where the key matches value
+	 *
+	 * @param string $key		DB column name to select on
+	 * @param string $value		Value the column should be to match
+	 */
+	public function get_by($key, $value)
+	{
+		$sql = 'SELECT * 
+				FROM `' . $this->_table . '`
+				LEFT JOIN events ON s_e_year = e_year
+				LEFT JOIN operators ON s_o_id = o_id
+				LEFT JOIN railways ON s_r_id = r_id 
+				WHERE `' . $key .'` = ?' .
+				$this->order_sql() .
+				$this->limit_sql();
+		
+		$query = $this->db->query($sql, array($value));
+		if ($this->_limit === 1)
+		{
+			return $query->row_array();
+		}
+		else
+		{
+			return $query->result_array();
+		}
 	}
 	
 	

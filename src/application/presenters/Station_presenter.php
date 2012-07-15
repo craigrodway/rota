@@ -53,4 +53,23 @@ class Station_presenter extends ROTA_Presenter
 	}
 	
 	
+	public function shack_edit_icon()
+	{
+		return icon_link('silk/edit', 'shack/stations/register/' . $this->s_id(), 'Edit registration');
+	}
+	
+	
+	public function shack_delete_icon()
+	{
+		$attrs = array(
+			'data-id' => $this->s_id(),
+			'data-name' => $this->operator->o_callsign(),
+			'data-text' => 'Are you sure you want to remove this registration?',
+			'data-url' => site_url('shack/stations/deregister'),
+			'rel' => 'delete',
+		);
+		return icon_link('silk/delete', '#', 'De-register', $attrs);
+	}
+	
+	
 }

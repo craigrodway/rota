@@ -12,7 +12,7 @@ class ROTA_Presenter
 	public function __construct($data = array())
 	{
 		$this->data = $data;
-		$this->_CI =& get_instance();
+		//$this->_CI =& get_instance();
 	}
 	
 	

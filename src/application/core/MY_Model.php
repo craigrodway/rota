@@ -210,7 +210,7 @@ class MY_Model extends CI_Model
 	 * @param int $id		ID of row
 	 * @return array 		Result row
 	 */
-	public function get($id)
+	public function get($id = NULL)
 	{
 		$sql = 'SELECT *
 				FROM `' . $this->_table . '`

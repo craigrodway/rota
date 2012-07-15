@@ -71,3 +71,19 @@ function tab_selected($var, $current)
 		return ' class="selected" ';
 	}
 }
+
+
+
+
+/**
+ * Make presenter objects of the passed array
+ */
+function presenters($class, $data)
+{
+	$class_name = $class . '_presenter';
+	foreach ($data as &$item)
+	{
+		$item = new $class_name($item);
+	}
+	return $data;
+}

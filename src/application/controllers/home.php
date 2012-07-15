@@ -32,7 +32,7 @@ class Home extends MY_Controller
 	public function about()
 	{
 		$this->layout->set_title('About the event');
-		$this->layout->set_content('content', 'About the event');
+		$this->layout->set_content('sidebar', '');
 	}
 	
 	
@@ -41,7 +41,7 @@ class Home extends MY_Controller
 	public function contact()
 	{
 		$this->layout->set_title('Contact us');
-		$this->layout->set_content('content', 'Contact us about the event');
+		$this->layout->set_content('sidebar', '');
 	}
 	
 	

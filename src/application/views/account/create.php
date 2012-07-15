@@ -11,7 +11,7 @@ $errors = validation_errors();
 
 	<p>
 		<ul class="disc">
-			<li>Register your own or your club's station for the event</li>
+			<li>Register your own or your club&rsquo;s station for the event</li>
 			<li>Have your details saved for next time</li>
 			<li>Post ROTA-related news updates</li>
 			<li>Upload your QSO log</li>
@@ -21,10 +21,10 @@ $errors = validation_errors();
 
 	<p>We treat your information with greate care and promise never to pass on
 	your personal details to third parties. We may send you the odd email in 
-	relation to ROTA, but we won't spam you.</p>
+	relation to ROTA, but we won&rsquo;t spam you.</p>
 
-	<p>Just enter your email address in the box below, and we'll send you a 
-	message explaining what	to do next. Don't worry, it's quite straight-forward!</p>
+	<p>Just enter your email address in the box below, and we&rsquo;ll send you a 
+	message explaining what	to do next. Don&rsquo;t worry, it&rsquo;s quite straight-forward!</p>
 
 <?php else: ?>
 

@@ -80,9 +80,13 @@ class Layout
 	 */
 	public function get_title($type = 'page')
 	{
+		if (empty($this->title)) $this->title = '';
+		
 		if ($type == 'full')
 		{
-			return $this->title . ' - ' . $this->_CI->config->item('site_name');
+			$titles = array($this->title, $this->_CI->config->item('site_name'));
+			$titles = array_filter($titles, 'strlen');
+			return implode(' - ', $titles);
 		}
 		elseif ($type == 'page')
 		{
@@ -233,7 +237,7 @@ class Layout
 	 */
 	public function get($section, $data = array())
 	{
-		if ( ! empty($this->_content[$section]))
+		if (isset($this->_content[$section]))
 		{
 			// Have actual content - return this
 			$content = $this->_content[$section];
@@ -258,8 +262,8 @@ class Layout
 	 */
 	public function has($section)
 	{
-		$_content = ! empty($this->_content[$section]);
-		$_view = ! empty($this->_views[$section]);
+		$_content = isset($this->_content[$section]);
+		$_view = isset($this->_views[$section]);
 		return ( $_content OR $_view );
 	}
 	
@@ -267,7 +271,7 @@ class Layout
 	
 	public function has_view($section)
 	{
-		return ( ! empty($this->_views[$section]));
+		return (isset($this->_views[$section]));
 	}
 	
 	
@@ -275,7 +279,7 @@ class Layout
 	
 	public function has_content($section)
 	{
-		return ( ! empty($this->_content[$section]));
+		return (isset($this->_content[$section]));
 	}
 	
 	
