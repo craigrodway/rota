@@ -21,6 +21,7 @@ class Railways extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->data['nav_active'] = 'railways/map';
 		$this->data['subnav'] = $this->menu_model->subnav_railways();
 	}
 	

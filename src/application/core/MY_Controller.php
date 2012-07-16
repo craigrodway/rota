@@ -66,6 +66,9 @@ class MY_Controller extends CI_Controller
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+		
+		$this->data['nav_active'] = $this->uri->segment(1);
+		$this->data['subnav_active'] = $this->uri->segment(1) . '/' . $this->uri->segment(2);
 	}
 	
 	
@@ -148,6 +151,7 @@ class AdminController extends MY_Controller
 		parent::__construct();
 		// Hard auth check for admin access
 		$this->auth->check('admin');
+		$this->data['nav_active'] = 'admin/' . $this->uri->segment(2);
 	}
 	
 }

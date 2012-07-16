@@ -121,20 +121,8 @@ if ($this->session->userdata('a_type') == 'admin')
 			<div class="sixteen columns site-nav">
 				
 				<ul class="horizontal">
-					<?php
-					$uri = $this->uri->uri_string();
-					$uri = (empty($uri)) ? 'home' : $uri;
-					?>
 					<?php foreach ($nav['primary'] as $item): ?>
-					<?php
-					$cls = '';
-					$parts = explode('/', $item[0]);
-					$regex = str_replace('/', '\/', "{$item[0]}");
-					if (preg_match("/^{$parts[0]}/", $uri))
-					{
-						$cls = 'class="active""';
-					}
-					?>
+					<?php $cls = ($nav_active == $item[0]) ? 'class="active"' : ''; ?>
 					<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
 					<?php endforeach; ?>
 				</ul>
@@ -159,19 +147,8 @@ if ($this->session->userdata('a_type') == 'admin')
 			<div class="sixteen columns site-nav">
 				
 				<ul class="horizontal">
-					<?php
-					$uri = $this->uri->uri_string();
-					$uri = (empty($uri)) ? 'home' : $uri;
-					?>
 					<?php foreach ($subnav as $item): ?>
-					<?php
-					$cls = '';
-					$regex = str_replace('/', '\/', "{$item[0]}");
-					if (preg_match("/^$regex/", $uri))
-					{
-						$cls = 'class="active""';
-					}
-					?>
+					<?php $cls = ($subnav_active == $item[0]) ? 'class="active"' : ''; ?>
 					<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
 					<?php endforeach; ?>
 				</ul>
