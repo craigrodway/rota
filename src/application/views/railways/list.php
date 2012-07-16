@@ -38,10 +38,10 @@ jsq.add(function() {
 		$(this).parent("li").addClass("current").siblings().removeClass("current");
 		var letter = $(this).data("letter");
 		if ( ! letter) {
-			$("ul.railways-small > li").show();
+			$("ul.railways > li").show();
 		} else {			
-			$("ul.railways-small > li[class!='letter-" + letter + "']").hide();
-			$("ul.railways-small > li.letter-" + letter).show();
+			$("ul.railways > li[class!='letter-" + letter + "']").hide();
+			$("ul.railways > li.letter-" + letter).show();
 		}
 	});
 });
