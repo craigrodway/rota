@@ -37,8 +37,8 @@ body {
 }
 
 .container.body {
-	padding-top: 20px;
-	margin-bottom: 20px;
+	padding-top: 10px;
+	margin-bottom: 10px;
 	background: #fff;
 	border: 0px solid #fff;
 	border-top-width: 0;
@@ -52,7 +52,6 @@ body {
 
 
 div.nav {
-	margin-top: 20px;
 	background: #2093C2;
 }
 

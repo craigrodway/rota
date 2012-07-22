@@ -169,16 +169,16 @@ if ($this->session->userdata('a_type') == 'admin')
 	
 	<?php if ($this->layout->has('content_full')): ?>
 	
-	
 	<div class="body">
 	<?php echo $this->layout->get('content_full') ?>
 	</div>
 	
+	<?php endif; ?>
 	
-	<?php else: ?>
 	
+	<?php if ($this->layout->has('content')): ?>
 	
-	<div class="container body">	
+	<div class="container body">
 		
 		<?php
 		$flashes = array('success', 'warning', 'error');
@@ -202,10 +202,10 @@ if ($this->session->userdata('a_type') == 'admin')
 		
 		<?php if (strlen($this->layout->get_title()) > 0): ?>
 		<div class="row add-bottom">
-			<div class="six columns">
+			<div class="eight columns">
 				<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
 			</div>
-			<div class="ten columns">
+			<div class="eight columns">
 				<?php echo $this->layout->get('links') ?>
 			</div>
 		</div>
