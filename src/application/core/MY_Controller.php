@@ -18,6 +18,7 @@ class MY_Controller extends CI_Controller
 	protected $data;
 	protected $json;
 	protected $view = NULL;
+	protected $auto_view = TRUE;
 	
 	
 	function __construct()
@@ -118,16 +119,19 @@ class MY_Controller extends CI_Controller
 			return;
 		}
 		
-		if ( ! ($this->layout->has_content('content') OR $this->layout->has_view('content')))
+		if ($this->auto_view === TRUE)
 		{
-			$view = $this->router->directory . $this->router->class . '/' . $this->router->method;
-			if (file_exists(APPPATH . "views/$view.php"))
+			if ( ! ($this->layout->has_content('content') OR $this->layout->has_view('content')))
 			{
-				$this->layout->set_view('content', $view);
-			}
-			else
-			{
-				$this->layout->set_content('content', '<div class="alert error" style="font-size: 12px"><strong>System error</strong> - required view file not found (' . $view . ')</div>');
+				$view = $this->router->directory . $this->router->class . '/' . $this->router->method;
+				if (file_exists(APPPATH . "views/$view.php"))
+				{
+					$this->layout->set_view('content', $view);
+				}
+				else
+				{
+					$this->layout->set_content('content', '<div class="alert error" style="font-size: 12px"><strong>System error</strong> - required view file not found (' . $view . ')</div>');
+				}
 			}
 		}
 		

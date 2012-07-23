@@ -50,6 +50,7 @@ class Railways extends MY_Controller
 	
 	function map()
 	{
+		$this->auto_view = FALSE;
 		$this->layout->set_view('content_full', 'railways/map');
 		$this->layout->set_css('../vendor/leaflet/leaflet');
 		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing'));
