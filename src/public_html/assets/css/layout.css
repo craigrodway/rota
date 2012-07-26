@@ -38,6 +38,7 @@ body {
 
 .container.body {
 	padding-top: 10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 	background: #fff;
 	border: 0px solid #fff;
@@ -198,6 +199,7 @@ a.i {
 	background-position: 0 50%;
 	background-repeat: no-repeat;
 	padding-left: 20px;
+	display: inline-block;
 }
 
 .i.login { background-image: url(../img/global/icons/pid/login.png); }
@@ -477,6 +479,35 @@ div.row.station.heading {
 			margin-left: 8px;
 		}
 
+
+
+
+/* #News
+========== */
+
+.row.article {
+	border-top: 1px dotted #ddd;
+	padding-top: 10px;
+}
+
+	.row.article .article-meta {
+		font-size: 90%;
+	}
+	
+		.row.article .article-meta p {
+			border-bottom: 1px dotted #ddd;
+			margin: 0;
+			padding: 5px 0;
+		}
+		
+		.row.article .article-meta p a {
+			font-weight: normal;
+		}
+	
+	.row.article .article-content h3 {
+		margin: 0 0 10px 0;
+		line-height: inherit;
+	}
 
 
 

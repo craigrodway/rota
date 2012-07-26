@@ -14,6 +14,7 @@ class Station_presenter extends ROTA_Presenter
 	public $data = array();
 	public $event = array();
 	public $operator = array();
+	public $railway = array();
 	
 	
 	public function __construct($data = array())

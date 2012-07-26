@@ -66,4 +66,10 @@ class Railway_presenter extends ROTA_Presenter
 	}
 	
 	
+	public function public_url()
+	{
+		return site_url('railways/' . element('r_slug', $this->data));
+	}
+	
+	
 }
