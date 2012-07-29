@@ -86,9 +86,8 @@ class Railways extends MY_Controller
 		{
 			// Load map in full-width view if location present
 			$this->layout->set_view('content_full', 'railways/info/map');
+			$this->layout->set_view('links', 'railways/info/map_toggle');
 		}
-		
-		$this->layout->set_view('links', 'railways/info/map_toggle');
 		
 		$this->layout->set_css('../vendor/leaflet/leaflet');
 		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing'));

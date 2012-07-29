@@ -103,7 +103,7 @@ class News extends AdminController
 					'n_title' => element('n_title', $post),
 				);
 				
-				$data['n_slug'] = ($n_id) ? $this->slug->create_uri($data, $n_id)	: $this->slug->create_uri($data);
+				$data['n_slug'] = ($n_id) ? $this->slug->create_uri($data, $n_id) : $this->slug->create_uri($data);
 				
 				if ($n_id)
 				{

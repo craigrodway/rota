@@ -508,6 +508,10 @@ div.row.station.heading {
 		margin: 0 0 10px 0;
 		line-height: inherit;
 	}
+	
+	.row.article .article-image {
+		padding-top: 28px;
+	}
 
 
 

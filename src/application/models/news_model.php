@@ -20,7 +20,7 @@ class News_model extends MY_Model
 	protected $_primary = 'n_id';
 	
 	protected $_filter_types = array(
-		'where' => array('n_e_year'),
+		'where' => array('n_e_year', 'n_r_id', 'n_o_id'),
 		'like' => array('o_name', 'o_callsign', 'r_name', 'n_title'),
 	);
 	

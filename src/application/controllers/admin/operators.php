@@ -24,6 +24,14 @@ class Operators extends AdminController
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		$this->load->model('operators_model');
+		
+		$config = array(
+			'field' => 'o_slug',
+			'title' => 'o_name',
+			'table' => 'operators',
+			'id' => 'o_id',
+		);
+		$this->load->library('slug', $config);
 	}
 	
 	
@@ -114,6 +122,8 @@ class Operators extends AdminController
 					'o_url' => $this->input->post('o_url'),
 					'o_info_src' => $this->input->post('o_info_src'),
 				);
+				
+				$data['o_slug'] = ($o_id) ? $this->slug->create_uri($data, $o_id) : $this->slug->create_uri($data);
 				
 				// Do required action depending on whether an account is being created or updated
 				if ($o_id)

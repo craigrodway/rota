@@ -26,6 +26,14 @@ class Operators extends MY_Controller
 		
 		$this->data['sidebar_menu'] = $this->menu_model->account();
 		$this->layout->set_view('sidebar', 'shack/sidebar');
+		
+		$config = array(
+			'field' => 'o_slug',
+			'title' => 'o_name',
+			'table' => 'operators',
+			'id' => 'o_id',
+		);
+		$this->load->library('slug', $config);
 	}
 	
 	
@@ -143,6 +151,8 @@ class Operators extends MY_Controller
 							'o_url' => $op['o_url'],
 							'o_info_src' => $op['o_info_src'],
 						);
+						
+						$data['o_slug'] = ($id) ? $this->slug->create_uri($data, $id) : $this->slug->create_uri($data);
 						
 						$update = $this->operators_model->update($id, $data);
 						

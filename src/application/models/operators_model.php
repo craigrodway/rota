@@ -20,7 +20,7 @@ class Operators_model extends MY_Model
 	protected $_primary = 'o_id';
 	
 	protected $_filter_types = array(
-		'like' => array('o_name', 'o_callsign', 'a_email'),
+		'like' => array('o_name', 'o_callsign', 'a_email', 'o_slug'),
 		'where' => array('o_type', 'o_a_id'),
 	);
 	

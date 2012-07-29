@@ -167,6 +167,14 @@ class Stations extends AdminController
 	 */
 	public function parse()
 	{
+		$config = array(
+			'field' => 'o_slug',
+			'title' => 'o_name',
+			'table' => 'operators',
+			'id' => 'o_id',
+		);
+		$this->load->library('slug', $config);
+		
 		$this->view = FALSE;
 		
 		$sql = 'SELECT * 
@@ -256,6 +264,8 @@ class Stations extends AdminController
 				'o_url' => trim(element('url', $legacy)),
 			);
 			
+			$operator['o_slug'] = $this->slug->create_uri($operator);
+			
 			if ($this->db->insert('operators', $operator))
 			{
 				// Added operator OK! get ID
@@ -280,7 +290,7 @@ class Stations extends AdminController
 			$this->db->or_like('r_url', $legacy_railway_url);
 			$query = $this->db->get('railways');
 			
-			if ($query->num_rows() == 1)
+			if ($query->num_rows() === 1)
 			{
 				// Got railway
 				$railway = $query->row_array();
