@@ -120,9 +120,39 @@ class News extends AdminController
 					$data['n_datetime_posted'] = date('Y-m-d H:i:s');
 					
 					$op = $this->news_model->insert($data);
+					$n_id = $op;
 					$ok = "The news article has been created successfully.";
 					$err = 'An error occurred while adding the event.';
 				}
+				
+				// Try to handle the image upload
+				$config['upload_path'] = realpath(FCPATH . '../../storage/images');
+				$config['encrypt_name'] = TRUE;
+				$config['allowed_types'] = 'jpg';
+				$config['max_size']	= '3072';
+				$config['max_width']  = '3000';
+				$config['max_height']  = '2000';
+				
+				if (isset($_FILES['userfile']))
+				{
+					$this->load->library('upload', $config);
+					if ($this->upload->do_upload())
+					{
+						$this->load->library('photo');
+						$upload = $this->upload->data();
+						$extra = array('i_n_id' => $n_id);
+						$res = $this->photo->add_image($upload['file_name'], $extra);
+						if ( ! $res)
+						{
+							$this->session->set_flashdata('error', $this->photo->lasterr);
+						}
+					}
+					else
+					{
+						$this->session->set_flashdata('error', strip_tags($this->upload->display_errors()));
+					}
+				}
+				
 				
 				$msg_type = ($op !== FALSE) ? 'success' : 'error';
 				$msg = ($op !== FALSE) ? $ok : $err;

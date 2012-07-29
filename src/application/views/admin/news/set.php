@@ -1,6 +1,6 @@
 <?php
 $errors = validation_errors();
-echo form_open('', array('id' => 'news_set'));
+echo form_open_multipart('', array('id' => 'news_set'));
 if (isset($news)) echo form_hidden('n_id', $news->n_id());
 if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></div>';
 ?>
@@ -80,6 +80,15 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					'rows' => 20,
 					'value' => set_value('n_content', $news->n_content()),
 				)); ?>
+			</td>
+		</tr>
+		
+		<tr>
+			<td class="title">
+				<label>Image</label>
+			</td>
+			<td class="input">
+				<input type="file" name="userfile" size="20">
 			</td>
 		</tr>
 		
