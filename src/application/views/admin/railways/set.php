@@ -44,11 +44,11 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 				<label for="r_info_src" <?php if (form_error('r_info_src')) echo 'class="error"' ?>>Information</label>
 			</td>
 			<td class="input"><?php echo form_textarea(array(
-				'name' => 'r_info_src',
-				'id' => 'r_info_src',
+				'name' => 'r_info',
+				'id' => 'r_info',
 				'cols' => '50',
 				'rows' => '10',
-				'value' => set_value('r_info_src', $railway->r_info_src())
+				'value' => set_value('r_info', $railway->r_info())
 			)); ?></td>
 		</tr>	
 	
@@ -62,7 +62,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 	
 	<table class="form">
 		
-		<tr class="nob">
+		<tr class="vat nob">
 			<td class="title" <?php if (form_error('r_info_src')) echo 'class="error"' ?>>
 				<label for="r_photo">Photo</label>
 			</td>
@@ -78,6 +78,12 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					<br><br>
 					<input type="file" class="input-file" name="userfile" id="userfile">
 				</div>
+			</td>
+			
+			<td rowspan="2" style="width: 400px">
+				<?php foreach ($railway->images as $image): ?>
+					<img src="<?php echo $image->src('c100x100') ?>">
+				<?php endforeach; ?>
 			</td>
 		</tr>
 	

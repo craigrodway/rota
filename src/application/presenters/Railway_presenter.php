@@ -1,6 +1,7 @@
 <?php
 
 require_once(APPPATH . 'presenters/ROTA_Presenter.php');
+require_once(APPPATH . 'presenters/Image_presenter.php');
 
 class Railway_presenter extends ROTA_Presenter
 {
@@ -14,6 +15,16 @@ class Railway_presenter extends ROTA_Presenter
 	public function __construct($data = array())
 	{
 		parent::__construct($data);
+		
+		// Images array present? Make presenter objects
+		if (is_array(element('images', $data)))
+		{
+			$this->images = presenters('Image', element('images', $data));
+		}
+		else
+		{
+			$this->images = array();
+		}
 	}
 	
 	

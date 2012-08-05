@@ -21,6 +21,7 @@ class Railways extends AdminController
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('photo');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<li>', '</li>');
 		
@@ -54,7 +55,6 @@ class Railways extends AdminController
 		$config['use_page_numbers'] = TRUE;
 		$config['suffix'] = '?' . @http_build_query($filter);
 		$this->pagination->initialize($config);
-		
 		
 		$this->railways_model->order_by('r_name', 'asc')
 							 ->limit(15, $page);
@@ -103,7 +103,7 @@ class Railways extends AdminController
 			$this->form_validation
 				->set_rules('r_name', 'Railway name', 'required|trim|max_length[100]')
 				->set_rules('r_url', 'Web address', 'trim|prep_url')
-				->set_rules('r_info_src', 'trim')
+				->set_rules('r_info', 'trim')
 				->set_rules('r_photo_url', 'Photo URL')
 				->set_rules('r_postcode', 'Postcode', 'strtoupper|trim|max_length[8]')
 				->set_rules('r_locator', 'Locator square', 'strtoupper|trim|max_length[8]')
@@ -115,37 +115,15 @@ class Railways extends AdminController
 				$data = array(
 					'r_name' => $this->input->post('r_name'),
 					'r_url' => $this->input->post('r_url'),
-					'r_info_src' => strip_tags($this->input->post('r_info_src')),
-					'r_info_html' => nl2br($data['r_info_src']),
+					'r_info' => $this->input->post('r_info'),
 					'r_postcode' => $this->input->post('r_postcode'),
 					'r_wab' => $this->input->post('r_wab'),
 					'r_locator' => $this->input->post('r_locator'),
 					'r_lat' => $this->input->post('r_lat'),
 					'r_lng' => $this->input->post('r_lng'),
-					'r_slug' => ($r_id) ? $this->slug->create_uri($data, $r_id)	: $this->slug->create_uri($data),
 				);
 				
-				$photo_url = $this->input->post('r_photo_url');
-				
-				if ($photo_url)
-				{
-					$photo = $this->railways_model->get_remote_image($photo_url);
-					if ($photo === FALSE)
-					{
-						$this->session->set_flashdata('warning', 
-							'<strong>Problem:</strong> ' . $this->railways_model->lasterr);
-					}
-					else
-					{
-						$sizes = array('580', '220x180');
-						$this->load->library('Photo');
-						$this->photo->resize(array(
-							'file' => $photo,
-							'sizes' => $sizes
-						));
-						die();
-					}
-				}
+				$data['r_slug'] = ($r_id) ? $this->slug->create_uri($data, $r_id) : $this->slug->create_uri($data);
 				
 				if ($r_id)
 				{
@@ -161,6 +139,21 @@ class Railways extends AdminController
 					$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
 					$err = 'An error occurred while adding the railway';
 				}
+				
+				// Do image processing
+				
+				$photo_url = $this->input->post('r_photo_url');
+				if ($photo_url)
+				{
+					$photo = $this->photo->add_image($photo_url, array('i_r_id' => $r_id));
+					
+					if ($photo === FALSE)
+					{
+						$this->session->set_flashdata('warning', 
+							'<strong>Problem adding photo:</strong> ' . $this->photo->lasterr);
+					}
+				}
+				
 				
 				$msg_type = ($op !== FALSE) ? 'success' : 'error';
 				$msg = ($op !== FALSE) ? $ok : $err;
