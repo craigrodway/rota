@@ -17,7 +17,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 <ul class="htabs-content">
 
 	<li id="helpTab" <?php echo tab_selected($tab, 'help') ?>>
-		<h4>What is an operator profile?</h4>
+		<h2>What is an operator profile?</h2>
 
 		<p>An operator profile is your name and callsign that you will use for the 
 		ROTA event.</p>

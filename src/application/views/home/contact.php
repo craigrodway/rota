@@ -51,7 +51,7 @@ the contact form below to get in touch with us.</p>
 						'name' => $name,
 						'id' => $name,
 						'rows' => 10,
-						'cols' => 70,
+						'cols' => 40,
 						'value' => set_value($name),
 					)); ?>
 				</td> 

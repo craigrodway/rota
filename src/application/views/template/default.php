@@ -28,6 +28,7 @@ if ($this->session->userdata('a_type') == 'admin')
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>
 	<?php echo $this->layout->get_css() ?>
 	
 	<!--[if lte IE 8]>
@@ -74,70 +75,73 @@ if ($this->session->userdata('a_type') == 'admin')
 </head>
 <body class="<?php echo $body_class ?>">
 	
+	<header>
 	
-	<div class="container body" id="header">
-		
-		
-		<div class="six columns logo">
-			<h1><a href="<?php echo site_url() ?>"><img src="img/global/title3.png" alt="Railways on the Air"></a></h1>
-		</div>
-		
-		<div class="ten columns user-nav">
-			<ul class="horizontal">
-				<?php
-				foreach ($nav['top'] as $item)
-				{
-					$cls = array('i', $item[2]);
-					$uri = $this->uri->uri_string();
-					$uri = (empty($uri)) ? 'home' : $uri;
-					if (stristr($uri, $item[0]))
-					{
-						$cls[] = 'active';
-					}
-					$cls = 'class="' . implode(' ', $cls) . '"';
-					echo '<li>' . anchor($item[0], $item[1], $cls) . '</li>';
-				}
-				?>
-			</ul>
+		<div class="container body" id="header">
 			
-			<div class="status">
-				<?php if ($this->auth->logged_in()): ?>
-				<em>Logged in as <strong><?php echo $this->session->userdata('a_email') ?></strong>.</em>
-				<?php else: ?>
-				<p></p>
-				<?php endif; ?>
+			
+			<div class="six columns logo">
+				<a href="<?php echo site_url() ?>"><img src="img/global/title3.png" alt="Railways on the Air"></a>
 			</div>
-		</div>
-		
-	</div>
-	
-	
-	
-	
-	<div class="nav">
-		
-		<div class="container">
 			
-			<div class="sixteen columns site-nav">
+			<div class="ten columns user-nav">
 				
 				<ul class="horizontal">
-					<?php foreach ($nav['primary'] as $item): ?>
-					<?php $cls = ($nav_active == $item[0]) ? 'class="active"' : ''; ?>
-					<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
-					<?php endforeach; ?>
+					<?php
+					foreach ($nav['top'] as $item)
+					{
+						$cls = array('i', $item[2]);
+						$uri = $this->uri->uri_string();
+						$uri = (empty($uri)) ? 'home' : $uri;
+						if (stristr($uri, $item[0]))
+						{
+							$cls[] = 'active';
+						}
+						$cls = 'class="' . implode(' ', $cls) . '"';
+						echo '<li>' . anchor($item[0], $item[1], $cls) . '</li>';
+					}
+					?>
 				</ul>
+				
+				<div class="status">
+					<?php if ($this->auth->logged_in()): ?>
+					<em>Logged in as <strong><?php echo $this->session->userdata('a_email') ?></strong>.</em>
+					<?php else: ?>
+					<p></p>
+					<?php endif; ?>
+				</div>
+				
+			</div>
+			
+		</div>
+		
+		
+		
+		
+		<div class="nav">
+			
+			<div class="container">
+				
+				<nav class="sixteen columns site-nav">
+					
+					<ul class="horizontal">
+						<?php foreach ($nav['primary'] as $item): ?>
+						<?php $cls = ($nav_active == $item[0]) ? 'class="active"' : ''; ?>
+						<li><?php echo anchor($item[0], $item[1], $cls) ?></li>
+						<?php endforeach; ?>
+					</ul>
+					
+					<div class="clear"></div>
+					
+				</nav> <!-- / .site-nav -->
 				
 				<div class="clear"></div>
 				
-			</div> <!-- / .site-nav -->
-			
-			<div class="clear"></div>
+			</div>
 			
 		</div>
-		
-	</div>
 	
-	
+	</header>
 	
 	<?php if (isset($subnav)): ?>
 	
@@ -202,10 +206,10 @@ if ($this->session->userdata('a_type') == 'admin')
 		
 		<?php if (strlen($this->layout->get_title()) > 0): ?>
 		<div class="row add-bottom">
-			<div class="eight columns">
-				<h2 class="page-title"><?php echo $this->layout->get_title() ?></h2>
+			<div class="ten columns">
+				<h1 class="page-title"><?php echo $this->layout->get_title() ?></h1>
 			</div>
-			<div class="eight columns">
+			<div class="six columns">
 				<?php echo $this->layout->get('links') ?>
 			</div>
 		</div>

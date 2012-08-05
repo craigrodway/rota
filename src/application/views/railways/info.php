@@ -28,7 +28,11 @@
 
 <div class="eight columns omega">
 	
-	<img src="http://lorempixel.com/580/440/transport/1" class="scale-with-grid">
+	<!-- <img src="http://lorempixel.com/580/440/transport/1" class="scale-with-grid"> -->
+	
+	<?php if ($railway->i_id()): ?>
+	<img src="<?php echo image_src($railway->data, 'w460') ?>">
+	<?php endif; ?>
 	
 	<p>List of all participating stations over the years...</p>
 	<table class="simple" style="width: 100%">

@@ -20,7 +20,7 @@ the preserver railway will take any responsibility for the running of your
 station.</p>
 
 
-<h4>Registering your station</h4>
+<h2>Registering your station</h2>
 
 <p>Once you have the details of your station, simply register the details on 
 this website to keep everyone up-to-date with the latest news. We will liaise 
@@ -31,7 +31,7 @@ and operator details for all events, save your details for future registrations,
 and contribute information about the railways you celebrate.</p>
 
 
-<h4>After the event</h4>
+<h2>After the event</h2>
 
 <p>Once the event is over and you have made more than 10 contacts, please submit
 your QSO log via the website. We will then produce a special certificate for 

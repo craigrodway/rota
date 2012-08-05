@@ -104,7 +104,7 @@ if (isset($s_id)) echo form_hidden('s_id', $station->s_id());
 		<tr>
 			<td class="title"></td>
 			<td class="input">
-				<?php $text = (isset($station)) ? 'Update' : 'Register'; ?>
+				<?php $text = (isset($s_id)) ? 'Update' : 'Register'; ?>
 				<button class="black button icon tick"><span><?php echo $text ?></span></button>
 			</td>
 		</tr>
