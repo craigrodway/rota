@@ -14,7 +14,7 @@ require_once(APPPATH . 'presenters/Operator_presenter.php');
  * http://opensource.org/licenses/OSL-3.0
  */
 
-class Operators extends MY_Controller
+class Operators extends ShackController
 {
 	
 	

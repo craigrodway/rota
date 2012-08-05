@@ -6,8 +6,11 @@ Array.prototype.min = function() {
   return Math.min.apply(null, this)
 }
 
-jsq.add(function() {
-	
+// Ensure all POST requests have the CSRF token
+$.ajaxSetup({ data: { rota_csrf_token: $.cookie('rota_csrf_cookie') } });
+
+
+jsq.add(function() {	
 	
 	// Attach events for tabs
 	$("body").on("click", "dl.htabs > dd > a", function(e) {

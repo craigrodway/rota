@@ -83,12 +83,54 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 			</td>
 		</tr>
 		
-		<tr>
+		<tr class="vat">
 			<td class="title">
 				<label>Image</label>
 			</td>
 			<td class="input">
+				
+				<?php if ($news->n_id()): ?>
+				
+				<div id="file-uploader">		
+					<noscript>
+						<input type="file" name="userfile" size="20">
+					</noscript>         
+				</div>
+				
+				<script>
+				jsq.add(function(){
+					var uploader = new qq.FileUploader({
+						element: document.getElementById('file-uploader'),
+						multiple: true,
+						action: siteurl + '/upload/image',
+						debug: false,
+						onComplete: function(id, file_name, res) {
+							if (res.i_id) {
+								$("<input>")
+									.attr("name", "i_id[]")
+									.attr("type", "hidden")
+									.val(res.i_id).appendTo("form#news_set");
+							}
+						}
+					});
+				});
+				</script>
+				
+				<?php else: ?>
+				
 				<input type="file" name="userfile" size="20">
+				
+				<?php endif; ?>
+				
+				<br><br>
+				
+				<?php foreach ($news->images as $image): ?>
+					<div style="width: 100px; height: 140px; float: left; display: block; margin-right: 5px;">
+						<img src="<?php echo $image->src('c100x100') ?>">
+						<small><a href="#" data-n_id="<?php echo $news->n_id() ?> "data-i_id="<?php echo $image->i_id() ?>" class="remove image">Remove</a></small>
+					</div>
+				<?php endforeach; ?>
+				
 			</td>
 		</tr>
 		
@@ -113,6 +155,18 @@ jsq.add(function(){
 		'alignleft', 'aligncenter', 'alignright', 'justify', '|', 
 		'horizontalrule', 'fullscreen'];
 	$('#n_content').redactor({ autoresize: true, buttons: buttons });
+	
+	// Remove attached images on click of remove link
+	$("a.remove.image").on("click", function(e) {
+		e.preventDefault();
+		var c = $(this).parents("div")[0];
+		$.post(siteurl + "admin/news/remove_image", {
+			i_id: $(this).data("i_id"),
+			n_id: $(this).data("n_id"),
+		}, function() {
+			$(c).remove();
+		});
+	})
 	
 });
 </script>

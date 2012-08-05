@@ -45,6 +45,9 @@ $route['404_override'] = '';
 $route['contact'] = 'home/contact';
 $route['about'] = 'home/about';
 
+$route['news/(:num)'] = 'news/event/$1';
+$route['news/(:num)/(:any)'] = 'news/article/$1/$2';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

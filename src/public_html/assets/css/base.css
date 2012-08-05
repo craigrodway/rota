@@ -62,7 +62,8 @@
 ================================================== */
 	body {
 		background: #fff;
-		font: 13px/20px "Ubuntu", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font: 13px/20px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-weight: normal;
 		color: #000;
 		-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 		-webkit-text-size-adjust: 100%;
@@ -335,26 +336,25 @@ table.simple .op { width: 20px; }
 
 .alert {
 	display: block;
-	padding: 6px 7px;
+	padding: 10px;
 	font-weight: normal;
 	font-size: 13px;
 	background: #fff6bf ;
-	border: 1px solid #ffd324;
+	border: 0px solid #ffd324;
 	margin-bottom: 20px;
 	position: relative;
+	color: #000;
 }
 
 .alert.warning,
 .alert.error,
 .alert.success {
-	padding-left: 30px;
-	background-position: 7px 50%;
-	background-repeat: no-repeat;
+	
 }
 
-.alert.warning { background-image: url(../img/global/icons/pid/yellow_warning.png); }
-.alert.error { background-image: url(../img/global/icons/pid/red_cross.png); }
-.alert.success { background-image: url(../img/global/icons/pid/green_tick.png); }
+.alert.warning { background-color: #fff6bf; }
+.alert.error { background-color: #FFBABA; }
+.alert.success { background-color: #DFF2BF; }
 
 .alert a { color: #000; font-weight: normal; text-decoration: underline; }
 
@@ -538,6 +538,7 @@ div.boxfill-heading, div.boxfill h3.heading {
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
 		font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+		max-width: 100%;
 		color: #333;
 		margin: 0;
 		/*display: block;*/
@@ -607,7 +608,8 @@ div.boxfill-heading, div.boxfill h3.heading {
 		clear: left;
 		text-align: right;
 		font-size: 85%;
-		color: #999;
+		color: #666;
+		font-weight: normal;
 		line-height: 90%;
 		/* background: #fdd; */
 	}

@@ -46,9 +46,19 @@ class News extends MY_Controller
 	
 	
 	
-	public function article($year, $slug)
+	public function article($year, $slug = '')
 	{
+		$this->news_model->limit(1);
+		if ( ! $news = $this->news_model->get_by('n_slug', $slug))
+		{
+			show_404();
+		}
 		
+		$news = new News_presenter($news);
+		
+		$this->data['news'] =& $news;
+		$this->layout->set_title($news->n_title());
+		$this->layout->set_js('rota.gallery');
 	}
 	
 	

@@ -29,7 +29,7 @@ class Photo
 	// Image dimension variations
 	private $variations = array(
 		'c100x100',
-		'w580',
+		'w460',
 		'c220x145',
 	);
 	
@@ -65,13 +65,22 @@ class Photo
 	 * Add an uploaded image to the database and process the variations
 	 *
 	 * @param string $file_name		File name of image to process
-	 * @param array $data		Extra data for the images table (Railway/News IDs)
 	 * @param bool $process		Whether to process the image for resizing or not
 	 * @return mixed		New ID on success
 	 */
-	public function add_image($file_name = '', $extra_data = array(), $process = TRUE)
+	public function add_image($file_name = '', $process = TRUE)
 	{
 		log_message('debug', 'Photo lib: add_image(): Filename: ' . $file_name);
+		
+		if (preg_match('/^http/', $file_name))
+		{
+			// Filename is actually a URL - get remote and save locally
+			$file_name = $this->_get_remote($file_name);
+			if ($file_name === FALSE)
+			{
+				return FALSE;
+			}
+		}
 		
 		$file = $this->orig_path . '/' . $file_name;
 		if ( ! file_exists($file))
@@ -94,9 +103,6 @@ class Photo
 		// Array of data for the database
 		$data = array(
 			'i_a_id' => $this->_CI->session->userdata('a_id'),
-			'i_e_year' => element('i_e_year', $extra_data, NULL),
-			'i_r_id' => element('i_r_id', $extra_data, NULL),
-			'i_n_id' => element('i_n_id', $extra_data, NULL),
 			'i_orig_file_name' => $file_name,
 			'i_orig_file_ext' => strtolower(end(explode('.', $file_name))),
 			'i_orig_width' => $size['w'],
@@ -111,7 +117,7 @@ class Photo
 		{
 			log_message('debug', 'Photo lib: add_image(): Image added to database, ID ' . $i_id);
 			// Success! Return the result of the process method or TRUE
-			return ($process) ? $this->process_image($i_id) : TRUE;
+			return ($process) ? $this->process_image($i_id) : $i_id;
 		}
 		else
 		{
@@ -129,11 +135,17 @@ class Photo
 	 * Process an original image for the variations on dimensions/resizing
 	 *
 	 * @param int $id		Image ID to process
+	 * @param string $variation		A single variation to process
 	 * @param int 
 	 */
-	public function process_image($i_id)
+	public function process_image($i_id, $variation = NULL)
 	{
 		log_message('debug', 'Photo lib: process_image(): Processing image ID ' . $i_id);
+		
+		if ($variation !== NULL)
+		{
+			$this->variations[] = $variation;
+		}
 		
 		$image = $this->_CI->images_model->get($i_id);
 		if ( ! $image)
@@ -202,7 +214,7 @@ class Photo
 		}
 		else
 		{
-			return TRUE;
+			return $i_id;
 		}
 	}
 	
@@ -378,6 +390,77 @@ class Photo
 			'w' => $img['0'],
 			'h' => $img['1']
 		);
+	}
+	
+	
+	
+	
+	/**
+	 * Get an image from remote server and save locally
+	 *
+	 * @param string $url		URL of picture to retrieve
+	 * @return mixed		String containing path if successful. False if error.
+	 */
+	private function _get_remote($url = '')
+	{
+		$orig_file_name = explode(".", basename($url));
+		
+		log_message('debug', "Photo lib: _get_remote(): URL: $url");
+		
+		// Generate unique filename
+		mt_srand();
+		$file_name = md5(uniqid(mt_rand())) . '.' . strtolower(end($orig_file_name));
+		
+		// Path to save file to 
+		$file_path = $this->orig_path . '/' . $file_name;
+		
+		log_message('debug', "Photo lib: _get_remote(): File name will be: $file_path");
+		
+		// Create the file handle for writing
+		$fh = @fopen($file_path, "w");
+		
+		// Check if we can write to the file
+		if ( ! is_really_writable($file_path))
+		{
+			log_message('debug', "Photo lib: _get_remote(): File is not writable.");
+			$this->lasterr = "Path ($file_path) is not really writable.";
+			return FALSE;
+		}
+		
+		// Initialise cURL. Get remote image and save to local file
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'curl/railways-on-the-air (rota.barac.org.uk)');
+		curl_setopt($ch, CURLOPT_FILE, $fh);
+		curl_exec($ch);
+		
+		// Validate request
+		$valid_types = array('image/jpeg', 'image/png', 'image/gif');
+		$status = FALSE;
+		$info = curl_getinfo($ch);
+		
+		curl_close($ch);
+		fclose($fh);
+		
+		// Must be 200 OK and an image content type
+		if ($info['http_code'] == 200 && in_array($info['content_type'], $valid_types))
+		{
+			log_message('debug', "Photo lib: _get_remote(): Success! File has been saved.");
+			$status = TRUE;
+		}
+		
+		if ($status === FALSE)
+		{
+			@unlink($file_path);
+			log_message('debug', "Photo lib: _get_remote(): Error getting image: status code {$info['http_code']}");
+			$this->lasterr = "Error retrieving remote image - status code was {$info['http_code']}.";
+			return FALSE;
+		}
+		
+		// Return path to file
+		return $file_name;
 	}
 	
 	

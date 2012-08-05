@@ -186,12 +186,24 @@ body.type_admin .footer {
 }
 
 
-h2.page-title {
-	font-size: 23px;
-	line-height: 23px;
+h1.page-title {
+	font-size: 36px;
+	line-height: 1.4;
 	font-weight: normal;
-	letter-spacing: -1px;
-	/*margin-bottom: 10px;*/
+	letter-spacing: 0;
+	font-weight: 300;
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+	color: #000;
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+
+h2 {
+	font-weight: 400;
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, Sans-serif;
+	font-size: 24px;
+	line-height: 24px;
+	margin-bottom: 20px;
 }
 
 
@@ -379,6 +391,40 @@ div.dp-popup td.disabled {
 }
 
 
+
+
+.gallery .gallery-control {
+	background: #1D82AB;
+	border-bottom: 2px solid #fff;
+	padding: 10px;
+	display: block;
+	width: 100%;
+	color: #fff;
+	text-align: right;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+	.gallery .gallery-control a {
+		color: #fff;
+	}
+	
+	.gallery .gallery-control div.status {
+		margin: 0 30px;
+		display: inline; 
+	}
+	
+	.gallery ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+		.gallery ul li {
+			display: none;
+		}
+
+
+
 /* #Page Styles
 ==================== */
 
@@ -407,6 +453,7 @@ ul.railways {
 		text-decoration: none;
 		outline: 0;
 		line-height: inherit;
+		font-weight: bold;
 	}
 	
 	ul.railways li a img {
@@ -423,6 +470,7 @@ ul.railways {
 		font-size: 110%;
 		line-height: 125%;
 		display: inline;
+		font-weight: bold;
 	}
 
 
@@ -443,20 +491,24 @@ div.row.station.heading {
 	div.row.station .station-year h3 {
 		margin: 0;
 		padding: 0;
-		line-height: normal;
-		font-size: 120%;
+		font-size: 16px;
+		line-height: 16px;
+		display: inline-block;
 		color: #2093C2;
+		font-weight: bold;
 	}
 	
 	div.row.station .station-operator .callsign,
 	div.row.station .station-operator .name {
 		display: inline-block;
-		vertical-align: middle;
 	}
 	
 	div.row.station .station-operator .callsign {
-		font-size: 110%;
+		font-size: 16px;
+		line-height: 16px;
 		font-weight: bold;
+		margin: 0;
+		padding: 0;
 		margin-right: 10px;
 		color: #aec81c;
 	}
@@ -465,6 +517,7 @@ div.row.station.heading {
 		color: #666;
 		font-size: 85%;
 		font-weight: bold;
+		vertical-align: top;
 	}
 	
 	div.row.station .station-railway .railway {
@@ -474,6 +527,7 @@ div.row.station.heading {
 	
 	div.row.station .ops {
 		text-align: right;
+		line-height: normal;
 	}
 		div.row.station .ops a {
 			margin-left: 8px;
@@ -492,6 +546,7 @@ div.row.station.heading {
 
 	.row.article .article-meta {
 		font-size: 90%;
+		margin-bottom: 20px;
 	}
 	
 		.row.article .article-meta p {
@@ -510,7 +565,7 @@ div.row.station.heading {
 	}
 	
 	.row.article .article-image {
-		padding-top: 28px;
+		padding-top: 45px;
 	}
 
 
@@ -524,6 +579,40 @@ div.row.station.heading {
 .autocomplete .selected { background:#F0F0F0; }
 .autocomplete div { padding:2px 5px; white-space:nowrap; }
 .autocomplete strong { font-weight:normal; color:#3399FF; }
+
+
+/* File Uploader
+========== */
+
+.qq-uploader { position:relative; width: 100%;}
+
+.qq-upload-button {
+	
+}
+.qq-upload-button-hover {background:#cc0000;}
+.qq-upload-button-focus {outline:1px dotted black;}
+
+.qq-upload-drop-area {
+	position:absolute; top:0; left:0; width:100%; height:100%; min-height: 70px; z-index:2;
+	background:#FF9797; text-align:center; 
+}
+.qq-upload-drop-area span {
+	display:block; position:absolute; top: 50%; width:100%; margin-top:-8px; font-size:16px;
+}
+.qq-upload-drop-area-active {background:#FF7171;}
+
+.qq-upload-list {margin:15px 35px; padding:0; list-style:disc;}
+.qq-upload-list li { margin:0; padding:0; line-height:15px; font-size:12px;}
+.qq-upload-file, .qq-upload-spinner, .qq-upload-size, .qq-upload-cancel, .qq-upload-failed-text {
+	margin-right: 7px;
+}
+
+.qq-upload-file {}
+.qq-upload-spinner {display:inline-block; background: url("../img/global/loading.gif"); width:15px; height:15px; vertical-align:text-bottom;}
+.qq-upload-size,.qq-upload-cancel {font-size:11px;}
+
+.qq-upload-failed-text {display:none;}
+.qq-upload-fail .qq-upload-failed-text {display:inline;}
 
 
 

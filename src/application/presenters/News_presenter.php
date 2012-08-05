@@ -5,6 +5,7 @@ require_once(APPPATH . 'presenters/Event_presenter.php');
 require_once(APPPATH . 'presenters/Operator_presenter.php');
 require_once(APPPATH . 'presenters/Railway_presenter.php');
 require_once(APPPATH . 'presenters/Station_presenter.php');
+require_once(APPPATH . 'presenters/Image_presenter.php');
 
 class News_presenter extends ROTA_Presenter
 {
@@ -27,6 +28,16 @@ class News_presenter extends ROTA_Presenter
 		$this->event = new Event_presenter($data);
 		$this->operator = new Operator_presenter($data);
 		$this->railway = new Railway_presenter($data);
+		
+		// Images array present? Make presenter objects
+		if (is_array(element('images', $data)))
+		{
+			$this->images = presenters('Image', element('images', $data));
+		}
+		else
+		{
+			$this->images = array();
+		}
 	}
 	
 	
@@ -62,7 +73,7 @@ class News_presenter extends ROTA_Presenter
 	public function read_more_link($text = 'Read more')
 	{
 		$year = $this->n_datetime_posted('Y');
-		return anchor('news/article/' . $year . '/' . element('n_slug', $this->data), $text);
+		return anchor('news/' . $year . '/' . element('n_slug', $this->data), $text);
 	}
 	
 	

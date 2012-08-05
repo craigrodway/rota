@@ -78,7 +78,7 @@ class News extends AdminController
 		else
 		{
 			// Adding new article
-			$this->data['news'] = new Event_presenter();
+			$this->data['news'] = new News_presenter();
 			$this->layout->set_title('Write new article');
 		}
 		
@@ -133,16 +133,29 @@ class News extends AdminController
 				$config['max_width']  = '3000';
 				$config['max_height']  = '2000';
 				
-				if (isset($_FILES['userfile']))
+				// Images uploaded via AJAX are added to the hidden i_id input
+				// Add them to the article
+				if ($op !== FALSE && $this->input->post('i_id'))
+				{
+					foreach ($this->input->post('i_id') as $i_id)
+					{
+						$this->news_model->add_image($n_id, $i_id);
+					}
+				}
+				
+				if ($op !== FALSE && isset($_FILES['userfile']))
 				{
 					$this->load->library('upload', $config);
 					if ($this->upload->do_upload())
 					{
 						$this->load->library('photo');
 						$upload = $this->upload->data();
-						$extra = array('i_n_id' => $n_id);
-						$res = $this->photo->add_image($upload['file_name'], $extra);
-						if ( ! $res)
+						$i_id = $this->photo->add_image($upload['file_name']);
+						if ($i_id)
+						{
+							$this->news_model->add_image($n_id, $i_id);
+						}
+						else
 						{
 							$this->session->set_flashdata('error', $this->photo->lasterr);
 						}
@@ -167,7 +180,7 @@ class News extends AdminController
 		$this->data['operators'] = $this->operators_model->dropdown('o_callsign_o_name');
 		$this->data['railways'] = $this->railways_model->dropdown('r_name');
 		
-		$this->layout->set_js('../vendor/redactor/redactor');
+		$this->layout->set_js(array('../vendor/redactor/redactor', 'fileuploader'));
 		$this->layout->set_css('../vendor/redactor/css/redactor');
 		
 	}
@@ -203,6 +216,24 @@ class News extends AdminController
 		$this->session->set_flashdata($msg_type, $msg);
 		
 		redirect('admin/news');
+	}
+	
+	
+	
+	
+	
+	public function remove_image()
+	{
+		if ($this->news_model->remove_image($this->input->post('n_id'), $this->input->post('i_id')))
+		{
+			$res = array('status' => 'ok');
+		}
+		else
+		{
+			$res = array('status' => 'err');
+		}
+		
+		$this->json = $res;
 	}
 	
 	

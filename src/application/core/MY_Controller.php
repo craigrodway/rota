@@ -26,13 +26,13 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 		
 		// Configure default page items and load the layout
-		$css = array('base', 'skeleton', 'layout');
+		$css = array('base', 'skeleton', 'rota');
 		
 		$js = array(
 			'jquery-1.7.1.min',
+			'jquery.cookie',
 			'jquery.simplemodal.1.4.2.min',
 			'default',
-			'//maps.google.com/maps/api/js?sensor=false'
 		);
 		
 		$template = 'default';
