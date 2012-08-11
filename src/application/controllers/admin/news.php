@@ -128,14 +128,6 @@ class News extends AdminController
 					$err = 'An error occurred while adding the event.';
 				}
 				
-				// Try to handle the image upload
-				$config['upload_path'] = realpath(FCPATH . '../../storage/images');
-				$config['encrypt_name'] = TRUE;
-				$config['allowed_types'] = 'jpg';
-				$config['max_size']	= '3072';
-				$config['max_width']  = '3000';
-				$config['max_height']  = '2000';
-				
 				// Images uploaded via AJAX are added to the hidden i_id input
 				// Add them to the article
 				if ($op !== FALSE && $this->input->post('i_id'))
@@ -146,9 +138,18 @@ class News extends AdminController
 					}
 				}
 				
+				// News article WAS added/updated, and standard file upload was submitted
 				if ($op !== FALSE && isset($_FILES['userfile']))
 				{
+					// Init upload of file
+					$config['upload_path'] = realpath(FCPATH . '../../storage/images');
+					$config['encrypt_name'] = TRUE;
+					$config['allowed_types'] = 'jpg';
+					$config['max_size']	= '3072';
+					$config['max_width']  = '3000';
+					$config['max_height']  = '2000';
 					$this->load->library('upload', $config);
+					
 					if ($this->upload->do_upload())
 					{
 						$this->load->library('photo');
@@ -169,7 +170,7 @@ class News extends AdminController
 					}
 				}
 				
-				
+				// Set message/status and go back to news section
 				$msg_type = ($op !== FALSE) ? 'success' : 'error';
 				$msg = ($op !== FALSE) ? $ok : $err;
 				$this->session->set_flashdata($msg_type, $msg);

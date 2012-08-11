@@ -161,7 +161,7 @@ jsq.add(function(){
 		}, function() {
 			$(c).remove();
 		});
-	})
+	});
 	
 });
 </script>
