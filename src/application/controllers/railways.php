@@ -90,7 +90,7 @@ class Railways extends MY_Controller
 		}
 		
 		$this->layout->set_css('../vendor/leaflet/leaflet');
-		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing'));
+		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing', 'rota.gallery'));
 	}
 	
 	

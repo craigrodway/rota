@@ -28,11 +28,17 @@
 
 <div class="eight columns omega">
 	
-	<!-- <img src="http://lorempixel.com/580/440/transport/1" class="scale-with-grid"> -->
+	<div class="gallery">
+		<ul>
+			<?php foreach ($railway->images as $image): ?>
+			<li><img src="<?php echo $image->src('w460') ?>"></li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
 	
-	<?php if ($railway->i_id()): ?>
-	<img src="<?php echo image_src($railway->data, 'w460') ?>">
-	<?php endif; ?>
+	<script>
+	jsq.add(function() { $(".gallery").gallery(); });
+	</script>
 	
 	<p>List of all participating stations over the years...</p>
 	<table class="simple" style="width: 100%">
