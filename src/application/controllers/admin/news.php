@@ -86,7 +86,7 @@ class News extends AdminController
 		{
 			$this->form_validation
 				->set_rules('n_title', 'Title', 'required|trim|max_length[128]')
-				->set_rules('n_content', 'Content', 'required')
+				->set_rules('n_content_source', 'Content', 'required')
 				->set_rules('n_e_year', 'Event year', 'exact_length[4]')
 				->set_rules('n_r_id', 'Railway', 'integer')
 				->set_rules('n_o_id', 'Operator', 'itneger');
@@ -95,11 +95,14 @@ class News extends AdminController
 			{
 				$post = $this->input->post(NULL, TRUE);
 				
+				$n_content_html = parse_markdown($this->input->post('n_content_source'));
+				
 				$data = array(
 					'n_o_id' => element('n_o_id', $post, NULL),
 					'n_r_id' => element('n_r_id', $post, NULL),
 					'n_e_year' => element('n_e_year', $post, NULL),
-					'n_content' => element('n_content', $post),
+					'n_content_source' => $this->input->post('n_content_source'),
+					'n_content_html' => $n_content_html,
 					'n_title' => element('n_title', $post),
 				);
 				
@@ -180,8 +183,15 @@ class News extends AdminController
 		$this->data['operators'] = $this->operators_model->dropdown('o_callsign_o_name');
 		$this->data['railways'] = $this->railways_model->dropdown('r_name');
 		
-		$this->layout->set_js(array('../vendor/redactor/redactor', 'fileuploader'));
-		$this->layout->set_css('../vendor/redactor/css/redactor');
+		$this->layout->set_js(array(
+			'../vendor/markitup/jquery.markitup',
+			'../vendor/markitup/sets/markdown/set',
+			'fileuploader',
+		));
+		$this->layout->set_css(array(
+			'../vendor/markitup/skins/simple/style',
+			'../vendor/markitup/sets/markdown/style',
+		));
 		
 	}
 	

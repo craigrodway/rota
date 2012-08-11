@@ -87,3 +87,15 @@ function presenters($class, $data)
 	}
 	return $data;
 }
+
+
+
+
+
+function parse_markdown($str = '')
+{
+	require_once(APPPATH . '/third_party/markdown.php');
+	require_once(APPPATH . '/third_party/smartypants.php');
+	
+	return SmartyPants(Markdown($str));
+}

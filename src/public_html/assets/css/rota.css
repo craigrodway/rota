@@ -396,7 +396,7 @@ div.dp-popup td.disabled {
 .gallery .gallery-control {
 	background: #1D82AB;
 	border-bottom: 2px solid #fff;
-	padding: 10px;
+	padding: 5px 10px;
 	display: block;
 	width: 100%;
 	color: #fff;
@@ -421,6 +421,10 @@ div.dp-popup td.disabled {
 
 		.gallery ul li {
 			display: none;
+		}
+		
+		.gallery ul li img {
+			max-width: 100%;
 		}
 
 
@@ -647,8 +651,7 @@ div.row.station.heading {
 			margin-left: 0;
 			display: block;
 			width: 100%;
-			padding-top: 5px;
-			padding-bottom: 5px;
+			padding: 5px 0;
 		}
 		
 		.site-nav ul {

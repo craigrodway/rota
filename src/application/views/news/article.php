@@ -17,7 +17,7 @@ else
 
 	<div class="<?php echo $classes['content'] ?>">
 		
-		<?php echo $news->n_content() ?>
+		<?php echo $news->n_content_html() ?>
 		
 	</div>
 	

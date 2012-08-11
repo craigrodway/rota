@@ -70,15 +70,15 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 		
 		<tr class="vat">
 			<td class="title">
-				<label for="n_content" <?php if (form_error('n_content')) echo 'class="error"' ?>>Content</label>
+				<label for="n_content_source" <?php if (form_error('n_content)source')) echo 'class="error"' ?>>Content</label>
 			</td>
 			<td class="input">
 				<?php echo form_textarea(array(
-					'name' => 'n_content',
-					'id' => 'n_content',
+					'name' => 'n_content_source',
+					'id' => 'n_content_source',
 					'cols' => 80,
 					'rows' => 20,
-					'value' => set_value('n_content', $news->n_content()),
+					'value' => element('n_content_source', $_POST, $news->n_content_source()),
 				)); ?>
 			</td>
 		</tr>
@@ -149,12 +149,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 <script>
 jsq.add(function(){
 	
-	var buttons = ['html', '|', 'formatting', '|', 'bold', 'italic', '|', 
-		'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 
-		'image', 'video', 'file', 'link', '|',
-		'alignleft', 'aligncenter', 'alignright', 'justify', '|', 
-		'horizontalrule', 'fullscreen'];
-	$('#n_content').redactor({ autoresize: true, buttons: buttons });
+	$('#n_content_source').markItUp(mySettings);
 	
 	// Remove attached images on click of remove link
 	$("a.remove.image").on("click", function(e) {
