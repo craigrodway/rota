@@ -1,6 +1,6 @@
 <?php
 $errors = validation_errors();
-echo form_open('', array('id' => 'railways_set'));
+echo form_open_multipart('', array('id' => 'railway_set'));
 if (isset($railway)) echo form_hidden('r_id', $railway->r_id());
 if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></div>';
 ?>
@@ -39,16 +39,16 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 			)); ?></td>
 		</tr>
 		
-		<tr class="nob">
+		<tr class="vat nob">
 			<td class="title">
-				<label for="r_info_src" <?php if (form_error('r_info_src')) echo 'class="error"' ?>>Information</label>
+				<label for="r_info_source" <?php if (form_error('r_info_source')) echo 'class="error"' ?>>Information</label>
 			</td>
 			<td class="input"><?php echo form_textarea(array(
-				'name' => 'r_info',
-				'id' => 'r_info',
-				'cols' => '50',
-				'rows' => '10',
-				'value' => set_value('r_info', $railway->r_info())
+				'name' => 'r_info_source',
+				'id' => 'r_info_source',
+				'cols' => 80,
+				'rows' => 20,
+				'value' => element('r_info_source', $_POST, $railway->r_info_source()),
 			)); ?></td>
 		</tr>	
 	
@@ -56,7 +56,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 	
 	
 	<div class="boxfill-heading internal">
-		Photo
+		Photos
 	</div>
 	
 	
@@ -64,9 +64,52 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 		
 		<tr class="vat nob">
 			<td class="title" <?php if (form_error('r_info_src')) echo 'class="error"' ?>>
-				<label for="r_photo">Photo</label>
+				<label for="r_photo">Add new</label>
 			</td>
 			<td class="input">
+				
+				<?php echo form_input(array(
+					'name' => 'r_photo_url',
+					'id' => 'r_photo_url',
+					'size' => 60,
+					'value' => '',
+					'placeholder' => 'URL to a photo'
+				)); ?>
+				<div class="more">
+					<br>
+					<strong>- OR - </strong>
+					<br><br>
+					<div id="file-uploader">		
+					<noscript>
+						<input type="file" name="userfile" size="20">
+					</noscript>         
+				</div>
+				</div>
+				
+				
+				
+				<script>
+				jsq.add(function(){
+					var uploader = new qq.FileUploader({
+						element: document.getElementById('file-uploader'),
+						multiple: true,
+						action: siteurl + '/upload/image',
+						debug: false,
+						onComplete: function(id, file_name, res) {
+							if (res.i_id) {
+								$("<input>")
+									.attr("name", "i_id[]")
+									.attr("type", "hidden")
+									.val(res.i_id)
+									.appendTo("form#railway_set");
+							}
+						}
+					});
+				});
+				</script>
+				
+				<?php
+				/*
 				<?php echo form_input(array(
 					'name' => 'r_photo_url',
 					'id' => 'r_photo_url',
@@ -78,15 +121,30 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					<br><br>
 					<input type="file" class="input-file" name="userfile" id="userfile">
 				</div>
+				*/
+				?>
+				
 			</td>
 			
-			<td rowspan="2" style="width: 400px">
+		</tr>
+		
+		<tr class="vat">
+			<td class="title"><label>Current photos</label>
+			</td>
+			<td>
 				<?php foreach ($railway->images as $image): ?>
+				<div style="width: 100px; height: 140px; float: left; display: block; margin-right: 5px;">
 					<img src="<?php echo $image->src('c100x100') ?>">
+					<small><a href="#" data-r_id="<?php echo $railway->r_id() ?> "data-i_id="<?php echo $image->i_id() ?>" class="remove image">Remove</a></small>
+				</div>
 				<?php endforeach; ?>
+				
+				<?php if (empty($railway->images)): ?>
+				<p>None yet!</p>
+				<?php endif; ?>
 			</td>
 		</tr>
-	
+		
 	</table>
 	
 	
@@ -192,3 +250,25 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 	?>
 	<button class="black button icon tick"><span><?php echo $text ?></span></button>
 </div>
+
+
+
+<script>
+jsq.add(function(){
+	
+	$('#r_info_source').markItUp(mySettings);
+	
+	// Remove attached images on click of remove link
+	$("a.remove.image").on("click", function(e) {
+		e.preventDefault();
+		var c = $(this).parents("div")[0];
+		$.post(siteurl + "admin/railways/remove_image", {
+			i_id: $(this).data("i_id"),
+			r_id: $(this).data("r_id"),
+		}, function() {
+			$(c).remove();
+		});
+	});
+	
+});
+</script>

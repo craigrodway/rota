@@ -112,10 +112,16 @@ class Railways extends AdminController
 			if ($this->form_validation->run())
 			{
 				// OK!
+				
+				// Parse the Markdown and convert to HTML
+				$r_info_html = parse_markdown($this->input->post('r_info_source'));
+				
+				// All data for railway from form
 				$data = array(
 					'r_name' => $this->input->post('r_name'),
 					'r_url' => $this->input->post('r_url'),
-					'r_info' => $this->input->post('r_info'),
+					'r_info_source' => $this->input->post('r_info_source'),
+					'r_info_html' => $r_info_html,
 					'r_postcode' => $this->input->post('r_postcode'),
 					'r_wab' => $this->input->post('r_wab'),
 					'r_locator' => $this->input->post('r_locator'),
@@ -123,11 +129,14 @@ class Railways extends AdminController
 					'r_lng' => $this->input->post('r_lng'),
 				);
 				
+				// Generate or upgdate the slug
 				$data['r_slug'] = ($r_id) ? $this->slug->create_uri($data, $r_id) : $this->slug->create_uri($data);
 				
 				if ($r_id)
 				{
 					// Update
+					$data['r_datetime_updated'] = date('Y-m-d H:i:s');
+					
 					$op = $this->railways_model->update($r_id, $data);
 					$ok = "<strong>{$data['r_name']}</strong> has been updated successfully.";
 					$err = 'An error occurred while updating the railway.';
@@ -136,25 +145,71 @@ class Railways extends AdminController
 				{
 					// Add
 					$op = $this->railways_model->insert($data);
+					$r_id = $op;
 					$ok = "<strong>{$data['r_name']}</strong> has been added successfully.";
 					$err = 'An error occurred while adding the railway';
 				}
 				
 				// Do image processing
 				
+				// Added photo by URL?
 				$photo_url = $this->input->post('r_photo_url');
 				if ($photo_url)
 				{
-					$photo = $this->photo->add_image($photo_url, array('i_r_id' => $r_id));
-					
-					if ($photo === FALSE)
+					$i_id = $this->photo->add_image($photo_url);
+					if ($i_id)
 					{
-						$this->session->set_flashdata('warning', 
-							'<strong>Problem adding photo:</strong> ' . $this->photo->lasterr);
+						$this->railways_model->add_image($r_id, $i_id);
+					}
+					else
+					{
+						$this->session->set_flashdata('warning', '<strong>Problem adding photo:</strong> ' . $this->photo->lasterr);
 					}
 				}
 				
+				// Images uploaded via AJAX are added to the hidden i_id input
+				// Add them to the railway
+				if ($op !== FALSE && $this->input->post('i_id'))
+				{
+					foreach ($this->input->post('i_id') as $i_id)
+					{
+						$this->railways_model->add_image($r_id, $i_id);
+					}
+				}
 				
+				// Railway WAS added/updated, and standard file upload was submitted
+				if ($op !== FALSE && isset($_FILES['userfile']))
+				{
+					// Init upload of file
+					$config['upload_path'] = realpath(FCPATH . '../../storage/images');
+					$config['encrypt_name'] = TRUE;
+					$config['allowed_types'] = 'jpg';
+					$config['max_size']	= '3072';
+					$config['max_width']  = '3000';
+					$config['max_height']  = '2000';
+					$this->load->library('upload', $config);
+					
+					if ($this->upload->do_upload())
+					{
+						$this->load->library('photo');
+						$upload = $this->upload->data();
+						$i_id = $this->photo->add_image($upload['file_name']);
+						if ($i_id)
+						{
+							$this->railways_model->add_image($r_id, $i_id);
+						}
+						else
+						{
+							$this->session->set_flashdata('error', $this->photo->lasterr);
+						}
+					}
+					else
+					{
+						$this->session->set_flashdata('error', strip_tags($this->upload->display_errors()));
+					}
+				}
+				
+				// Set message/status and go back to news section 
 				$msg_type = ($op !== FALSE) ? 'success' : 'error';
 				$msg = ($op !== FALSE) ? $ok : $err;
 				$this->session->set_flashdata($msg_type, $msg);
@@ -165,7 +220,15 @@ class Railways extends AdminController
 			
 		}	// End input POST
 		
-		//$this->layout->set_js('modules/admin_railways_addedit.js');
+		$this->layout->set_js(array(
+			'../vendor/markitup/jquery.markitup',
+			'../vendor/markitup/sets/markdown/set',
+			'fileuploader',
+		));
+		$this->layout->set_css(array(
+			'../vendor/markitup/skins/simple/style',
+			'../vendor/markitup/sets/markdown/style',
+		));
 		
 	}
 	
@@ -200,6 +263,23 @@ class Railways extends AdminController
 		$this->session->set_flashdata($msg_type, $msg);
 		
 		redirect('admin/railways');
+	}
+	
+	
+	
+	
+	public function remove_image()
+	{
+		if ($this->railways_model->remove_image($this->input->post('r_id'), $this->input->post('i_id')))
+		{
+			$res = array('status' => 'ok');
+		}
+		else
+		{
+			$res = array('status' => 'err');
+		}
+		$res['query'] = $this->db->last_query();
+		$this->json = $res;
 	}
 	
 	
