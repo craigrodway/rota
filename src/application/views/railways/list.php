@@ -21,8 +21,8 @@
 	
 	<li class="letter-<?php echo strtoupper(substr($r->r_name(), 0, 1)) ?>">
 		<a href="<?php echo site_url('railways/' . $r->r_slug()) ?>">
-			<?php if ($r->i_id()): ?>
-			<img src="<?php echo image_src($r->data, 'c150x150') ?>">
+			<?php if ($r->images): ?>
+			<img src="<?php echo $r->images[0]->src('c150x150') ?>" alt="Photo for <?php echo $r->r_name() ?>">
 			<?php else: ?>
 			<img src="http://lorempixel.com/150/150/transport/<?php echo $i ?>"/>
 			<?php endif; ?>
