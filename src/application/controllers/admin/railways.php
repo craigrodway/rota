@@ -115,6 +115,8 @@ class Railways extends AdminController
 				
 				// Parse the Markdown and convert to HTML
 				$r_info_html = parse_markdown($this->input->post('r_info_source'));
+				$r_lat = $this->input->post('r_lat');
+				$r_lng = $this->input->post('r_lng');
 				
 				// All data for railway from form
 				$data = array(
@@ -125,8 +127,8 @@ class Railways extends AdminController
 					'r_postcode' => $this->input->post('r_postcode'),
 					'r_wab' => $this->input->post('r_wab'),
 					'r_locator' => $this->input->post('r_locator'),
-					'r_lat' => $this->input->post('r_lat'),
-					'r_lng' => $this->input->post('r_lng'),
+					'r_lat' => (empty($r_lat)) ? NULL : $r_lat,
+					'r_lng' => (empty($r_lng)) ? NULL : $r_lng,
 				);
 				
 				// Generate or upgdate the slug
