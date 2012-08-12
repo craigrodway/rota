@@ -146,13 +146,21 @@ class Ajax extends MY_Controller
 		{
 			if ( ! $r->latlng()) continue;
 			
+			$content = '<h5>' . anchor('railways/' . $r->r_slug(), $r->r_name()) . '</h5>';
+			
+			// Add thumbnail image if present
+			if ( ! empty($r->images))
+			{
+				$content .= '<br><img src="'  . $r->images[0]->src('c150x150') . '" width="64" height="64" alt="">'; 
+			}
+			
 			$feature = array(
 				'type' => 'Feature',
 				'id' => $r->r_id(),
 				'properties' => array(
 					'name' => $r->r_name(),
 					'amenity' => 'Railway',
-					'popupContent' => anchor('railways/' . $r->r_slug(), $r->r_name()),
+					'popupContent' => $content,
 				),
 				'geometry' => array(
 					'type' => 'Point',
@@ -170,4 +178,4 @@ class Ajax extends MY_Controller
 }
 
 /* End of file home.php */
-/* Location: ./application/controllers/home.php */
+/* Location: ./application/controllers/ajax.php */
