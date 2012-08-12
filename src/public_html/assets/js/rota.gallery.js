@@ -34,7 +34,7 @@
 			$(img).attr("data-id", i);
 			i++;
 		});
-		
+
 		// Add control bar
 		var control = $('<div class="gallery-control"></div>')
 			.insertBefore(self.$list)
@@ -54,6 +54,9 @@
 		// Set the total text
 		self.$img_total.text(self.imgs.length);
 		
+		// If there is only one image, hide the control bar
+		if (i === 2) control.hide();
+				
 		// kick it off to show the first image
 		self.navigate_to(1);
 	}
