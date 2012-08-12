@@ -44,6 +44,8 @@ class Stations extends ShackController
 		
 		$this->stations_model->order_by('s_e_year', 'DESC');
 		$this->data['stations'] = presenters('Station', $this->stations_model->get_by('o_a_id', $this->session->userdata('a_id')));
+		
+		$this->layout->set_js('fileuploader');
 	}
 	
 	
@@ -208,6 +210,95 @@ class Stations extends ShackController
 		$this->session->set_flashdata($msg_type, $msg);
 		
 		redirect('shack/stations');
+	}
+	
+	
+	
+	
+	public function upload_log()
+	{
+		// Try to handle the image upload
+		$config['upload_path'] = realpath(FCPATH . '../../storage/logs');
+		$config['encrypt_name'] = TRUE;
+		$config['allowed_types'] = 'doc|docx|xls|xlsx|pdf|jpg|jpeg|png';
+		$config['max_size']	= '3072';
+		$config['max_width']  = '3000';
+		$config['max_height']  = '2000';
+
+		if ($this->input->get('qqfile'))
+		{
+			$this->load->library('upload', $config);
+			if ($this->upload->do_upload())
+			{
+				$upload_data = $this->upload->data();
+				
+				// Got the file. Update station entry.
+				
+				$s_id = $this->input->get('s_id');
+				$station = $this->stations_model->get($s_id);
+				$station = new Station_presenter($station);
+				
+				// Get station and check account matches
+				if ($station->operator->o_a_id() == $this->session->userdata('a_id'))
+				{
+					// Got station info and the account ID matches logged in user.
+					
+					// Update the file
+					$data = array(
+						's_log_file_name' => $upload_data['file_name'],
+						's_date_log_uploaded' => date('Y-m-d H:i:s'),
+						's_log_status' => 'uploaded',
+					);
+					
+					// Update DB with log info
+					if ($this->stations_model->update($s_id, $data))
+					{
+						$res = array(
+							'status' => 'ok',
+							'success' => TRUE,
+							'data' => $this->upload->data(),
+						);
+						
+						$this->session->set_flashdata('success', 'Thanks, your log file has been received!');
+					}
+					else
+					{
+						$res = array(
+							'status' => 'err',
+							'success' => FALSE,
+							'msg' => 'Failed to record the log file.',
+						);
+					}
+				}
+				else
+				{
+					$res = array(
+						'status' => 'err',
+						'success' => FALSE,
+						'msg' => 'Station ID was invalid.',
+					);
+				}
+				
+			}
+			else
+			{
+				$res = array(
+					'status' => 'err',
+					'success' => FALSE,
+					'msg' => strip_tags($this->upload->display_errors()),
+				);
+			}
+		}
+		else
+		{
+			$res = array(
+				'status' => 'err',
+				'success' => FALSE,
+				'msg' => 'No file to upload',
+			);
+		}
+		
+		$this->json = $res;
 	}
 	
 	

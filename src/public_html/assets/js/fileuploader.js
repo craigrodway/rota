@@ -258,26 +258,27 @@ qq.FileUploaderBasic = function(o){
         multiple: true,
         maxConnections: 3,
         // validation        
-        allowedExtensions: [],               
-        sizeLimit: 0,   
-        minSizeLimit: 0,                             
+        allowedExtensions: [],
+        sizeLimit: 0,
+        minSizeLimit: 0,
+        buttonText: "Upload a file!",
         // events
         // return false to cancel submit
         onSubmit: function(id, fileName){},
         onProgress: function(id, fileName, loaded, total){},
         onComplete: function(id, fileName, responseJSON){},
         onCancel: function(id, fileName){},
-        // messages                
+        // messages
         messages: {
             typeError: "{file} has invalid extension. Only {extensions} are allowed.",
             sizeError: "{file} is too large, maximum file size is {sizeLimit}.",
             minSizeError: "{file} is too small, minimum file size is {minSizeLimit}.",
             emptyError: "{file} is empty, please select files again without it.",
-            onLeave: "The files are being uploaded, if you leave now the upload will be cancelled."            
+            onLeave: "The files are being uploaded, if you leave now the upload will be cancelled."
         },
         showMessage: function(message){
             alert(message);
-        }               
+        }
     };
     qq.extend(this._options, o);
         
@@ -486,7 +487,7 @@ qq.FileUploader = function(o){
                 
         template: '<div class="qq-uploader">' + 
                 '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
-                '<div class="black button qq-upload-button">Upload a file</div>' +
+                '<div class="black button qq-upload-button">' + this._options.buttonText + '</div>' +
                 '<ul class="qq-upload-list"></ul>' + 
              '</div>',
 

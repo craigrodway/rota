@@ -82,8 +82,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					<div id="file-uploader">		
 					<noscript>
 						<input type="file" name="userfile" size="20">
-					</noscript>         
-				</div>
+					</noscript>
 				</div>
 				
 				
@@ -107,22 +106,6 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					});
 				});
 				</script>
-				
-				<?php
-				/*
-				<?php echo form_input(array(
-					'name' => 'r_photo_url',
-					'id' => 'r_photo_url',
-					'class' => 'xlarge'
-				)); ?>
-				<div class="more">
-					<br><br>
-					<strong>- OR - </strong>
-					<br><br>
-					<input type="file" class="input-file" name="userfile" id="userfile">
-				</div>
-				*/
-				?>
 				
 			</td>
 			
