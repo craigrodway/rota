@@ -28,6 +28,8 @@
 
 <div class="eight columns omega">
 	
+	<?php if ( ! empty($railway->images)): ?>
+	
 	<div class="gallery">
 		<ul>
 			<?php foreach ($railway->images as $image): ?>
@@ -35,10 +37,9 @@
 			<?php endforeach; ?>
 		</ul>
 	</div>
+	<script>jsq.add(function() { $(".gallery").gallery(); });</script>
 	
-	<script>
-	jsq.add(function() { $(".gallery").gallery(); });
-	</script>
+	<?php endif; ?>
 	
 	<p>List of all participating stations over the years...</p>
 	<table class="simple" style="width: 100%">

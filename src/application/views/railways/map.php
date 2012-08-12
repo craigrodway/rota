@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div id="map" style="height: 200px"></div>
+<div id="map" style="height: 400px"></div>
 
 <script>
 jsq.add(function() {
@@ -24,20 +24,17 @@ jsq.add(function() {
 	var window_height = $(window).height();
 	$("#map").height(window_height - header_height + "px");
 	
-	// Set up GeoJSON object for holding the points
-	var railways = new L.GeoJSON(null, {
-		pointToLayer: function (latlng) {
-			return new L.Marker(latlng);
-		}
+	// Base map tile layer
+	var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/{key}/{style}/256/{z}/{x}/{y}.png', {
+		attribution: '<a href="/about/credits">About the maps</a>.',	//'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
+		maxZoom: 18,
+		key: "<?php echo config_item('maps_key') ?>",
+		style: "<?php echo config_item('maps_style') ?>"
 	});
 	
-	// Base map tile layer
-	var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/1f5dfc0b37724a46b30912bd55c0a97c/67654/256/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
-		maxZoom: 18
-	});
 	// Load in bing layer for satellite
 	var bing = new L.BingLayer("Anqm0F_JjIZvT0P3abS6KONpaBaKuTnITRrnYuiJCE0WOhH6ZbE4DzeT6brvKVR5");
+	
 	// Control layer for swapping base layers
 	var layers_ctl = new L.Control.Layers({ "Satellite": bing, "Map": cloudmade });
 	
@@ -47,25 +44,23 @@ jsq.add(function() {
 	// Rough guesstimate of the centre of the UK
 	var centre = new L.LatLng(53.891391, -1.845703);
 	
-	// Popup windows
-	railways.on("featureparse", function (e) {
-		if (e.properties && e.properties.popupContent) {
-			e.layer.bindPopup(e.properties.popupContent);
-		}
-	});
-	
 	// Create the map!
 	map.setView(centre, 6)
 		.addLayer(cloudmade)
-		//.addLayer(bing)
-		.addLayer(railways)
 		.addControl(layers_ctl);
 	
 	// Get the railways
 	$.getJSON(siteurl + 'ajax/railways_geojson', function(res) {
 		
-		// Send the GeoJSON data to the railways layer
-		railways.addGeoJSON(res);
+		// Add new GeoJSON layer
+		L.geoJson(res, {
+			onEachFeature: function (f, l) {
+				console.log(f.properties.popupContent);
+				if (f.properties && f.properties.popupContent) {
+					l.bindPopup(f.properties.popupContent);
+				}
+			}
+		}).addTo(map);
 		
 		// Loop through the coordinates in order to get min/max values
 		$.each(res.features, function(i, j) {
