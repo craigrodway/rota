@@ -204,7 +204,8 @@ if ($this->session->userdata('a_type') == 'admin')
 		<?php endif; ?>
 		
 		
-		<?php if (strlen($this->layout->get_title()) > 0): ?>
+		<?php if (strlen($this->layout->get_title()) > 0 && ! isset($hide_title)): ?>
+		
 		<div class="row add-bottom">
 			<div class="ten columns">
 				<h1 class="page-title"><?php echo $this->layout->get_title() ?></h1>
@@ -214,6 +215,7 @@ if ($this->session->userdata('a_type') == 'admin')
 			</div>
 		</div>
 		<div class="clear"></div>
+		
 		<?php endif; ?>
 		
 		<div class="<?php echo $left_classes ?>">

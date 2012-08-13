@@ -58,6 +58,21 @@ class Events_model extends MY_Model
 	
 	
 	
+	public function get_past_present()
+	{
+		$sql = 'SELECT *
+				FROM events
+				WHERE e_year <= (
+					SELECT e_year FROM events WHERE e_current = "Y"
+				)
+				ORDER BY e_year DESC';
+		
+		return $this->db->query($sql)->result_array();
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/models/events_model.php */

@@ -48,7 +48,14 @@ class Stations_model extends MY_Model
 				. $this->order_sql()
 				. $this->limit_sql();
 		
-		return $this->db->query($sql)->result_array();
+		$result = $this->db->query($sql)->result_array();
+		
+		foreach ($result as &$row)
+		{
+			$row['images'] = $this->images_model->railway($row['r_id']);
+		}
+		
+		return $result;
 	}
 	
 	
@@ -70,7 +77,9 @@ class Stations_model extends MY_Model
 				WHERE s_id = ?
 				LIMIT 1';
 		
-		return $this->db->query($sql, array($s_id))->row_array();
+		$row = $this->db->query($sql, array($s_id))->row_array();
+		$row['images'] = $this->images_model->railway($row['r_id']);
+		return $row;
 	}
 	
 	
@@ -94,13 +103,20 @@ class Stations_model extends MY_Model
 				$this->limit_sql();
 		
 		$query = $this->db->query($sql, array($value));
+		
 		if ($this->_limit === 1)
 		{
-			return $query->row_array();
+			$row = $query->row_array();
+			$row['images'] = $this->images_model->railway($row['r_id']);
 		}
 		else
 		{
-			return $query->result_array();
+			$result = $query->result_array();
+			foreach ($result as &$row)
+			{
+				$row['images'] = $this->images_model->railway($row['r_id']);
+			}
+			return $result;
 		}
 	}
 	

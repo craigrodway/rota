@@ -40,7 +40,7 @@ class Menu_model extends CI_Model
 		$nav[] = array('about', 'About');
 		$nav[] = array('news', 'News');
 		$nav[] = array('contact', 'Contact');
-		$nav[] = array('stations', 'Stations');
+		$nav[] = array('events', 'Events');
 		$nav[] = array('railways/map', 'Railways');
 		return $nav;
 	}

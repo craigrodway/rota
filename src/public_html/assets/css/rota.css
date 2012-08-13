@@ -574,6 +574,78 @@ div.row.station.heading {
 	}
 
 
+/* Events page
+========== */
+
+.events-header .columns {
+	padding-top: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+/* All event year listing */
+ul.event-list-header {
+	margin: 0;
+	padding: 0;
+}
+
+	ul.event-list-header li {
+		display: inline;
+		margin: 0;
+		padding: 0;
+	}
+	
+	ul.event-list-header li a {
+		padding: 0;
+		margin: 0;
+		font-size: 140%;
+		font-weight: normal;
+		color: #999;
+		margin-right: 30px;
+		text-decoration: none;
+		padding: 4px;
+	}
+	
+	ul.event-list-header li a:hover {
+		text-decoration: none;
+		color: #333;
+	}
+	
+	ul.event-list-header li.current a {
+		font-size: 200%;
+		font-weight: bold;
+		color: #2093C2;
+	}
+	
+	ul.event-list-header li.current a:hover {
+		background: #fff;
+		color: #2093C2;
+	}
+
+
+
+.row.event-station {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+	.row.event-station .op-callsign {
+		text-align: right;
+	}
+		.row.event-station .op-callsign span.callsign {
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: bold;
+			margin: 0;
+			padding: 0;
+			margin-right: 10px;
+			color: #aec81c;
+		}
+	
+	.row.event-station .op-name .op-type {
+		font-size: 85%;
+		color: #333;
+		font-style: italic;
+		font-weight: bold;
+	} 
 
 /* Autocomplete
 ========== */

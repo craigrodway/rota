@@ -20,8 +20,18 @@ class Operator_presenter extends ROTA_Presenter
 	public function o_type($format = 'icon', $img_tag = TRUE)
 	{
 		$type = element('o_type', $this->data);
+		
 		switch ($format)
 		{
+			
+			case 'longtext':
+				$types = array(
+					'person' => 'Individual',
+					'club' => 'Club or group',
+				);
+				return element($type, $types, NULL);
+			break;
+			
 			case 'text':
 				return $type;
 			break;
@@ -42,6 +52,8 @@ class Operator_presenter extends ROTA_Presenter
 				$types = array(
 					'person' => 'img/global/icons/silk/person.png',
 					'club' => 'img/global/icons/silk/club.png',
+					/*'person' => 'img/global/icons/station-individual.png',
+					'club' => 'img/global/icons/station-club.png',*/
 				);
 				
 				$img = element($type, $types, NULL);
