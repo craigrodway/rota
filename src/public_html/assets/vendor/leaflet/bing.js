@@ -1,6 +1,7 @@
 L.BingLayer = L.TileLayer.extend({
 	options: {
 		subdomains: [0, 1, 2, 3],
+		type: 'AerialWithLabels',
 		attribution: 'Bing'
 	},
 
@@ -26,6 +27,7 @@ L.BingLayer = L.TileLayer.extend({
 	},
 
 	getTileUrl: function(p, z) {
+		var z = this._getZoomForUrl();
 		var subdomains = this.options.subdomains,
 			s = this.options.subdomains[(p.x + p.y) % subdomains.length];
 		return this._url.replace('{subdomain}', s)
@@ -35,7 +37,7 @@ L.BingLayer = L.TileLayer.extend({
 
 	loadMetadata: function() {
 		var _this = this;
-		var cbid = '_bing_metadata';
+		var cbid = '_bing_metadata_' + L.Util.stamp(this);
 		window[cbid] = function (meta) {
 			_this.meta = meta;
 			window[cbid] = undefined;
@@ -47,7 +49,7 @@ L.BingLayer = L.TileLayer.extend({
 			}
 			_this.initMetadata();
 		};
-		var url = "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial?include=ImageryProviders&jsonp=" + cbid + "&key=" + this._key;
+		var url = "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/" + this.options.type + "?include=ImageryProviders&jsonp=" + cbid + "&key=" + this._key;
 		var script = document.createElement("script");
 		script.type = "text/javascript";
 		script.src = url;
@@ -90,13 +92,13 @@ L.BingLayer = L.TileLayer.extend({
 			var p = this._providers[i];
 			if ((zoom <= p.zoomMax && zoom >= p.zoomMin) &&
 					bounds.intersects(p.bounds)) {
-				if (!p.active){
+				if (!p.active)
 					this._map.attributionControl.addAttribution(p.attrib);
-				p.active = true;}
+				p.active = true;
 			} else {
-				if (p.active) {
+				if (p.active)
 					this._map.attributionControl.removeAttribution(p.attrib);
-				p.active = false;}
+				p.active = false;
 			}
 		}
 	},
