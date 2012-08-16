@@ -47,6 +47,7 @@ $route['about'] = 'home/about';
 
 $route['events/(:num)'] = 'events/index/$1';
 $route['events/(:num)/map'] = 'events/map/$1';
+$route['events/(:num).pdf'] = 'events/pdf/$1';
 
 $route['news/(:num)'] = 'news/event/$1';
 $route['news/(:num)/(:any)'] = 'news/article/$1/$2';

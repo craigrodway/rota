@@ -55,7 +55,7 @@ $url_suffix = array(
 		<?php endif; ?>
 		
 		<div class="two columns omega link">
-			<a href="<?php echo site_url('events/' . $year . '/pdf') ?>"><img src="img/global/icons/pdf.png"><span>Printable list</span></a>
+			<a href="<?php echo site_url('events/' . $year . '.pdf') ?>"><img src="img/global/icons/pdf.png"><span>Printable list</span></a>
 		</div>
 			
 	</div>

@@ -111,6 +111,46 @@ class Events extends MY_Controller
 	
 	
 	
+	public function pdf($year)
+	{
+		$this->auto_view = FALSE;
+		
+		// Set the chosen year in the controller data
+		$this->data['year'] = $year;
+		
+		$this->stations_model->order_by('s_date_registered', 'desc');
+		$this->data['stations'] = presenters('Station', $this->stations_model->get_by('s_e_year', $year));
+		
+		$this->data['stats'] = $this->stations_model->stats($year);
+		
+		// Get document in HTML format
+		$document = $this->load->view('events/pdf', $this->data, TRUE);;
+		
+		// Include the PDF library and generate it
+		require_once(APPPATH . 'third_party/dompdf/dompdf_config.inc.php');
+		$dompdf = new DOMPDF();
+		$dompdf->load_html($document);
+		$dompdf->set_paper('a4', 'landscape');
+
+		$dompdf->render();
+		
+		$pdf = $dompdf->output();
+		
+		$file_name = 'Railways on the Air ' . $year . '.pdf';
+		
+		// Set header to dorce download
+		$this->output->set_content_type('application/pdf');
+		$this->output->set_header("Content-Disposition: attachment; filename={$file_name}");
+		$this->output->set_header("Cache-Control: private");
+		$this->output->set_header("Pragma: token");
+		$this->output->set_header("Expires: 0");
+		$this->output->set_output($pdf);
+
+	}
+	
+	
+	
+	
 }
 
 /* End of file: ./application/controllers/events.php */
