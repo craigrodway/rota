@@ -42,7 +42,7 @@ jsq.add(function() {
 		.addControl(layers_ctl);
 	
 	// Get the railways
-	$.getJSON(siteurl + 'ajax/events_geojson/' + <?php echo $year ?>, function(res) {
+	$.getJSON(siteurl + 'ajax/events_geojson/<?php echo $year ?>', function(res) {
 		
 		// Add new GeoJSON layer
 		L.geoJson(res, {
