@@ -84,7 +84,7 @@ if ($this->session->userdata('a_type') == 'admin')
 				<a href="<?php echo site_url() ?>"><img src="img/global/title3.png" alt="Railways on the Air"></a>
 			</div>
 			
-			<div class="ten columns user-nav">
+			<div class="ten columns user-nav no-print">
 				
 				<ul class="horizontal">
 					<?php
@@ -118,7 +118,7 @@ if ($this->session->userdata('a_type') == 'admin')
 		
 		
 		
-		<div class="nav">
+		<div class="nav no-print">
 			
 			<div class="container">
 				

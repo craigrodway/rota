@@ -47,11 +47,15 @@ class Events extends MY_Controller
 			$event = new Event_presenter($this->events_model->get_by('e_year', $year));
 		}
 		
+		$this->data['view_mode'] = 'list';
+		
 		// Set the chosen year in the controller data
 		$this->data['year'] = $year;
 		
 		$this->stations_model->order_by('s_date_registered', 'desc');
 		$this->data['stations'] = presenters('Station', $this->stations_model->get_by('s_e_year', $year));
+		
+		$this->data['stats'] = $this->stations_model->stats($year);
 		
 		$this->data['hide_title'] = TRUE;
 		
@@ -64,13 +68,44 @@ class Events extends MY_Controller
 	
 	
 	
-	function map($year)
+	function map($year = NULL)
 	{
 		$this->auto_view = FALSE;
-		$this->layout->set_view('content_full', 'railways/map');
+		
+		// Check if a year has been supplied
+		if ($year === NULL)
+		{
+			// No year! Use the current event that's already set
+			$event = $this->data['current_event'];
+			$year = $event->e_year();
+		}
+		else
+		{
+			// Get the event info for the requested year
+			$this->events_model->limit(1);
+			$event = new Event_presenter($this->events_model->get_by('e_year', $year));
+		}
+		
+		$this->data['view_mode'] = 'map';
+		
+		// Set the chosen year in the controller data
+		$this->data['year'] = $year;
+		
+		$this->stations_model->order_by('s_date_registered', 'desc');
+		$this->data['stations'] = presenters('Station', $this->stations_model->get_by('s_e_year', $year));
+		
+		$this->data['stats'] = $this->stations_model->stats($year);
+		
+		$this->data['hide_title'] = TRUE;
+		
+		// Load 2 views into the "content full" section
+		$content_full = $this->load->view('events/header', $this->data, TRUE);
+		$content_full .= $this->load->view('events/map', $this->data, TRUE);
+		
+		$this->layout->set_content('content_full', $content_full);
 		$this->layout->set_css('../vendor/leaflet/leaflet');
 		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing'));
-		$this->layout->set_title('Railways map');
+		$this->layout->set_title('Events map');
 	}
 	
 	

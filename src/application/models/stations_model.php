@@ -123,6 +123,22 @@ class Stations_model extends MY_Model
 	
 	
 	
+	public function stats($s_e_year)
+	{
+		$sql = 'SELECT
+					COUNT(DISTINCT s_o_id) AS operator_count,
+					COUNT(DISTINCT s_r_id) AS railway_count
+				FROM
+					stations
+				WHERE
+					s_e_year = ?';
+		
+		return $this->db->query($sql, $s_e_year)->row_array();
+	}
+	
+	
+	
+	
 }
 
 /* End of file: application/models/stations_model.php */

@@ -330,7 +330,7 @@
 	color: #999;
 	}
 .leaflet-popup-content p {
-	margin: 18px 0;
+	/*margin: 18px 0;*/
 	}
 .leaflet-popup-scrolled {
 	overflow: auto;

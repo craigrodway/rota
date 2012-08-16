@@ -579,8 +579,7 @@ div.row.station.heading {
 
 .events-header .columns {
 	padding-top: 20px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #ccc;
+	padding-bottom: 15px;
 }
 /* All event year listing */
 ul.event-list-header {
@@ -620,6 +619,54 @@ ul.event-list-header {
 		background: #fff;
 		color: #2093C2;
 	}
+
+
+.map-op-callsign {
+	font-size: 160%;
+	line-height: 100%;
+	font-weight: bold;
+	color: #aec81c;
+	margin-bottom: 5px;
+}
+
+.map-op-name a {
+	font-size: 120%;
+}
+
+
+.event-info {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	background: #f3f3f3;
+	margin-top: 0;
+}
+
+	.event-info > div {
+		padding: 10px 0;
+	}
+
+	.event-info .total {
+		text-align: center;
+	}
+	.event-info .total span {
+		display: block;
+	}
+	
+	.event-info .total .total-figure {
+		font-size: 200%;
+		line-height: 32px;
+	}
+	
+	.event-info .link {
+		text-align: center;
+	}
+	
+
+	.event-info .link span {
+		display: block;
+		height: 20px;
+	}
+
 
 
 
@@ -765,3 +812,13 @@ ul.event-list-header {
 	    font-weight: normal;
 	    font-style: normal; }
 */
+
+
+
+@media print{
+
+
+	.no-print { display: none; }
+
+
+}

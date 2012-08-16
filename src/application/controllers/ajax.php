@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require(APPPATH . '/presenters/Railway_presenter.php');
+require(APPPATH . '/presenters/Station_presenter.php');
 
 /**
  * Railways on the Air
@@ -173,6 +173,49 @@ class Ajax extends MY_Controller
 		
 		$this->json =& $geojson;
 	}
+	
+	
+	
+	/**
+	 * All events for a given year with railway location data in GeoJSON format
+	 */
+	public function events_geojson($year = NULL)
+	{
+		$geojson = array(
+			'type' => 'FeaturesCollection',
+			'features' => array(),
+		);
+		
+		// Get list of all stations
+		$stations = presenters('Station', $this->stations_model->get_by('s_e_year', $year));
+		
+		foreach ($stations as &$s)
+		{
+			if ( ! $s->railway->latlng()) continue;
+			
+			$content = '<p class="map-op-callsign">' . $s->operator->o_callsign() . '</p>
+				<p class="map-op-name">' . anchor('operators/' . $s->operator->o_slug(), $s->operator->o_name()) . '</p>
+				<p class="map-railway">' . anchor('railways/' . $s->railway->r_slug(), $s->railway->r_name()) . '</p>';
+			
+			$feature = array(
+				'type' => 'Feature',
+				'id' => $s->s_id(),
+				'properties' => array(
+					'name' => $s->operator->o_callsign() . ', ' . $s->operator->o_name(),
+					'amenity' => 'Station',
+					'popupContent' => $content,
+				),
+				'geometry' => array(
+					'type' => 'Point',
+					'coordinates' => array($s->railway->r_lng(), $s->railway->r_lat()),
+				)
+			);
+			
+			$geojson['features'][] = $feature;
+		}
+		
+		$this->json =& $geojson;
+	}	
 	
 	
 }
