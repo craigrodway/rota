@@ -20,57 +20,57 @@ if ($this->session->userdata('a_type') == 'admin')
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"><!--<![endif]-->
 <head>
 	
-	<meta charset="utf-8">
-	<base href="<?php echo $this->config->item('base_url') . 'assets/' ?>">
-	<title><?php echo $this->layout->get_title('full') ?></title>
-	<meta name="description" content="Railways on the Air - amateur radio special event">
-	<meta name="author" content="Craig A Rodway. Bishop Auckland Radio Amateur Club">
+<meta charset="utf-8">
+<base href="<?php echo $this->config->item('base_url') . 'assets/' ?>">
+<title><?php echo $this->layout->get_title('full') ?></title>
+<meta name="description" content="Railways on the Air - amateur radio special event">
+<meta name="author" content="Craig A Rodway. Bishop Auckland Radio Amateur Club">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>
+<?php echo $this->layout->get_css() ?>
+
+<!--[if lte IE 8]>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.ie.css" />
+<![endif]-->
+
+<link rel="shortcut icon" href="img/global/favicon.ico">
+<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="img/global/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="img/global/apple-touch-icon-114x114.png"> -->
+
+<script type="text/javascript">
+var baseurl = "<?php echo $this->config->item('base_url') . 'assets/' ?>";
+var siteurl = "<?php echo site_url() ?>";
+
+var jsq = (function(){
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	var q = [];		// internal queue of functions that are added
+	var fs = {};		// public functions
 	
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>
-	<?php echo $this->layout->get_css() ?>
+	// Add a function to the queue
+	fs.add = function(f){
+		if (typeof(f) == "function") q.push(f);
+	};
 	
-	<!--[if lte IE 8]>
-	<link rel="stylesheet" href="vendor/leaflet/leaflet.ie.css" />
-	<![endif]-->
-	
-	<link rel="shortcut icon" href="img/global/favicon.ico">
-	<!--<link rel="apple-touch-icon" href="img/global/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="img/global/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="img/global/apple-touch-icon-114x114.png"> -->
-	
-	<script type="text/javascript">
-	var baseurl = "<?php echo $this->config->item('base_url') . 'assets/' ?>";
-	var siteurl = "<?php echo site_url() ?>/";
-	
-	var jsq = (function(){
-		
-		var q = [];		// internal queue of functions that are added
-		var fs = {};		// public functions
-		
-		// Add a function to the queue
-		fs.add = function(f){
-			if (typeof(f) == "function") q.push(f);
-		};
-		
-		// Run the queued functions
-		fs.run = function(){
-			if (typeof(q) != "undefined") {
-				for (var i=0, len=q.length; i<len; i++) {
-					q[i]();
-				}
+	// Run the queued functions
+	fs.run = function(){
+		if (typeof(q) != "undefined") {
+			for (var i=0, len=q.length; i<len; i++) {
+				q[i]();
 			}
-		};
-		
-		return fs;
-	})();
+		}
+	};
 	
-	</script>
-	
-	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+	return fs;
+})();
+
+</script>
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 
 </head>
 <body class="<?php echo $body_class ?>">

@@ -73,7 +73,11 @@ class MY_Upload extends CI_Upload
 			// Set the uploaded data as class variables
 			$this->file_temp = $temp_file_name;
 			$this->file_size = $real_size;
-			$this->_file_mime_type(array('tmp_name' => $temp_file_name, 'tmp_path' => sys_get_temp_dir()));
+			$this->_file_mime_type(array(
+				'tmp_name' => $temp_file_name,
+				'tmp_path' => sys_get_temp_dir(),
+				'type' => element('HTTP_X_FILE_TYPE', $_SERVER, NULL),
+			));
 			$this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $this->file_type);
 			$this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
 			$this->file_name = $this->_prep_filename($_GET['qqfile']);
@@ -83,6 +87,7 @@ class MY_Upload extends CI_Upload
 			// Is the file type allowed to be uploaded?
 			if ( ! $this->is_allowed_filetype())
 			{
+				log_message('debug', 'MY_Upload(): do_upload(): File type is: ' . $this->file_type);
 				$this->set_error('upload_invalid_filetype');
 				return FALSE;
 			}
