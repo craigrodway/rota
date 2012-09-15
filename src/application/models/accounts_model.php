@@ -115,31 +115,6 @@ class Accounts_model extends MY_Model
 	
 	
 	/**
-	 * Admin-side account creation - accept all values from $data param.
-	 *
-	 * @param array $data		Array of values to be set.
-	 * @return int		ID of new account
-	 */
-	/*
-	public function add($data)
-	{
-		$verify = ($data['send_email'] == TRUE) ? random_string('alnum', 10) : NULL;
-		
-		$insert = $this->db->insert('accounts', array(
-			'a_email' => trim($data['a_email']),
-			'a_created' => date('Y-m-d H:i:s'),
-			'a_enabled' => $data['a_enabled'],
-			'a_verify' => $verify
-		));
-		
-		return $this->db->insert_id();
-	}
-	*/
-	
-	
-	
-	
-	/**
 	 * Update details for account
 	 *
 	 * @param int $a_id		Account ID to update
@@ -167,30 +142,29 @@ class Accounts_model extends MY_Model
 	 * @param bool $send_email		Whether or not to send the verification email
 	 * @return mixed		Verification code on success, FALSE on error
 	 */
-	/*
 	function create_account($data = array(), $send_email = FALSE)
 	{
-		if (!isset($data['email']))
+		if ( ! isset($data['email']))
 		{
 			return FALSE;
 		}
 		
 		$verify = random_string('alnum', 10);
 		
-		$insert = $this->db->insert('accounts', array(
+		$insert = $this->insert(array(
 			'a_email' => trim($data['email']),
-			'a_type' => 'user',
+			'a_type' => 'member',
 			'a_created' => date('Y-m-d H:i:s'),
 			'a_enabled' => 'N',
 			'a_verify' => $verify
 		));
 		
-		if ($insert == FALSE)
+		if ($insert === FALSE)
 		{
 			return FALSE;
 		}
 		
-		if ($send_email == FALSE)
+		if ($send_email === FALSE)
 		{
 			return $verify;
 		}
@@ -201,37 +175,15 @@ class Accounts_model extends MY_Model
 			$parsedata['verifyurl'] = site_url('account/verify/' . $verify);
 			$mailbody = $this->parser->parse('emails/create-account', $parsedata, TRUE);
 			
-			$this->email->from('no-reply@barac.org.uk', 'ROTA Admin');
+			$this->email->from(config_item('email_from_addr'), config_item('email_from_name'));
 			$this->email->to(trim($data['email']));
 			$this->email->subject('Railways on the Air account verification');
 			$this->email->message($mailbody);
-			$this->email->send();
+			return $this->email->send();
 		}
 		
 	}
-	*/
 	
-	
-	
-	/**
-	 * Find and retrieve an account by the verification code
-	 */
-	/*function find_by_verify($code = NULL)
-	{
-		if (!$code) return FALSE;
-		
-		$sql = 'SELECT * FROM accounts WHERE a_verify = ? LIMIT 1';
-		$query = $this->db->query($sql, array($code));
-		if ($query->num_rows() == 1)
-		{
-			return $query->row();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	*/
 	
 	
 	

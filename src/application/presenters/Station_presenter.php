@@ -54,13 +54,14 @@ class Station_presenter extends ROTA_Presenter
 	}
 	
 	
-	public function shack_edit_icon()
+	public function shack_edit_button()
 	{
-		return icon_link('silk/edit', 'shack/stations/register/' . $this->s_id(), 'Edit registration');
+		//return icon_link('silk/edit', 'shack/stations/register/' . $this->s_id(), 'Edit registration');
+		return anchor('shack/stations/register/' . $this->s_id(), 'Edit', 'class="black button"');
 	}
 	
 	
-	public function shack_delete_icon()
+	public function shack_delete_button()
 	{
 		$attrs = array(
 			'data-id' => $this->s_id(),
@@ -68,8 +69,10 @@ class Station_presenter extends ROTA_Presenter
 			'data-text' => 'Are you sure you want to remove this registration?',
 			'data-url' => site_url('shack/stations/deregister'),
 			'rel' => 'delete',
+			'class' => 'red button',
 		);
-		return icon_link('silk/delete', '#', 'De-register', $attrs);
+		//return icon_link('silk/delete', '#', 'De-register', $attrs);
+		return anchor('', 'De-register', $attrs);
 	}
 	
 	

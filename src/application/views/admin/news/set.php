@@ -70,7 +70,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 		
 		<tr class="vat">
 			<td class="title">
-				<label for="n_content_source" <?php if (form_error('n_content)source')) echo 'class="error"' ?>>Content</label>
+				<label for="n_content_source" <?php if (form_error('n_content_source')) echo 'class="error"' ?>>Content</label>
 			</td>
 			<td class="input">
 				<?php echo form_textarea(array(
@@ -78,7 +78,7 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 					'id' => 'n_content_source',
 					'cols' => 80,
 					'rows' => 20,
-					'value' => element('n_content_source', $_POST, $news->n_content_source()),
+					'value' => element('n_content_source', $this->input->post(), $news->n_content_source()),
 				)); ?>
 			</td>
 		</tr>

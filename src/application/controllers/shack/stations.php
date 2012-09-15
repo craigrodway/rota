@@ -30,6 +30,15 @@ class Stations extends ShackController
 		
 		// Current event to register for
 		$this->data['current_event'] = new Event_presenter($this->events_model->get_current());
+		
+		// Slug library config for operator callsigns
+		$config = array(
+			'field' => 'o_slug',
+			'title' => 'o_name',
+			'table' => 'operators',
+			'id' => 'o_id',
+		);
+		$this->load->library('slug', $config);
 	}
 	
 	
@@ -62,6 +71,52 @@ class Stations extends ShackController
 		if ($this->input->post())
 		{
 			// Form submitted - register or update
+						
+			if ( ! $this->input->post('s_o_id'))
+			{
+				// No operator ID. Presume we're adding a new operator
+				$this->form_validation
+					->set_rules("o_type", 'Type', 'required|alpha')
+					->set_rules("o_name", 'Name', 'required|trim')
+					->set_rules("o_callsign", 'Callsign', 'required|trim|min_length[4]|max_length[10]|strtoupper')
+					->set_rules("o_url", 'URL', 'valid_url|prep_url|trim')
+					->set_rules("o_info_src", 'Information', 'trim');
+				
+				if ($this->form_validation->run())
+				{
+					// Create new operator
+					$data = array(
+						'o_a_id' => $this->session->userdata('a_id'),
+						'o_type' => element('o_type', $this->input->post(), 'person'),
+						'o_name' => $this->input->post('o_name'),
+						'o_callsign' => $this->input->post('o_callsign'),
+						'o_url' => $this->input->post('o_url'),
+						'o_info_src' => $this->input->post('o_info_src'),
+						'o_info_html' => parse_markdown($this->input->post('o_info_src')),
+					);
+					
+					$data['o_slug'] = ($id) ? $this->slug->create_uri($data, $id) : $this->slug->create_uri($data);
+					
+					$add = $this->operators_model->insert($data);
+					if ( ! $add)
+					{
+						$this->session->set_flashdata('error', 'Could not add new operator with those details.');
+						redirect('shack/stations/register');
+					}
+					else
+					{
+						// Get new operator ID
+						$o_id = $add;
+					}
+				}
+				else
+				{
+					$this->session->set_flashdata('error', 'Problem with supplied details: ' . validation_errors());
+					redirect('shack/stations/register');
+				}
+				
+				$this->form_validation->clear_rules();
+			}
 			
 			if ($s_id)
 			{
@@ -75,12 +130,14 @@ class Stations extends ShackController
 			}
 			
 			$this->form_validation->set_rules('railway_new', 'Railway name', 'trim|max_length[100]');
-			$this->form_validation->set_rules('s_o_id', 'Operator', 'required|integer');
+			$this->form_validation->set_rules('s_o_id', 'Operator', 'integer');
 			
 			if ($this->form_validation->run())
 			{
+				// Use operator ID + callsign from new one added, or from POST
 				$data = array(
-					's_o_id' => $this->input->post('s_o_id'),
+					's_o_id' => (int) (isset($o_id)) ? $o_id : $this->input->post('s_o_id'),
+					's_callsign' => (isset($o_id)) ? $this->input->post('o_callsign') : $this->input->post('s_callsign'),
 				);
 				
 				if ($this->input->post('s_r_id'))
@@ -115,6 +172,23 @@ class Stations extends ShackController
 				{
 					// Registering for 'current' event
 					$data['s_e_year'] = $this->data['current_event']->e_year();
+				}
+				
+				// Check that no duplicates exist
+				$filter = array(
+					's_e_year' => $data['s_e_year'],
+					's_o_id' => $data['s_o_id'],
+					's_r_id' => $data['s_r_id'],
+					's_callsign' => $data['s_callsign'],
+				);
+				
+				$this->stations_model->set_filter($filter);
+				if ($stations = $this->stations_model->get_all())
+				{
+					//$this->output->enable_profiler(true);
+					//return;
+					$this->session->set_flashdata('error', 'Only one registration per operator per railway is permitted.');
+					redirect('shack/stations/register');
 				}
 				
 				if ($s_id)
@@ -168,7 +242,16 @@ class Stations extends ShackController
 		// Operators belonging to the account
 		$this->data['operators'] = presenters('Operator', $this->operators_model->get_by('o_a_id', $a_id));
 		
-		$this->layout->set_js('jquery.autocomplete-min');
+		$this->layout->set_js(array(
+			'jquery.autocomplete-min',
+			'../vendor/markitup/jquery.markitup',
+			'../vendor/markitup/sets/markdown/set',
+			'fileuploader',
+		));
+		$this->layout->set_css(array(
+			'../vendor/markitup/skins/simple/style',
+			'../vendor/markitup/sets/markdown/style',
+		));
 	}
 	
 	

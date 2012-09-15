@@ -1,4 +1,5 @@
 <div class="seven columns alpha">
+	
 	<h2 class="page-title">Log In</h2>
 	<br>
 	
@@ -13,7 +14,7 @@
 		
 		<div style="margin: 25px;">
 	
-			<?php echo form_open(current_url()) ?>
+			<?php echo form_open('account/login') ?>
 					
 				<label for="email">Email address</label>
 				<input type="text" name="email" size="40" value="">
@@ -31,8 +32,10 @@
 </div>
 
 <div class="eight columns omega offset-by-one">
+	
 	<h2 class="page-title">Create an account</h2>
 	<br>
+	
 	<?php
 	$errors = validation_errors();
 	?>
@@ -47,7 +50,7 @@
 				<li>Manage registrations for you and/or your club from the same account</li>
 				<li>Have your details saved for next time</li>
 				<li>Post ROTA-related news updates</li>
-				<li>Upload your QSO log</li>
+				<li>Upload your QSO log and download your certificates</li>
 				<li>Update railway information</li>
 			</ul>
 		</p>
@@ -61,7 +64,7 @@
 		
 	<?php endif; ?>
 
-	<?php echo form_open(current_url()) ?>
+	<?php echo form_open('account/create') ?>
 		
 		<div class="panel">
 				

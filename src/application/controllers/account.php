@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+require_once(APPPATH . '/presenters/Account_presenter.php');
+
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -28,7 +30,7 @@ class Account extends MY_Controller
 	
 	public function index()
 	{
-		//$this->layout->set_title('Log In or');
+		//$this->layout->set_title('Log In or create an account');
 	}
 	
 	
@@ -42,7 +44,7 @@ class Account extends MY_Controller
 			
 			$auth = $this->auth->login($email, $password);
 			
-			if (!$auth)
+			if ( ! $auth)
 			{
 				$this->session->set_flashdata('error', 'Error: ' . $this->auth->lasterr);
 				redirect(current_url());
@@ -56,7 +58,9 @@ class Account extends MY_Controller
 		else
 		{
 			// show form
-			$this->layout->set_title('Log in with your ROTA account');
+			//$this->layout->set_title('Log in with your ROTA account');
+			$this->auto_view = FALSE;
+			$this->layout->set_view('content', 'account/index');
 		}
 	}
 	
@@ -95,16 +99,17 @@ class Account extends MY_Controller
 			{
 				$create = $this->accounts_model->create_account(array(
 					'email' => $email
-				), true);
+				), TRUE);
 				$this->session->set_flashdata('success', sprintf(
-					"An email has been sent to %s - please check for further details.",
+					"An email has been sent to %s - please check your inbox for further details.",
 					$email
 				));
 				redirect('account/verify');
 			}
 		}
 		
-		$this->layout->set_title('Create an account');
+		$this->auto_view = FALSE;
+		$this->layout->set_view('content', 'account/index');
 		
 	}
 	
@@ -114,9 +119,9 @@ class Account extends MY_Controller
 	/**
 	 * Handle the landing page for verifying an account
 	 */
-	function verify($code = null)
+	function verify($code = NULL)
 	{
-		if ($code == null)
+		if ($code === NULL)
 		{
 			// Show simple page if no code supplied
 			$this->layout->set_title('Create an account');
@@ -125,14 +130,15 @@ class Account extends MY_Controller
 		else
 		{
 			// Look up the account using the code.
-			$account = $this->accounts_model->find_by_verify($code);
+			$this->accounts_model->limit(1);
+			$account = $this->accounts_model->get_by('a_verify', $code);
 			if ( ! $account)
 			{
 				show_error('Could not find the account specified. Please check and try again. Perhaps it has already been verified?', 404);
 			}
 			else
 			{
-				$data['account'] = $account;
+				$this->data['account'] = new Account_presenter($account);
 				$this->layout->set_title('Verify your account');
 				$this->layout->set_view('content', 'account/verify2');
 			}
@@ -154,17 +160,19 @@ class Account extends MY_Controller
 		$password1 = $this->input->post('password1');
 		$password2 = $this->input->post('password2');
 		
-		if ($this->form_validation->run() == false)
+		if ($this->form_validation->run() === FALSE)
 		{
-			return $this->verify($verify_code);
+			$this->session->set_flashdata('warning', validation_errors());
+			redirect('account/verify/' . $verify_code);
 		}
 		else
 		{
-			$account = $this->accounts_model->find_by_verify($verify_code);
+			$this->accounts_model->limit(1);
+			$account = $this->accounts_model->get_by('a_verify', $verify_code);
 			if ( ! $account) show_error('Could not find account using verification code ' . $verify_code);
 			
 			// Attempt to set the password. Should only fail if blank!
-			$set = $this->accounts_model->set_password($account->account_id, $password1);
+			$set = $this->accounts_model->set_password($account['a_id'], $password1);
 			
 			if ( ! $set)
 			{
@@ -181,7 +189,7 @@ class Account extends MY_Controller
 			}
 			
 			// OK! Now log them in
-			$login = $this->auth->login($account->email, $password1);
+			$login = $this->auth->login($account['a_email'], $password1);
 			
 			if ( ! $login)
 			{
@@ -192,7 +200,7 @@ class Account extends MY_Controller
 				$this->session->set_flashdata('success', 'Your password has been set and you are now logged in.');
 			}
 			
-			redirect('shack/profiles/add');
+			redirect('shack');
 			
 		}
 	}

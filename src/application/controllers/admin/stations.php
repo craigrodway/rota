@@ -319,6 +319,7 @@ class Stations extends AdminController
 					's_r_id' => element('r_id', $railway),
 					's_o_id' => element('o_id', $operator),
 					's_date_registered' => element('date', $legacy, NULL),
+					's_callsign' => element('o_callsign', $operator),
 				);
 				
 				log_message('debug', "Registering station with the following data: " . json_encode($station, JSON_NUMERIC_CHECK));

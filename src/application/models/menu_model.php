@@ -96,8 +96,8 @@ class Menu_model extends CI_Model
 	function guest()
 	{
 		$nav = array();
-		$nav[] = array('account/create', 'Create an account', 'register');
-		$nav[] = array('account/login', 'Log In', 'login');
+		$nav[] = array('account', 'Create an account', 'register');
+		$nav[] = array('account', 'Log In', 'login');
 		return $nav;
 	}
 	

@@ -3,40 +3,53 @@ $errors = validation_errors();
 ?>
 
 <p>Thank you for verifying your email address 
-<strong><?php echo $account->email ?></strong>.</p>
+<strong><?php echo $account->a_email() ?></strong>.</p>
 
 <p>You will now need to set a password for your Railways on the Air account. 
 Please choose something memorable, but not too short.</p>
 
 
 <?php echo form_open(site_url('account/setpassword')) ?>
-<?php echo form_hidden('verify', $account->verify) ?>
+	
+	<?php echo form_hidden('verify', $account->a_verify()) ?>
 
-	<div class="box">
-	
-		<?php if (!empty($errors)) echo $errors ?>
-	
-		<div class="clearfix">
-			<label for="password1">Password</label>
-			<div class="input">
-				<input type="password" name="password1" size="40" value="">
-			</div>
+	<div class="boxfill add-bottom">
+		
+		<div class="boxfill-heading">
+			Set password
 		</div>
 		
-		<div class="clearfix">
-			<label for="password2">Password (confirm)</label>
-			<div class="input">
-				<input type="password" name="password2" size="40" value="">
-			</div>
-		</div>
+		<table class="form">
 		
-		<div class="clearfix remove-bottom">
-			<label></label>
-			<div class="input">
-				<input class="btn primary" type="submit" value="Set password">
-			</div>
-		</div>
-
+			<tr>
+				<td class="title">
+					<label for="password1" <?php if (form_error('password1')) echo 'class="error"' ?>>Password</label>
+				</td>
+				<td class="input"><?php echo form_password(array(
+					'name' => 'password1',
+					'id' => 'password1',
+					'size' => '30'
+				)); ?></td>
+			</tr>
+			
+			<tr>
+				<td class="title">
+					<label for="password2" <?php if (form_error('password2')) echo 'class="error"' ?>>Password (again)</label>
+				</td>
+				<td class="input"><?php echo form_password(array(
+					'name' => 'password2',
+					'id' => 'password2',
+					'size' => '30'
+				)); ?></td>
+			</tr>
+		
+		</table>
+		
 	</div>
 
+
+	<div class="form-actions">
+		<button class="black button icon tick"><span>Set password</span></button>
+	</div>
+	
 </form>

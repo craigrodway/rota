@@ -79,6 +79,9 @@ if (isset($s_id)) echo form_hidden('s_id', $station->s_id());
 		</tr>
 		
 		
+		<?php if (count($operators) > 0): ?>
+		
+		
 		<tr class="vat">
 			<td class="title">
 				<label for="s_o_id" <?php if (form_error('s_o_id')) echo 'class="error"' ?>>Operator</label>
@@ -91,28 +94,139 @@ if (isset($s_id)) echo form_hidden('s_id', $station->s_id());
 					'name' => 's_o_id',
 					'id' => 's_o_id_' . $op->o_id(),
 					'value' => $op->o_id(),
-					'checked' => ($station->s_o_id() == $op->o_id())
-				)); ?> <?php echo $op->o_callsign() ?> - <?php echo $op->o_name() ?></label>
+					'checked' => ($station->s_o_id() == $op->o_id()),
+					'data-callsign' => $op->o_callsign(),
+				)); ?> <?php echo $op->o_callsign() ?> <?php echo $op->o_name() ?></label>
 				<div class="clear"></div>
 				
 				<?php endforeach; ?>
 				
 			</td>
 		</tr>
-				
 		
 		<tr>
-			<td class="title"></td>
+			<td class="title">
+				<label for="s_callsign" <?php if (form_error('s_callsign')) echo 'class="error"' ?>>Callsign</label>
+			</td>
 			<td class="input">
-				<?php $text = (isset($s_id)) ? 'Update' : 'Register'; ?>
-				<button class="black button icon tick"><span><?php echo $text ?></span></button>
+				<?php echo form_input(array(
+					'name' => 's_callsign',
+					'id' => 's_callsign',
+					'value' => $station->s_callsign(),
+					'size' => 15,
+					'max_length' => 10,
+					'style' => 'text-transform: uppercase',
+				)); ?>
 			</td>
 		</tr>
 		
+		<?php endif; ?>
 		
 	</table>
+	
+	
+	<?php if (count($operators) === 0): ?>
+	
+	<div class="boxfill-heading internal">
+		Operator details
+	</div>
 
+	<table class="form">
+	
+		<tr class="vat">
+			<td class="title">
+				<label for="o_callsign" <?php if (form_error('o_callsign')) echo 'class="error"' ?>>Callsign</label>
+				<span class="hint">/M and /P not required</span>
+			</td>
+			<td class="input">
+				<?php echo form_input(array(
+					'name' => 'o_callsign',
+					'id' => 'o_callsign',
+					'size' => 10,
+					'maxlength' => 10,
+					'style' => 'text-transform: uppercase;',
+					'value' => set_value('o_callsign')
+				)); ?>
+			</td>
+		</tr>
+		
+		<tr class="vat">
+			<td class="title">
+				<label for="o_type" <?php if (form_error('o_type')) echo 'class="error"' ?>>Type</label>
+			</td>
+			<td class="input">
+				<label><?php echo form_radio(array(
+					'name' => 'o_type',
+					'id' => 'o_type_person',
+					'value' => 'person',
+					'checked' => FALSE,
+				)); ?> Person</label>
+				<label><?php echo form_radio(array(
+					'name' => 'o_type',
+					'id' => 'o_type_club',
+					'value' => 'club',
+					'checked' => TRUE,
+				)); ?> Club</label>
+			</td>
+		</tr>
+	
+		<tr>
+			<td class="title">
+				<label for="o_name" <?php if (form_error('o_name')) echo 'class="error"' ?>>Name</label>
+			</td>
+			<td class="input">
+				<?php echo form_input(array(
+					'name' => 'o_name',
+					'id' => 'o_name',
+					'size' => 50,
+					'maxlength' => 100,
+					'value' => set_value('o_name')
+				)); ?>
+			</td>
+		</tr>
+		
+		<tr>
+			<td class="title">
+				<label for="o_url" <?php if (form_error('o_url')) echo 'class="error"' ?>>Web address</label>
+			</td>
+			<td class="input">
+				<?php echo form_input(array(
+					'name' => 'o_url',
+					'id' => 'o_url',
+					'size' => 50,
+					'value' => set_value('o_url', 'http://'),
+				)); ?>
+			</td>
+		</tr>
+		
+		<tr class="vat nob">
+			<td class="title">
+				<label for="o_info_src" <?php if (form_error('o_info_src')) echo 'class="error"' ?>>Information</label>
+				<span class="hint">Markdown format</span>
+			</td>
+			<td class="input">
+				<?php echo form_textarea(array(
+					'name' => 'o_info_src',
+					'id' => 'o_info_src',
+					'cols' => 55,
+					'rows' => 20,
+					'value' => set_value('o_info_src')
+				)); ?>
+			</td>
+		</tr>
+		
+	</table>
+	
+	<?php endif; ?>
+	
 </div>
+
+	
+<div class="form-actions">
+	<?php $text = (isset($s_id)) ? 'Update' : 'Register'; ?>
+	<button class="black button icon tick"><span><?php echo $text ?></span></button>
+</div>
+
 
 </form>
 
@@ -139,6 +253,14 @@ jsq.add(function() {
 			$("div.new-railway").hide();
 		}
 	});
+	
+	$('#o_info_src').markItUp(mySettings);
+	
+	$("input[name=s_o_id]").on("change", function() {
+		var $s_callsign = $("input#s_callsign");
+		if (!$("input[name=s_id]").val()) $s_callsign.val($(this).data("callsign")); 
+	})
+	
 	
 });
 </script>
