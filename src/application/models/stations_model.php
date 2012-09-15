@@ -20,7 +20,7 @@ class Stations_model extends MY_Model
 	protected $_primary = 's_id';
 	
 	protected $_filter_types = array(
-		'where' => array('s_e_year', 's_o_id', 's_r_id', 'o_a_id', 's_callsign'),
+		'where' => array('s_e_year', 's_o_id', 's_r_id', 'o_a_id', 's_callsign', 's_log_status'),
 		'like' => array('o_callsign', 'o_name', 'r_name'),
 	);
 	
@@ -78,7 +78,12 @@ class Stations_model extends MY_Model
 				LIMIT 1';
 		
 		$row = $this->db->query($sql, array($s_id))->row_array();
-		$row['images'] = $this->images_model->railway($row['r_id']);
+		
+		if ($row)
+		{
+			$row['images'] = $this->images_model->railway(element('r_id', $row));
+		}
+		
 		return $row;
 	}
 	

@@ -1,7 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require(APPPATH . '/presenters/Station_presenter.php');
-
 /**
  * Railways on the Air
  * Copyright (C) 2011 Craig A Rodway <craig.rodway@gmail.com>
@@ -13,6 +11,8 @@ require(APPPATH . '/presenters/Station_presenter.php');
  * through the world wide web at this URL:
  * http://opensource.org/licenses/OSL-3.0
  */
+
+require(APPPATH . '/presenters/Station_presenter.php');
 
 class Stations extends AdminController
 {
@@ -157,6 +157,31 @@ class Stations extends AdminController
 		$this->session->set_flashdata($msg_type, $msg);
 		
 		redirect('admin/stations');
+	}
+	
+	
+	
+	
+	/** 
+	 * Retrieve and show the uploaded log file for given station ID
+	 */
+	public function log($s_id = 0)
+	{
+		$this->auto_view = FALSE;
+		
+		$station = $this->stations_model->get($s_id);
+		if ( ! $station)
+		{
+			show_error('Could not find station with ID ' . $s_id);
+		}
+		
+		$log_file_path = config_item('path_logs') . '/' . element('s_log_file_name', $station);
+		if (file_exists($log_file_path))
+		{
+			$this->load->helper('file');
+			$this->output->set_content_type(get_mime_by_extension($log_file_path));
+			$this->output->set_output(read_file($log_file_path));
+		}
 	}
 	
 	

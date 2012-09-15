@@ -29,7 +29,7 @@ jsq.add(function() {
 	$("body").on("click", "table.simple tr", function(e) {
 		if (e.target.tagName == "TD" || e.target.tagName == "IMG") {
 			var a = $(this).find("td.title a")[0];
-			window.location.href = $(a).attr("href");  
+			if (a) window.location.href = $(a).attr("href");
 		}
 	});
 	

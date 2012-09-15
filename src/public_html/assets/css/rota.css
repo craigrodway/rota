@@ -39,7 +39,8 @@ body {
 .container.body {
 	padding-top: 10px;
 	margin-top: 0;
-	margin-bottom: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 0;
 	background: #fff;
 	border: 0px solid #fff;
 	border-top-width: 0;
@@ -142,8 +143,8 @@ p.big { font-size: 135%; line-height: 165%; color: #666; }
 }
 
 
-.left { text-align: left; }
-.right { text-align: right; }
+.left { text-align: left !important; }
+.right { text-align: right !important; }
 
 
 

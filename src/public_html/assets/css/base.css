@@ -306,7 +306,7 @@ table.simple thead tr th:first-child, table.simple tfoot tr td:first-child { bor
 table.simple thead tr th:last-child, table.simple tfoot tr td:last-child { border-right: none; }
 
 table.simple tbody tr:hover, 
-table.simple tbody tr:hover td { background: #ddd; cursor: pointer; }
+table.simple tbody tr:hover td { background: #ddd; /*cursor: pointer;*/ }
 table.simple tbody tr:hover td,
 table.simple tbody tr:hover td a { color: #000; }
 
