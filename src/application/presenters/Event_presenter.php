@@ -30,7 +30,7 @@ class Event_presenter extends ROTA_Presenter
 	
 	public function e_current($format = 'boolean')
 	{
-		$current = (element('e_current', $this->data, 'N') == 'Y');
+		$current = (element('e_current', $this->data) == 1);
 		
 		switch ($format)
 		{

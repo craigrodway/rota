@@ -12,24 +12,38 @@
  * http://opensource.org/licenses/OSL-3.0
  */
 
+require_once(APPPATH . '/third_party/phpass.php');
+
 class Auth
 {
 
-
-	private $CI;
 	public $lasterr;
+	
+	private $_CI;
+	
+	private $_phpass = NULL;
+	private $_phpass_iteration_count = 8;
+	private $_phpass_portable = FALSE;
+	
+	private $_hash_algorithm = 'sha256';
 	
 	
 	
 	function __construct()
 	{
-		$this->CI =& get_instance();
+		$this->_CI =& get_instance();
+		
+		if ( ! $this->logged_in())
+		{
+			// Not already logged in, attempt auto-login
+			$this->_auto_login();
+		}
 	}
 	
 	
 	public function logged_in()
 	{
-		return ($this->CI->session->userdata('a_id'));
+		return ($this->_CI->session->userdata('a_id'));
 	}
 	
 	
@@ -42,35 +56,35 @@ class Auth
 	 * @param bool $return Only return the result of the check
 	 * @return bool
 	 */
-	public function check($type = null, $return = false)
+	public function check($type = NULL, $return = FALSE)
 	{
 		// Default value
-		$auth_ok = false;
+		$auth_ok = FALSE;
 		
-		if ($type == null)
+		if ($type == NULL)
 		{
 			// No type to check - only make sure user is logged in
 			if ($this->logged_in())
 			{
-				$auth_ok = true;
+				$auth_ok = TRUE;
 			}
 		}
 		else
 		{
 			$ok_types = explode(',', $type);
-			if (in_array($this->CI->session->userdata('a_type'), $ok_types))
+			if (in_array($this->_CI->session->userdata('a_type'), $ok_types))
 			{
-				$auth_ok = true;
+				$auth_ok = TRUE;
 			}
 		}
 		
-		if ($return == true)
+		if ($return === TRUE)
 		{
 			return $auth_ok;
 		}
 		else
 		{
-			if ($auth_ok == false)
+			if ($auth_ok === FALSE)
 			{
 				show_error('You are not authorised to access that page.');
 			}
@@ -83,49 +97,67 @@ class Auth
 	/**
 	 * Attempt to create a login session by authenticating email+pwd in the DB
 	 */
-	public function login($email = null, $password = null)
+	public function login($email = NULL, $password = NULL)
 	{
-		if (!$email){
+		if ( ! $email)
+		{
 			$this->lasterr = 'Empty email address.';
-			return false;
+			return FALSE;
 		}
-		if (!$password){
+		
+		if ( ! $password)
+		{
 			$this->lasterr = 'Empty password.';
-			return false;
+			return FALSE;
 		}
 		
 		$email = trim($email);
 		
-		$sql = "SELECT a_password 
+		$sql = "SELECT a_id, a_password 
 				FROM accounts
 				WHERE a_email = ?
-				AND a_enabled = 'Y'
+				AND a_enabled = 1
 				AND a_verify IS NULL
 				LIMIT 1";
 				
-		$query = $this->CI->db->query($sql, array($email));
+		$query = $this->_CI->db->query($sql, array($email));
 		
 		if ($query->num_rows() == 1)
 		{
-			$account = $query->row();
-			$match = $this->check_password($password, $account->a_password);
-			if ($match == true)
+			$account = $query->row_array();
+			$match = $this->check_password($password, $account['a_password']);
+			if ($match === TRUE)
 			{
 				// If passwords match, create session
-				return $this->_create_session($email);
+				if ($this->_create_session($account['a_id']))
+				{
+					// Created session - now do auto-login if enabled
+					// Set auto-login if being used
+					if (config_item('auto_login_enable'))
+					{
+						$this->_set_auto_login($account['a_id']);
+					}
+					
+					return TRUE;
+				}
+				else
+				{
+					// Could not create session
+					return FALSE;
+				}
 			}
 			else
 			{
 				// Bad password
 				$this->lasterr = 'Incorrect email address and/or password.';
-				return false;
+				return FALSE;
 			}
 		}
 		else
 		{
 			// No account found (num_rows != 1)
 			$this->lasterr = 'Incorrect email address and/or password.';
-			return false;
+			return FALSE;
 		}
 	}
 	
@@ -137,7 +169,7 @@ class Auth
 	 */
 	public function logout()
 	{
-		$a_id = $this->CI->session->userdata('a_id');
+		$a_id = $this->_CI->session->userdata('a_id');
 		
 		// Set session data to NULL (include all fields!)
 		$sessdata['a_id'] = null;
@@ -145,118 +177,74 @@ class Auth
 		$sessdata['a_type'] = null;
 		
 		// Set empty session data
-		$this->CI->session->set_userdata($sessdata);
-		$this->CI->session->unset_userdata($sessdata);
+		$this->_CI->session->set_userdata($sessdata);
+		$this->_CI->session->unset_userdata($sessdata);
 		
 		// Destroy session
-		$this->CI->session->sess_destroy();
+		$this->_CI->session->sess_destroy();
+		
+		// Remove the auto-login cookie
+		$this->_delete_auto_login();
 		
 		// Verify session has been destroyed by retrieving info that should have gone 
-		return (!$this->CI->session->userdata('a_id'));
+		return ( ! $this->_CI->session->userdata('a_id'));
 	}
 	
 	
 	
 	
 	/**
-	 * Handle the creation of the user session
+	 * Handle the creation of the browser session for the supplied user
 	 */
-	private function _create_session($email = null)
+	private function _create_session($a_id)
 	{
-		$this->CI->load->helper('date');
-		
-		if (!$email)
-		{
-			$this->lasterr = 'No email address supplied.';
-			return false;
-		}
-		
-		$email = trim($email);
+		$this->_CI->load->helper('date');
 		
 		$sql = "SELECT * FROM accounts
-				WHERE a_email = ? 
-				AND a_enabled = 'Y'
+				WHERE a_id = ? 
+				AND a_enabled = 1
 				AND a_verify IS NULL
 				LIMIT 1";
 		
-		$query = $this->CI->db->query($sql, array($email));
+		$query = $this->_CI->db->query($sql, array($a_id));
 		
 		if ($query->num_rows() == 1)
 		{
 			// Get account.
-			$account = $query->row();
+			$account = $query->row_array();
 			
 			// Update last login timestamp
-			$timestamp = mdate('%Y-%m-%d %H:%i:%s');
-			$sql = 'UPDATE accounts SET a_lastlogin = ?
-					WHERE a_id = ? LIMIT 1';
-			$this->CI->db->query($sql, array($timestamp, $account->a_id));
+			$sql = 'UPDATE accounts SET a_lastlogin = NOW() WHERE a_id = ? LIMIT 1';
+			$this->_CI->db->query($sql, array($account['a_id']));
 			
 			// Gather info for session
-			$sessdata['a_id'] = $account->a_id;
-			$sessdata['a_email'] = $account->a_email;
-			$sessdata['a_type'] = $account->a_type;
+			$sessdata['a_id'] = $account['a_id'];
+			$sessdata['a_email'] = $account['a_email'];
+			$sessdata['a_type'] = $account['a_type'];
 			
 			// Set session data
-			$this->CI->session->set_userdata($sessdata);
+			$this->_CI->session->set_userdata($sessdata);
 			
-			return true;
+			return TRUE;
 		}
 		else
 		{
 			// Couldn't find account!
-			$this->lasterr = "Could not find account $email.";
-			return false;
+			$this->lasterr = "Could not create browser session for $a_id.";
+			return FALSE;
 		}
 	}
+	
 	
 	
 	
 	/**
 	 * Publicly-accessible function for hashing a supplied plaintext password
-	 *
-	 * Generates a random salt for the password and hashes it using internal
-	 * hashing function. 
 	 */
-	public function hash_password($password = null)
+	public function hash_password($password)
 	{
-		if (!$password) return false;
-		$this->CI->load->helper('string');
-		$salt = random_string('alnum', 10);
-		return $this->_hash_with_salt($password, $salt);
-	}
-	
-	
-	
-	
-	/**
-	 * Private function that will hash a password along with the supplied salt
-	 * as well as the global site salt.
-	 *
-	 * Returned password is a string in the format of:
-	 *     rota#<salt>#sha1
-	 */
-	private function _hash_with_salt($password = null, $salt = null)
-	{
-		if (!$password)
-		{
-			$this->lasterr = 'No password.';
-			return false;
-		}
-		if (!$salt)
-		{
-			$this->lasterr = 'No salt.';
-			return false;
-		}
-		
-		$global_salt = $this->CI->config->item('encryption_key');
-		
-		$sha1 = sha1($salt . $password . $global_salt);
-		for ($i = 0; $i < 1000; $i++)
-		{
-			$sha1 = sha1($sha1 . (($i % 2 == 0) ? $password : $salt));
-		}
-		return 'rota#' . $salt . '#' . $sha1;
+		$this->_init_phpass();
+		return $this->_phpass->HashPassword($password);
 	}
 	
 	
@@ -265,11 +253,200 @@ class Auth
 	/**
 	 * Check if a given plaintext password matches the (expected) hash
 	 */
-	public function check_password($password, $hashed)
+	public function check_password($password, $stored_hash)
 	{
-		$parts = explode('#', $hashed);
-		$salt = $parts[1];
-		return ($this->_hash_with_salt($password, $salt) == $hashed);
+		$this->_init_phpass();
+		return $this->_phpass->CheckPassword($password, $stored_hash);
+	}
+	
+	
+	
+	private function _init_phpass()
+	{
+		if ($this->_phpass === NULL)
+		{
+			$this->_phpass = new PasswordHash($this->_phpass_iteration_count, $this->_phpass_portable);
+		}
+	}
+	
+	
+	
+	
+	private function _set_auto_login($a_id, $series = NULL)
+	{
+		$this->_CI->load->model('autologin_model');
+		
+		// Generate keys
+		list($public, $private) = $this->_generate_keys();
+		
+		// create new series or update current series
+		if ( ! $series)
+		{
+			list($series) = $this->_generate_keys();
+			$this->_CI->autologin_model->insert(array(
+				'al_a_id' => $a_id,
+				'al_series' => $series,
+				'al_key' => $private,
+			));
+		}
+		else
+		{
+			$this->_CI->autologin_model->update($a_id, $series, $private);
+		}
+		
+		// Create and set the cookie
+		$this->_set_cookie(array(
+			'al_a_id' => $a_id,
+			'al_series' => $series,
+			'al_key' => $public,
+		));
+	}
+	
+	
+	
+	private function _auto_login()
+	{
+		if ($cookie = $this->_read_cookie())
+		{
+			log_message('debug', 'Auth: _auto_login(): Got cookie.');
+			
+			// remove expired keys
+			$this->_CI->load->model('autologin_model');
+			$this->_CI->autologin_model->purge();
+			
+			// Get private key
+			$private = $this->_CI->autologin_model->get_private_key($cookie['al_a_id'], $cookie['al_series']);
+			
+			if ($this->_validate_keys($cookie['al_key'], $private))
+			{
+				log_message('debug', 'Auth: _auto_login(): Keys have been validated. Creating session.');
+				
+				// Create logged in session for user
+				$this->_create_session($cookie['al_a_id']);
+				// Extend the autologin cookie
+				$this->_set_auto_login($cookie['al_a_id'], $cookie['al_series']);
+				
+				return TRUE;
+			}
+			else
+			{
+				log_message('debug', 'Auth: _auto_login(): Keys were invalid.');
+				
+				// the key was not valid, strange stuff going on
+				// remove the active session to prevent theft!
+				$this->_delete_auto_login();
+			}
+		}
+		
+		return FALSE;
+	}
+	
+	
+	
+	/**
+	 * Disable the current autologin key and remove the cookie
+	 */
+	private function _delete_auto_login()
+	{
+		if ($cookie = $this->_read_cookie())
+		{
+			// Remove current series
+			$this->_CI->load->model('autologin_model');
+			$this->_CI->autologin_model->delete($cookie['al_a_id'], $cookie['al_series']);
+			// Clear the cookie
+			$this->_CI->input->set_cookie(array(
+				'name' => config_item('auto_login_cookie'),
+				'value' => '',
+				'expire' => '',
+			));
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * Generate public/private key pair
+	 * 
+	 * @return array
+	 */
+	private function _generate_keys()
+	{
+		$public = hash($this->_hash_algorithm, uniqid(rand()));
+		$private = hash_hmac($this->_hash_algorithm, $public, config_item('encryption_key'));
+		return array($public, $private);
+	}
+	
+	
+	
+	
+	/**
+	 * Validate public/private key pair
+	 * 
+	 * @param string $public
+	 * @param string $private
+	 * @return boolean
+	 */
+	private function _validate_keys($public, $private)
+	{
+		$check = hash_hmac($this->_hash_algorithm, $public, config_item('encryption_key'));
+		return $check === $private;
+	}
+	
+	
+	
+	
+	/**
+	 * Write auto-login cookie
+	 * 
+	 * @param array $data		Data including the account ID, series and public key
+	 * @return bool
+	 */
+	private function _set_cookie($data = array())
+	{
+		$this->_CI->load->library('encrypt');
+		
+		$data = array(
+			'name' => config_item('auto_login_cookie'),
+			'value' => $this->_CI->encrypt->encode(json_encode($data)),
+			'expire' => config_item('auto_login_expire'),
+		);
+		
+		log_message('debug', 'Auth: _set_cookie(): Setting auto-login cookie ' . $data['name']);
+		
+		return $this->_CI->input->set_cookie($data);
+	}
+	
+	
+	
+	
+	/**
+	 * Read auto-login cookie
+	 *
+	 * @return array
+	 */
+	public function _read_cookie()
+	{
+		$cookie = $this->_CI->input->cookie(config_item('auto_login_cookie'), TRUE);
+
+		if ( ! $cookie)
+		{
+			log_message('debug', 'Auth: _read_cookie(): No auto-login cookie ' . config_item('auto_login_cookie') . ' present.');
+			return FALSE;
+		}
+		
+		// Decrypt cookie data
+		$this->_CI->load->library('encrypt');
+		$data = (array) json_decode($this->_CI->encrypt->decode($cookie));
+		
+		if (isset($data['al_a_id']) && isset($data['al_series']) && isset($data['al_key']))
+		{
+			log_message('debug', 'Auth: _read_cookie(): All data from cookie is present.');
+			return $data;
+		}
+		
+		log_message('debug', 'Auth: _read_cookie(): Failed to read cookie data or not all values present. Data: ' . var_export($data));
+		return FALSE;
 	}
 	
 	
@@ -277,4 +454,4 @@ class Auth
 	
 }
 
-/* End of file: application/librarys/Auth.php */
+/* End of file: application/libraries/Auth.php */

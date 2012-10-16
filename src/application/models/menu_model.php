@@ -109,7 +109,7 @@ class Menu_model extends CI_Model
 	function admin()
 	{
 		$nav = array();
-		$nav[] = array('admin/home', 'Admin home');
+		$nav[] = array('admin/logs', 'Logs');
 		$nav[] = array('admin/accounts', 'Accounts');
 		$nav[] = array('admin/operators', 'Operators');
 		$nav[] = array('admin/events', 'Events');

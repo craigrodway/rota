@@ -27,9 +27,11 @@ jsq.add(function() {
 	
 	
 	// Base map tile layer
-	var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/1f5dfc0b37724a46b30912bd55c0a97c/67654/256/{z}/{x}/{y}.png', {
+	var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/{key}/{style}/256/{z}/{x}/{y}.png', {
 		attribution: '',	/*'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',*/
-		maxZoom: 18
+		maxZoom: 18,
+		key: "<?php echo config_item('maps_key') ?>",
+		style: "<?php echo config_item('maps_style') ?>"
 	});
 	// Load in bing layer for satellite
 	var bing = new L.BingLayer("Anqm0F_JjIZvT0P3abS6KONpaBaKuTnITRrnYuiJCE0WOhH6ZbE4DzeT6brvKVR5");

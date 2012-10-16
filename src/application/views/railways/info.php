@@ -8,13 +8,14 @@
 		<?php echo $railway->r_info_html() ?>
 	<?php else: ?>
 		<?php if ($this->auth->logged_in()): ?>
-			<p>This railway doesn&rsquo;t have any information about it! Why not 
+			<div class="alert"><p>This railway doesn&rsquo;t have any information about it! Why not 
 			be the first to add something?</p>
 			<a href="<?php echo site_url('railways/edit/' . $railway->r_slug()) ?>" class="small black button">Add description</a>
+			</div>
 		<?php else: ?>
-			<p>This railway doesn&rsquo;t have any information about it! If you 
-			had an account, you could be the first to add something.</p>
-			<a href="<?php echo site_url('account') ?>" class="small btn">Log in or Create an account</a>
+			<div class="alert">This railway doesn&rsquo;t have any information about it! If you 
+			had an account, you could be the first to add something.
+			<a href="<?php echo site_url('account') ?>" class="small btn">Log in or Create an account</a></div>
 		<?php endif; ?>
 	<?php endif; ?>
 	</div>
@@ -41,6 +42,9 @@
 	
 	<?php endif; ?>
 	
+	
+	<?php if ($stations): ?>
+	
 	<p>List of all participating stations over the years...</p>
 	<table class="simple" style="width: 100%">
 		<thead>
@@ -51,18 +55,21 @@
 			</tr>
 		</thead>
 		<tbody>
+			<?php foreach ($stations as $s): ?>
 			<tr>
-				<td>GX4TTF</td>
-				<td>Bishop Auckland Amateur Radio Club</td>
-				<td>2011</td>
+				<td><?php echo $s->s_callsign() ?></td>
+				<td><?php echo $s->operator_link() ?></td>
+				<td><?php echo $s->s_e_year() ?></td>
 			</tr>
-			<tr>
-				<td>GX4TTF</td>
-				<td>Bishop Auckland Amateur Radio Club</td>
-				<td>2010</td>
-			</tr>
+			<?php endforeach; ?>
 		</tbody>
 	</table>
+	
+	<?php else: ?>
+	
+	<div class="alert">This railway has never had a station for Railways on the Air!</div>
+	
+	<?php endif; ?>
 	
 </div>
 

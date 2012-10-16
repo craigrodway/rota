@@ -52,11 +52,11 @@ if ( ! empty($errors)) echo '<div class="alert error"><ul>' . $errors . '</ul></
 				<label for="a_enabled" <?php if (form_error('a_enabled')) echo 'class="error"' ?>>Enable</label>
 			</td>
 			<td class="input">
-				<?php echo form_hidden('a_enabled', 'N') ?>
+				<?php echo form_hidden('a_enabled', 0) ?>
 				<label class="input"><?php echo form_checkbox(array(
 					'name' => 'a_enabled',
 					'id' => 'a_enabled',
-					'value' => 'Y',
+					'value' => 1,
 					'checked' => ($account->a_enabled())
 				)); ?> Yes</label>
 			</td>

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require(APPPATH . '/presenters/Railway_presenter.php');
+require_once(APPPATH . '/presenters/Station_presenter.php');
 
 /**
  * Railways on the Air
@@ -88,6 +88,10 @@ class Railways extends MY_Controller
 			$this->layout->set_view('content_full', 'railways/info/map');
 			$this->layout->set_view('links', 'railways/info/map_toggle');
 		}
+		
+		// Get list of stations
+		$this->stations_model->order_by('s_e_year', 'DESC');
+		$this->data['stations'] = presenters('Station', $this->stations_model->get_by('s_r_id', $r->r_id()));
 		
 		$this->layout->set_css('../vendor/leaflet/leaflet');
 		$this->layout->set_js(array('../vendor/leaflet/leaflet', '../vendor/leaflet/bing', 'rota.gallery'));

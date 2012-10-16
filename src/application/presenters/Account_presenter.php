@@ -32,7 +32,7 @@ class Account_presenter extends ROTA_Presenter
 	
 	public function a_enabled($format = 'boolean')
 	{
-		$enabled = (element('a_enabled', $this->data, 'N') == 'Y');
+		$enabled = ( (int) element('a_enabled', $this->data, 0) === 1);
 		
 		switch ($format)
 		{

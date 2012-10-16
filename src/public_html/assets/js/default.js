@@ -25,15 +25,6 @@ jsq.add(function() {
 	});
 	
 	
-	// Table row clicking
-	$("body").on("click", "table.simple tr", function(e) {
-		if (e.target.tagName == "TD" || e.target.tagName == "IMG") {
-			var a = $(this).find("td.title a")[0];
-			if (a) window.location.href = $(a).attr("href");
-		}
-	});
-	
-	
 	// "Delete" dialogs
 	$("body").on("click", "a[rel='delete']", function(e) {
 		

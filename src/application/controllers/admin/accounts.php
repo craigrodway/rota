@@ -97,7 +97,7 @@ class Accounts extends AdminController
 					->set_rules('a_password1', 'Password', 'trim')
 					->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
 					->set_rules('a_type', 'Account type', 'alpha')
-					->set_rules('a_enabled', 'Enabled', '');
+					->set_rules('a_enabled', 'Enabled', 'integer');
 			}
 			else
 			{
@@ -107,7 +107,7 @@ class Accounts extends AdminController
 					->set_rules('a_password1', 'Password', 'trim|required|max_length[100]')
 					->set_rules('a_password2', 'Password (again)', 'trim|matches[a_password1]')
 					->set_rules('a_type', 'Account type', 'alpha')
-					->set_rules('a_enabled', 'Enabled', '');
+					->set_rules('a_enabled', 'Enabled', 'integer');
 			}
 			
 			if ($this->form_validation->run())
@@ -116,7 +116,7 @@ class Accounts extends AdminController
 				$data = array(
 					'a_email' => $this->input->post('a_email'),
 					'a_type' => $this->input->post('a_type'),
-					'a_enabled' => $this->input->post('a_enabled'),
+					'a_enabled' => (int) $this->input->post('a_enabled'),
 				);
 				
 				// Set password if supplied

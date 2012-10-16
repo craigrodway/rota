@@ -155,7 +155,7 @@ class Accounts_model extends MY_Model
 			'a_email' => trim($data['email']),
 			'a_type' => 'member',
 			'a_created' => date('Y-m-d H:i:s'),
-			'a_enabled' => 'N',
+			'a_enabled' => 0,
 			'a_verify' => $verify
 		));
 		
@@ -200,7 +200,7 @@ class Accounts_model extends MY_Model
 					accounts
 				SET
 					a_verify = NULL,
-					a_enabled = 'Y'
+					a_enabled = 1
 				WHERE
 					a_verify = ?
 				LIMIT 1";

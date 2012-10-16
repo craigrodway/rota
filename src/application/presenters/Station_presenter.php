@@ -76,4 +76,17 @@ class Station_presenter extends ROTA_Presenter
 	}
 	
 	
+	public function operator_link()
+	{
+		if ($this->operator->o_name())
+		{
+			return anchor('operators/' . $this->operator->o_slug(), $this->operator->get('o_name', '(Unknown)'));
+		}
+		else
+		{
+			return '(Unknown)';
+		} 
+	}
+	
+	
 }

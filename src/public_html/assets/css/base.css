@@ -245,7 +245,7 @@ dl.subnav dd a.active {
 
 /* #Buttons (custom)
 ================================================= */
-.button {
+.button, .alert .button {
 	font-size: 11px;
 	padding: 5px 13px;
 	display: inline-block;
